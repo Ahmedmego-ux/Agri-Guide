@@ -5,21 +5,24 @@ import 'package:flutter/material.dart';
 
 class Custome_auth_buttom extends StatelessWidget {
   const Custome_auth_buttom.CustomeButtom({
-    super.key, required this.progres, this.color, this.colortext,
+    super.key, required this.progres, this.color, this.colortext, this.bordercolor,
   });
   final Color? color;
   final Color? colortext;
+  final Color? bordercolor;
 final String progres;
   @override
   Widget build(BuildContext context) {
     return Container(
-     height: MediaQuery.heightOf(context)*0.07,
+     height: MediaQuery.heightOf(context)*0.06,
      width: double.infinity,
      decoration: BoxDecoration(
+      border: Border.all(color: bordercolor??Colors.white),
        borderRadius: BorderRadius.circular(8),
        color: color??Colors.white
      ),
-     child: Center(child: Text(progres,style: TextStyle(fontSize: 20,color:colortext?? maincolor,fontFamily: 'Poppins' ),)),
+     child: Center(child: Text(progres,style: TextStyle(fontSize: 20,
+     color:colortext?? maincolor,fontFamily: 'Poppins' ),)),
     );
   }
 }

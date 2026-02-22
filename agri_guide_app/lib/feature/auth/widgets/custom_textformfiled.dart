@@ -21,10 +21,11 @@ final Color? bordercolor;
           return 'please fill ${hintText}';
         }null;
       },
+
       obscureText: ispassword,
       controller: controller,
      decoration: InputDecoration(
-      contentPadding: EdgeInsets.symmetric(vertical: 20, horizontal: 16),
+      //contentPadding: EdgeInsets.symmetric(vertical: 5, horizontal: 16),
       prefixIcon: prefixicon,
        filled: true,
        fillColor: Colors.white,
@@ -32,16 +33,19 @@ final Color? bordercolor;
        hintStyle: TextStyle(color: Colors.black),
        hintText: hintText,
        focusColor: Colors.white,
-       border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+       border: OutlineInputBorder(borderRadius: BorderRadius.circular(16)),
+       
        enabledBorder: OutlineInputBorder(
+        borderRadius: BorderRadius.circular(8),
          borderSide: BorderSide(
           width: 2,
-           color:bordercolor?? Colors.white
+           color:bordercolor?? const Color.fromARGB(255, 227, 225, 225)
          ) 
        ),
        focusedBorder: OutlineInputBorder(
+         borderRadius: BorderRadius.circular(8),
          borderSide: BorderSide(
-           color: Colors.white
+           color: bordercolor?? Colors.grey
          ) 
      ),
             

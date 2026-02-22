@@ -2,6 +2,8 @@ import 'package:agri_guide_app/core/constans/app_colors.dart';
 import 'package:agri_guide_app/core/constans/app_strings.dart';
 import 'package:agri_guide_app/core/network/api_errors.dart';
 import 'package:agri_guide_app/feature/auth/data/auth_repo.dart';
+import 'package:agri_guide_app/feature/auth/view/signup_view.dart';
+import 'package:agri_guide_app/feature/auth/widgets/auth_header.dart';
 import 'package:agri_guide_app/feature/auth/widgets/custom_textformfiled.dart';
 import 'package:agri_guide_app/feature/auth/widgets/custome_auth_buttom.dart';
 import 'package:agri_guide_app/root.dart';
@@ -57,132 +59,101 @@ class _LoginViewState extends State<LoginView> {
       child: Form(
         key: _formkey,
         child: Scaffold(
-          backgroundColor: Colors.white,
+          backgroundColor: Color(0xffFFFFFFF2),
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              SizedBox(height: 100,),
               
-             Container(
-                width: double.infinity,
-                height: MediaQuery.of(context).size.height * 0.35, // تحديد ارتفاع ثابت
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: const AssetImage('assets/background.jpg'),
-                    fit: BoxFit.cover,
-                    colorFilter: ColorFilter.mode(
-                      maincolor.withOpacity(0.2),
-                      BlendMode.lighten,
-                    ),
-                  ),
-                ),
-               child: Column(
-                children: [
-                  Gap(100),
-                 Center(
-                  child: CircleAvatar(
-                    
-                    radius: 50,
-                    backgroundColor: Colors.white.withOpacity(0.3),
-                    child: SvgPicture.asset(
-                      'assets/logo.svg',
-                      color: Colors.white,
-                      height: 45,
-                    ),
-                  ),
-                ),
-                Gap(15),
-                Center(
-                  child: Text(
-                    'welcome Back To your planets',
-                    style: TextStyle(color: Colors.white, fontSize: 18),
-                  ),
-                ),
-               Gap(60),
-               ],),
-             ),
+             AuthHeader(),
               
 
               Expanded(
-                child: Container(
-                  decoration: BoxDecoration(
-                    // borderRadius: BorderRadius.only(
-                    //   topLeft: Radius.circular(64),
-                    //   topRight: Radius.circular(64),
-                    // ),
-                    color:  const Color(0xffdffde9),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 15),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Gap(40),
-                          Text(
-                            'Login',
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Gap(10),
+                        Center(
+                          child: Text(
+                            'Login with your Email',
                             style: TextStyle(
-                              fontSize: 30,
-                              color: Colors.black,
+                              fontSize: 16,
+                              color: const Color.fromARGB(199, 0, 0, 0),
                               fontFamily: fontFamily,
                             ),
                           ),
-                          Gap(30),
-                          Custome_Textformfield(
-                            hintText: 'E-mail',
-                            suffixicon: IconButton(
-                              onPressed: () {},
-                              icon: Icon(Icons.email),
-                            ),
-                            controller: emailcontroller,
-                            ispassword: false,
-                          ),
-                          Gap(40),
-                          Custome_Textformfield(
-                            hintText: 'Password',
-                            suffixicon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  if (_obscureText == true) {
-                                    _obscureText = false;
-                                  } else {
-                                    _obscureText = true;
-                                  }
-                                });
-                              },
-                              icon: Icon(
-                                _obscureText
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
-                              ),
-                            ),
-                            controller: Passwordcontroller,
-                            ispassword: _obscureText,
-                          ),
-                          Gap(60),
-                          GestureDetector(
-                            onTap: ()async {
-                              await login();
+                        ),
+                        Gap(60),
+                        Custome_Textformfield(
+                          hintText: 'Enter your E-mail',
+                          prefixicon:  Icon(Icons.email),
+                          controller: emailcontroller,
+                          ispassword: false,
+                        ),
+                        Gap(40),
+                        Custome_Textformfield(
+                          hintText: 'Password',
+                          prefixicon: Icon(Icons.lock),
+                          suffixicon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                if (_obscureText == true) {
+                                  _obscureText = false;
+                                } else {
+                                  _obscureText = true;
+                                }
+                              });
                             },
-                            child: Custome_auth_buttom.CustomeButtom(
-                              progres: 'Log In',
-                              color: Colors.green,
-                              colortext: Colors.white,
+                            icon: Icon(
+                              _obscureText
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
                             ),
                           ),
-                          Gap(30),
-                          GestureDetector(
-                            onTap: () async {
-                              await login();
-                            },
+                          controller: Passwordcontroller,
+                          ispassword: _obscureText,
+                        ),
+                        Gap(40),
+                        Custome_Textformfield(
+                          hintText: 'Location',
+                          prefixicon: Icon(Icons.location_on),
+                          controller: emailcontroller,
+                          ispassword: false,
+                        ),
 
-                            child: Custome_auth_buttom.CustomeButtom(
-                              progres: 'Go to creat Acount',
-                            ),
+
+
+
+                        Gap(60),
+                        GestureDetector(
+                          onTap: ()async {
+                            await login();
+                          },
+                          child: Custome_auth_buttom.CustomeButtom(
+                            progres: 'Log In',
+                            color: Colors.green,
+                            colortext: Colors.white,
                           ),
-                          Gap(30),
-                         
-                        ],
-                      ),
+                        ),
+                        Gap(30),
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.push(context,MaterialPageRoute(builder: (_)=>SignupView()));
+                            
+                          },
+                
+                          child: Custome_auth_buttom.CustomeButtom(
+                            progres: 'Go to creat Acount',
+                            bordercolor: Colors.grey,
+                            
+                          ),
+                        ),
+                        Gap(30),
+                       
+                      ],
                     ),
                   ),
                 ),
@@ -194,3 +165,5 @@ class _LoginViewState extends State<LoginView> {
     );
   }
 }
+
+
