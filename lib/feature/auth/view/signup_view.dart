@@ -1,31 +1,69 @@
-import 'package:agri_guide_app/core/constans/app_colors.dart';
 import 'package:agri_guide_app/core/constans/app_strings.dart';
+import 'package:agri_guide_app/core/network/api_errors.dart';
+import 'package:agri_guide_app/feature/auth/data/auth_repo.dart';
 import 'package:agri_guide_app/feature/auth/view/login_view.dart';
 import 'package:agri_guide_app/feature/auth/widgets/auth_header.dart';
 import 'package:agri_guide_app/feature/auth/widgets/custom_textformfiled.dart';
 import 'package:agri_guide_app/feature/auth/widgets/custome_auth_buttom.dart';
-import 'package:agri_guide_app/feature/home/view/home_view.dart';
+import 'package:agri_guide_app/root.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 
-
-
 class SignupView extends StatefulWidget {
-   SignupView({super.key});
+  const SignupView({super.key});
 
   @override
   State<SignupView> createState() => _SignupViewState();
 }
 
 class _SignupViewState extends State<SignupView> {
-bool isActive=false;
-final GlobalKey<FormState> _Formkey=GlobalKey<FormState>();
-final TextEditingController namecontroller=TextEditingController();
-final TextEditingController emailcontroller=TextEditingController();
-final TextEditingController Passwordcontroller=TextEditingController();
-final TextEditingController Passwordconfirmcontroller=TextEditingController();
-bool _obscureText = true; 
+  final TextEditingController firstnameController = TextEditingController();
+  final TextEditingController lastnameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
+  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController locationController = TextEditingController();
+  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
+  
+  AuthRepo authRepo = AuthRepo();
+  bool _obscurePassword = true;
+  bool _obscureConfirmPassword = true;
+
+  // Future<void> signup() async {
+  //   // Validate passwords match
+  //   if (passwordController.text != confirmPasswordController.text) {
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       const SnackBar(content: Text('Passwords do not match')),
+  //     );
+  //     return;
+  //   }
+
+  //   try {
+  //     final user = await authRepo.signup(
+  //       firstnameController.text.trim(),
+  //       lastnameController.text.trim(),
+  //       emailController.text.trim(),
+  //       passwordController.text.trim(),
+  //       locationController.text.trim(),
+  //     );
+      
+  //     if (user != null) {
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         const SnackBar(content: Text('Account created successfully')),
+  //       );
+  //       Navigator.push(context, MaterialPageRoute(builder: (_) => Root()));
+  //     }
+  //   } catch (e) {
+  //     String errormessage = 'Error creating account';
+  //     if (e is ApiErrors) {
+  //       errormessage = e.message;
+  //     }
+  //     ScaffoldMessenger.of(context).showSnackBar(
+  //       SnackBar(content: Text(errormessage)),
+  //     );
+  //   }
+  // }
+
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -33,74 +71,192 @@ bool _obscureText = true;
         FocusScope.of(context).unfocus();
       },
       child: Form(
-        key: _Formkey,
+        key: _formkey,
         child: Scaffold(
-          backgroundColor:Color(0xffFFFFFFF2),
-          body: SingleChildScrollView(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-             
-              children: [
-                Gap(50),
-                AuthHeader(),
-            
+          backgroundColor: const Color(0xffFFFFFFF2),
+          body: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const SizedBox(height: 60),
               
-               Gap(8),
-               Center(child: Text('welcome Back To your Agri Guide',style: TextStyle(color: const Color.fromARGB(199, 0, 0, 0)),)),
-               Gap(15),
-               Padding(
-                 padding: const EdgeInsets.symmetric(horizontal: 16),
-                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                   children: [
-                     Gap(5),
-                     Text('Sign in',style: TextStyle(fontSize: 30,color:maincolor,fontFamily: fontFamily),),
-                 Gap(20),
-                 Custome_Textformfield(hintText:'Name',  controller: namecontroller,
-                  ispassword: false,bordercolor: maincolor,),
-                 Gap(15),
-                              Custome_Textformfield(
-                 hintText: 'E-mail', suffixicon: IconButton(onPressed: (){}, icon: Icon(Icons.email)), controller: emailcontroller, ispassword: false,bordercolor: maincolor,),
-                              Gap(30),
-                             Custome_Textformfield(hintText: 'Password', suffixicon:
-                                   IconButton(onPressed: (){
-                                     setState(() {
-                                      if(_obscureText==true)
-                                      {
-                                       _obscureText=false;
-               
-                                      }else{_obscureText=true;}
-                                      
-                                     });
-                                   }, icon: Icon(_obscureText?Icons.visibility_off:Icons.visibility)),
-                                   controller: Passwordcontroller, ispassword: _obscureText,),
-                              
-                              Gap(60),
-                              GestureDetector(
-                 onTap: () {
-                     if(_Formkey.currentState!.validate()){
-                       ScaffoldMessenger(child: SnackBar(content: Text('succes')),);
-                       Navigator.push(context, MaterialPageRoute(builder: (_)=>HomeView()));
-                     }
-                   },
-                 child: Custome_auth_buttom.CustomeButtom(progres: 'Sign In',color: Colors.grey,colortext: Colors.black,)),
-                              Gap(30),
-                              GestureDetector(
-                 onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginView()));
-                 },
-                 
-                 child: Custome_auth_buttom.CustomeButtom(progres: 'Go to Login',color: maincolor,colortext: Colors.white,
-                     ),)
-                   ],
-                 ),
-               )
-              ],
-            ),
+              const AuthHeader(),
+
+              Expanded(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 15),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Gap(10),
+                        Center(
+                          child: Text(
+                            'Create your account',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.w500,
+                              color: const Color.fromARGB(199, 0, 0, 0),
+                              fontFamily: fontFamily,
+                            ),
+                          ),
+                        ),
+                        const Gap(25),
+                        
+                        // First Name
+                        Custome_Textformfield(
+                          hintText: 'Enter your first name',
+                          lableText: 'First Name',
+                          prefixicon: const Icon(Icons.person_outline),
+                          controller: firstnameController,
+                          ispassword: false,
+                        ),
+                      const Gap(15),
+                        
+                        // Last Name
+                        Custome_Textformfield(
+                          hintText: 'Enter your last name',
+                          lableText: 'Last Name',
+                          prefixicon: const Icon(Icons.person_outline),
+                          controller: lastnameController,
+                          ispassword: false,
+                        ),
+                        const Gap(15),
+                        
+                        // Email
+                        Custome_Textformfield(
+                          hintText: 'Enter your email',
+                          lableText: 'Email Address',
+                          prefixicon: const Icon(Icons.email),
+                          controller: emailController,
+                          ispassword: false,
+                        ),
+                        const Gap(15),
+                        
+                        // Password
+                        Custome_Textformfield(
+                          hintText: 'Create a password',
+                          lableText: 'Password',
+                          prefixicon: const Icon(Icons.lock),
+                          suffixicon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _obscurePassword = !_obscurePassword;
+                              });
+                            },
+                            icon: Icon(
+                              _obscurePassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                          ),
+                          controller: passwordController,
+                          ispassword: _obscurePassword,
+                        ),
+                        const Gap(15),
+                        
+                        // Confirm Password
+                        Custome_Textformfield(
+                          hintText: 'Confirm your password',
+                          lableText: 'Confirm Password',
+                          prefixicon: const Icon(Icons.lock),
+                          suffixicon: IconButton(
+                            onPressed: () {
+                              setState(() {
+                                _obscureConfirmPassword = !_obscureConfirmPassword;
+                              });
+                            },
+                            icon: Icon(
+                              _obscureConfirmPassword
+                                  ? Icons.visibility_off
+                                  : Icons.visibility,
+                            ),
+                          ),
+                          controller: confirmPasswordController,
+                          ispassword: _obscureConfirmPassword,
+                        ),
+                       const Gap(15),
+                        
+                        // Location
+                        Custome_Textformfield(
+                          hintText: 'Your location',
+                          lableText: 'Location',
+                          prefixicon: const Icon(Icons.location_on),
+                          suffixicon: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_drop_down)),
+                          controller: locationController,
+                          ispassword: false,
+                        ),
+                        
+                        const Gap(40),
+                        
+                        // Sign Up Button
+                        GestureDetector(
+                          onTap: () async {
+                            // if (_formkey.currentState?.validate() ?? false) {
+                            //   await signup();
+                            // }
+                          },
+                          child: Custome_auth_buttom.CustomeButtom(
+                            progres: 'Sign Up',
+                            color: Colors.green,
+                            colortext: Colors.white,
+                          ),
+                        ),
+                        
+                        const Gap(15),
+                        
+                        // Go to Login Button
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              'Already have an account? ',
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 14,
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => LoginView(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                'Log in',
+                                style: TextStyle(
+                                  color: Colors.green,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 14,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                        const Gap(30),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    firstnameController.dispose();
+    lastnameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    confirmPasswordController.dispose();
+    locationController.dispose();
+    super.dispose();
   }
 }
 
