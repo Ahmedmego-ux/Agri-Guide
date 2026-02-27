@@ -1,6 +1,7 @@
 import 'package:agri_guide_app/core/constans/app_strings.dart';
 import 'package:agri_guide_app/core/network/api_errors.dart';
 import 'package:agri_guide_app/feature/auth/data/auth_repo.dart';
+import 'package:agri_guide_app/feature/auth/view/reset_password_view.dart';
 import 'package:agri_guide_app/feature/auth/view/signup_view.dart';
 import 'package:agri_guide_app/feature/auth/widgets/auth_header.dart';
 import 'package:agri_guide_app/feature/auth/widgets/custom_textformfiled.dart';
@@ -134,23 +135,23 @@ class _LoginViewState extends State<LoginView> {
                           const Gap(50),
                           
                           // Email Field
-                          Custome_Textformfield(
+                          CustomeTextFormField(
                             hintText: 'Enter your email',
-                            lableText: 'Email',
-                            prefixicon: const Icon(Icons.email, color: Colors.green),
+                            labelText: 'Email',
+                            prefixIcon: const Icon(Icons.email, color: Colors.green),
                             controller: emailcontroller,
-                            ispassword: false,
+                            isPassword: false,
                            
                           ),
                           
                           const Gap(30),
                           
                           // Password Field
-                          Custome_Textformfield(
+                          CustomeTextFormField(
                             hintText: 'Enter your password',
-                            lableText: 'Password',
-                            prefixicon: const Icon(Icons.lock, color: Colors.green),
-                            suffixicon: IconButton(
+                            labelText: 'Password',
+                            prefixIcon: const Icon(Icons.lock, color: Colors.green),
+                            suffixIcon: IconButton(
                               onPressed: () {
                                 setState(() {
                                   _obscureText = !_obscureText;
@@ -164,19 +165,19 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             ),
                             controller: passwordcontroller,
-                            ispassword: _obscureText,
+                            isPassword: _obscureText,
                           
                           ),
                           const Gap(30),
 
 
-                           Custome_Textformfield(
+                           CustomeTextFormField(
                           hintText: 'Your location',
-                          lableText: 'Location',
-                          prefixicon: const Icon(Icons.location_on),
-                          suffixicon: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_drop_down)),
+                          labelText: 'Location',
+                          prefixIcon: const Icon(Icons.location_on),
+                          suffixIcon: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_drop_down)),
                           controller: locationController,
-                          ispassword: false,
+                          isPassword: false,
                         ),
                           
                           const Gap(30),
@@ -186,9 +187,9 @@ class _LoginViewState extends State<LoginView> {
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: () {
-                                // هتضيف هنا منطق نسيت كلمة المرور
+                                Navigator.push(context,MaterialPageRoute(builder: (_)=>ResetPasswordView()));
                               },
-                              child: const Text(
+                              child:  Text(
                                 'Forgot Password?',
                                 style: TextStyle(
                                   color: Colors.green,

@@ -103,41 +103,41 @@ class _SignupViewState extends State<SignupView> {
                         const Gap(25),
                         
                         // First Name
-                        Custome_Textformfield(
+                        CustomeTextFormField(
                           hintText: 'Enter your first name',
-                          lableText: 'First Name',
-                          prefixicon: const Icon(Icons.person_outline),
+                          labelText: 'First Name',
+                          prefixIcon: const Icon(Icons.person_outline),
                           controller: firstnameController,
-                          ispassword: false,
+                          isPassword: false,
                         ),
                       const Gap(15),
                         
                         // Last Name
-                        Custome_Textformfield(
+                        CustomeTextFormField(
                           hintText: 'Enter your last name',
-                          lableText: 'Last Name',
-                          prefixicon: const Icon(Icons.person_outline),
+                          labelText: 'Last Name',
+                          prefixIcon: const Icon(Icons.person_outline),
                           controller: lastnameController,
-                          ispassword: false,
+                          isPassword: false,
                         ),
                         const Gap(15),
                         
                         // Email
-                        Custome_Textformfield(
+                        CustomeTextFormField(
                           hintText: 'Enter your email',
-                          lableText: 'Email Address',
-                          prefixicon: const Icon(Icons.email),
+                          labelText: 'Email Address',
+                          prefixIcon: const Icon(Icons.email),
                           controller: emailController,
-                          ispassword: false,
+                          isPassword: false,
                         ),
                         const Gap(15),
                         
                         // Password
-                        Custome_Textformfield(
+                        CustomeTextFormField(
                           hintText: 'Create a password',
-                          lableText: 'Password',
-                          prefixicon: const Icon(Icons.lock),
-                          suffixicon: IconButton(
+                          labelText: 'Password',
+                          prefixIcon: const Icon(Icons.lock),
+                          suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
                                 _obscurePassword = !_obscurePassword;
@@ -150,16 +150,16 @@ class _SignupViewState extends State<SignupView> {
                             ),
                           ),
                           controller: passwordController,
-                          ispassword: _obscurePassword,
+                          isPassword: _obscurePassword,
                         ),
                         const Gap(15),
                         
                         // Confirm Password
-                        Custome_Textformfield(
+                        CustomeTextFormField(
                           hintText: 'Confirm your password',
-                          lableText: 'Confirm Password',
-                          prefixicon: const Icon(Icons.lock),
-                          suffixicon: IconButton(
+                          labelText: 'Confirm Password',
+                          prefixIcon: const Icon(Icons.lock),
+                          suffixIcon: IconButton(
                             onPressed: () {
                               setState(() {
                                 _obscureConfirmPassword = !_obscureConfirmPassword;
@@ -172,18 +172,18 @@ class _SignupViewState extends State<SignupView> {
                             ),
                           ),
                           controller: confirmPasswordController,
-                          ispassword: _obscureConfirmPassword,
+                          isPassword: _obscureConfirmPassword,
                         ),
                        const Gap(15),
                         
                         // Location
-                        Custome_Textformfield(
+                        CustomeTextFormField(
                           hintText: 'Your location',
-                          lableText: 'Location',
-                          prefixicon: const Icon(Icons.location_on),
-                          suffixicon: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_drop_down)),
+                          labelText: 'Location',
+                          prefixIcon: const Icon(Icons.location_on),
+                          suffixIcon: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_drop_down)),
                           controller: locationController,
-                          ispassword: false,
+                          isPassword: false,
                         ),
                         
                         const Gap(40),
@@ -195,10 +195,10 @@ class _SignupViewState extends State<SignupView> {
                             //   await signup();
                             // }
                           },
-                          child: Custome_auth_buttom.CustomeButtom(
-                            progres: 'Sign Up',
-                            color: Colors.green,
-                            colortext: Colors.white,
+                          child: CustomAuthButton(
+                            text: 'Sign Up',
+                            borderColor: Colors.green,
+                            textColor: Colors.white,
                           ),
                         ),
                         
