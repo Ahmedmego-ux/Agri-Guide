@@ -1,10 +1,10 @@
 import 'package:agri_guide_app/core/constans/app_strings.dart';
 import 'package:agri_guide_app/core/network/api_errors.dart';
-import 'package:agri_guide_app/feature/auth/data/auth_repo.dart';
-import 'package:agri_guide_app/feature/auth/view/login_view.dart';
-import 'package:agri_guide_app/feature/auth/widgets/auth_header.dart';
-import 'package:agri_guide_app/feature/auth/widgets/custom_textformfiled.dart';
-import 'package:agri_guide_app/feature/auth/widgets/custome_auth_buttom.dart';
+import 'package:agri_guide_app/feature/auth/domain/repos/auth_repo.dart';
+import 'package:agri_guide_app/feature/auth/view/view/login_view.dart';
+import 'package:agri_guide_app/feature/auth/view/widgets/auth_header.dart';
+import 'package:agri_guide_app/feature/auth/view/widgets/custom_textformfiled.dart';
+import 'package:agri_guide_app/feature/auth/view/widgets/custome_auth_buttom.dart';
 import 'package:agri_guide_app/root.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
@@ -25,7 +25,7 @@ class _SignupViewState extends State<SignupView> {
   final TextEditingController locationController = TextEditingController();
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
   
-  AuthRepo authRepo = AuthRepo();
+  //AuthRepo authRepo = AuthRepo();
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
 

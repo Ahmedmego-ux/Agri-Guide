@@ -1,10 +1,10 @@
 import 'package:agri_guide_app/core/constans/app_strings.dart';
 import 'package:agri_guide_app/core/network/api_errors.dart';
-import 'package:agri_guide_app/feature/auth/data/auth_repo.dart';
-import 'package:agri_guide_app/feature/auth/view/reset_password_view.dart';
-import 'package:agri_guide_app/feature/auth/view/signup_view.dart';
-import 'package:agri_guide_app/feature/auth/widgets/auth_header.dart';
-import 'package:agri_guide_app/feature/auth/widgets/custom_textformfiled.dart';
+import 'package:agri_guide_app/feature/auth/domain/repos/auth_repo.dart';
+import 'package:agri_guide_app/feature/auth/view/view/reset_password_view.dart';
+import 'package:agri_guide_app/feature/auth/view/view/signup_view.dart';
+import 'package:agri_guide_app/feature/auth/view/widgets/auth_header.dart';
+import 'package:agri_guide_app/feature/auth/view/widgets/custom_textformfiled.dart';
 
 import 'package:agri_guide_app/root.dart';
 import 'package:flutter/material.dart';
@@ -23,7 +23,7 @@ class _LoginViewState extends State<LoginView> {
   final TextEditingController locationController = TextEditingController();
 
   final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
-  AuthRepo authRepo = AuthRepo();
+ // AuthRepo authRepo = AuthRepo();
   bool _obscureText = true;
   bool _isLoading = false;
 
@@ -56,42 +56,42 @@ class _LoginViewState extends State<LoginView> {
         _isLoading = true;
       });
 
-      try {
-        final user = await authRepo.login(
-          emailcontroller.text.trim(),
-          passwordcontroller.text.trim(),
-        );
+  //     try {
+  //       final user = await authRepo.login(
+  //         emailcontroller.text.trim(),
+  //         passwordcontroller.text.trim(),
+  //       );
         
-        if (user != null) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text('Login successful'),
-              backgroundColor: Colors.green,
-            ),
-          );
-          Navigator.pushReplacement( // استخدام pushReplacement عشان مايرجعش للخلف
-            context, 
-            MaterialPageRoute(builder: (_) => Root())
-          );
-        }
-      } catch (e) {
-        String errormessage = 'Error logging in';
-        if (e is ApiErrors) {
-          errormessage = e.message;
-        }
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: Text(errormessage),
-            backgroundColor: Colors.red,
-          ),
-        );
-      } finally {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
-  }
+  //       if (user != null) {
+  //         ScaffoldMessenger.of(context).showSnackBar(
+  //           const SnackBar(
+  //             content: Text('Login successful'),
+  //             backgroundColor: Colors.green,
+  //           ),
+  //         );
+  //         Navigator.pushReplacement( // استخدام pushReplacement عشان مايرجعش للخلف
+  //           context, 
+  //           MaterialPageRoute(builder: (_) => Root())
+  //         );
+  //       }
+  //     } catch (e) {
+  //       String errormessage = 'Error logging in';
+  //       if (e is ApiErrors) {
+  //         errormessage = e.message;
+  //       }
+  //       ScaffoldMessenger.of(context).showSnackBar(
+  //         SnackBar(
+  //           content: Text(errormessage),
+  //           backgroundColor: Colors.red,
+  //         ),
+  //       );
+  //     } finally {
+  //       setState(() {
+  //         _isLoading = false;
+  //       });
+  //     }
+     }
+   }
 
   @override
   Widget build(BuildContext context) {

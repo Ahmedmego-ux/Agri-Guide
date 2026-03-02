@@ -1,7 +1,7 @@
 // lib/feature/auth/view/reset_password_view.dart
-import 'package:agri_guide_app/feature/auth/view/otp_view.dart';
-import 'package:agri_guide_app/feature/auth/widgets/custom_textformfiled.dart';
-import 'package:agri_guide_app/feature/auth/widgets/custome_auth_buttom.dart';
+import 'package:agri_guide_app/feature/auth/view/view/otp_view.dart';
+import 'package:agri_guide_app/feature/auth/view/widgets/custom_textformfiled.dart';
+import 'package:agri_guide_app/feature/auth/view/widgets/custome_auth_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

@@ -1,4 +1,4 @@
-import 'package:agri_guide_app/feature/auth/view/new_password_view.dart';
+import 'package:agri_guide_app/feature/auth/view/view/new_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:pinput/pinput.dart';
 

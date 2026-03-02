@@ -1,5 +1,5 @@
 import 'package:agri_guide_app/core/constans/app_colors.dart';
-import 'package:agri_guide_app/feature/auth/widgets/custome_profile_textfield.dart';
+import 'package:agri_guide_app/feature/auth/view/widgets/custome_profile_textfield.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 

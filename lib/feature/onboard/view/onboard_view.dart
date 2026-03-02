@@ -1,4 +1,4 @@
-import 'package:agri_guide_app/feature/auth/view/login_view.dart';
+import 'package:agri_guide_app/feature/auth/view/view/login_view.dart';
 import 'package:agri_guide_app/feature/onboard/widgets/onboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
