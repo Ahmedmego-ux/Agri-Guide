@@ -1,106 +1,78 @@
-import 'package:agri_guide_app/core/constans/app_strings.dart';
-import 'package:agri_guide_app/core/network/api_errors.dart';
 import 'package:agri_guide_app/feature/auth/domain/repos/auth_repo.dart';
+import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:agri_guide_app/core/constans/app_strings.dart';
 import 'package:agri_guide_app/feature/auth/view/view/reset_password_view.dart';
 import 'package:agri_guide_app/feature/auth/view/view/signup_view.dart';
 import 'package:agri_guide_app/feature/auth/view/widgets/auth_header.dart';
 import 'package:agri_guide_app/feature/auth/view/widgets/custom_textformfiled.dart';
 
-import 'package:agri_guide_app/root.dart';
-import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-
 class LoginView extends StatefulWidget {
-  LoginView({super.key});
+  const LoginView({super.key});
 
   @override
   State<LoginView> createState() => _LoginViewState();
 }
 
 class _LoginViewState extends State<LoginView> {
-  final TextEditingController emailcontroller = TextEditingController();
-  final TextEditingController passwordcontroller = TextEditingController();
-  final TextEditingController locationController = TextEditingController();
+  // Controllers
+  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _locationController = TextEditingController();
 
-  final GlobalKey<FormState> _formkey = GlobalKey<FormState>();
- // AuthRepo authRepo = AuthRepo();
+  // Form Key
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+    
+    //logic
+
+
+  // State
   bool _obscureText = true;
   bool _isLoading = false;
 
   // Validators
-  String? validateEmail(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your email';
-    }
-    final emailRegex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
-    if (!emailRegex.hasMatch(value)) {
-      return 'Please enter a valid email';
-    }
+  String? _validateEmail(String? value) {
+    if (value == null || value.isEmpty) return 'Please enter your email';
+    final regex = RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$');
+    if (!regex.hasMatch(value)) return 'Please enter a valid email';
     return null;
   }
 
-  String? validatePassword(String? value) {
-    if (value == null || value.isEmpty) {
-      return 'Please enter your password';
-    }
-    if (value.length < 6) {
-      return 'Password must be at least 6 characters';
-    }
+  String? _validatePassword(String? value) {
+    if (value == null || value.isEmpty) return 'Please enter your password';
+    if (value.length < 6) return 'Password must be at least 6 characters';
     return null;
   }
 
-  Future<void> login() async {
-    
-    if (_formkey.currentState?.validate() ?? false) {
-      setState(() {
-        _isLoading = true;
-      });
+  // Placeholder for login logic
+  Future<void> _login() async {
+    if (!(_formKey.currentState?.validate() ?? false)) return;
 
-  //     try {
-  //       final user = await authRepo.login(
-  //         emailcontroller.text.trim(),
-  //         passwordcontroller.text.trim(),
-  //       );
-        
-  //       if (user != null) {
-  //         ScaffoldMessenger.of(context).showSnackBar(
-  //           const SnackBar(
-  //             content: Text('Login successful'),
-  //             backgroundColor: Colors.green,
-  //           ),
-  //         );
-  //         Navigator.pushReplacement( // استخدام pushReplacement عشان مايرجعش للخلف
-  //           context, 
-  //           MaterialPageRoute(builder: (_) => Root())
-  //         );
-  //       }
-  //     } catch (e) {
-  //       String errormessage = 'Error logging in';
-  //       if (e is ApiErrors) {
-  //         errormessage = e.message;
-  //       }
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(
-  //           content: Text(errormessage),
-  //           backgroundColor: Colors.red,
-  //         ),
-  //       );
-  //     } finally {
-  //       setState(() {
-  //         _isLoading = false;
-  //       });
-  //     }
-     }
-   }
+    setState(() {
+      _isLoading = true;
+    });
+
+    // TODO: Implement login logic with AuthRepo here
+
+    setState(() {
+      _isLoading = false;
+    });
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    _locationController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () {
-        FocusScope.of(context).unfocus();
-      },
+      onTap: () => FocusScope.of(context).unfocus(),
       child: Form(
-        key: _formkey,
+        key: _formKey,
         child: Scaffold(
           backgroundColor: const Color(0xffFFFFFFF2),
           body: SafeArea(
@@ -108,9 +80,7 @@ class _LoginViewState extends State<LoginView> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40),
-                
                 const AuthHeader(),
-
                 Expanded(
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
@@ -119,7 +89,6 @@ class _LoginViewState extends State<LoginView> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Gap(20),
-                          
                           Center(
                             child: Text(
                               'Login with your Email',
@@ -131,88 +100,83 @@ class _LoginViewState extends State<LoginView> {
                               ),
                             ),
                           ),
-                          
                           const Gap(50),
-                          
+
                           // Email Field
                           CustomeTextFormField(
                             hintText: 'Enter your email',
                             labelText: 'Email',
                             prefixIcon: const Icon(Icons.email, color: Colors.green),
-                            controller: emailcontroller,
-                            isPassword: false,
-                           
+                            controller: _emailController,
+                            validator: _validateEmail,
+                             isPassword: false,
                           ),
-                          
+
                           const Gap(30),
-                          
+
                           // Password Field
                           CustomeTextFormField(
                             hintText: 'Enter your password',
                             labelText: 'Password',
                             prefixIcon: const Icon(Icons.lock, color: Colors.green),
                             suffixIcon: IconButton(
-                              onPressed: () {
-                                setState(() {
-                                  _obscureText = !_obscureText;
-                                });
-                              },
+                              onPressed: () => setState(() => _obscureText = !_obscureText),
                               icon: Icon(
-                                _obscureText
-                                    ? Icons.visibility_off
-                                    : Icons.visibility,
+                                _obscureText ? Icons.visibility_off : Icons.visibility,
                                 color: Colors.grey,
                               ),
                             ),
-                            controller: passwordcontroller,
+                            controller: _passwordController,
                             isPassword: _obscureText,
-                          
+                            validator: _validatePassword,
                           ),
+
                           const Gap(30),
 
+                          // Location Field
+                          CustomeTextFormField(
+                            hintText: 'Your location',
+                            labelText: 'Location',
+                            prefixIcon: const Icon(Icons.location_on),
+                            suffixIcon: IconButton(
+                              onPressed: () {},
+                              icon: const Icon(Icons.arrow_drop_down),
+                            ),
+                            controller: _locationController,
+                            isPassword: false,
+                          ),
 
-                           CustomeTextFormField(
-                          hintText: 'Your location',
-                          labelText: 'Location',
-                          prefixIcon: const Icon(Icons.location_on),
-                          suffixIcon: IconButton(onPressed: (){}, icon: const Icon(Icons.arrow_drop_down)),
-                          controller: locationController,
-                          isPassword: false,
-                        ),
-                          
                           const Gap(30),
-                          
-                          // Forgot Password (optional)
+
+                          // Forgot Password
                           Align(
                             alignment: Alignment.centerRight,
                             child: TextButton(
                               onPressed: () {
-                                Navigator.push(context,MaterialPageRoute(builder: (_)=>ResetPasswordView()));
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(builder: (_) => const ResetPasswordView()),
+                                );
                               },
-                              child:  Text(
+                              child: const Text(
                                 'Forgot Password?',
-                                style: TextStyle(
-                                  color: Colors.green,
-                                  fontSize: 14,
-                                ),
+                                style: TextStyle(color: Colors.green, fontSize: 14),
                               ),
                             ),
                           ),
-                          
-                        // const Gap(40),
-                          
+
+                          const Gap(30),
+
                           // Login Button
                           SizedBox(
                             width: double.infinity,
                             height: 55,
                             child: ElevatedButton(
-                              onPressed: _isLoading ? null : login,
+                              onPressed: _isLoading ? null : _login,
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
                                 foregroundColor: Colors.white,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(12),
-                                ),
+                                shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                                 elevation: 0,
                                 disabledBackgroundColor: Colors.grey[300],
                               ),
@@ -220,55 +184,40 @@ class _LoginViewState extends State<LoginView> {
                                   ? const SizedBox(
                                       height: 20,
                                       width: 20,
-                                      child: CircularProgressIndicator(
-                                        color: Colors.white,
-                                        strokeWidth: 2,
-                                      ),
+                                      child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                                     )
                                   : const Text(
                                       'Log In',
-                                      style: TextStyle(
-                                        fontSize: 16,
-                                        fontWeight: FontWeight.w600,
-                                      ),
+                                      style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                                     ),
                             ),
                           ),
-                          
+
                           const Gap(20),
-                          
+
                           // Go to Sign Up
                           Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: [
                               Text(
                                 "Don't have an account? ",
-                                style: TextStyle(
-                                  color: Colors.grey[600],
-                                  fontSize: 14,
-                                ),
+                                style: TextStyle(color: Colors.grey[600], fontSize: 14),
                               ),
                               GestureDetector(
                                 onTap: () {
                                   Navigator.push(
                                     context,
-                                    MaterialPageRoute(
-                                      builder: (_) => const SignupView(),
-                                    ),
+                                    MaterialPageRoute(builder: (_) => const SignupView()),
                                   );
                                 },
                                 child: const Text(
                                   'Sign Up',
-                                  style: TextStyle(
-                                    color: Colors.green,
-                                    fontWeight: FontWeight.bold,
-                                    fontSize: 14,
-                                  ),
+                                  style: TextStyle(color: Colors.green, fontWeight: FontWeight.bold, fontSize: 14),
                                 ),
                               ),
                             ],
                           ),
-                          
+
                           const Gap(30),
                         ],
                       ),
@@ -282,13 +231,4 @@ class _LoginViewState extends State<LoginView> {
       ),
     );
   }
-
-  @override
-  void dispose() {
-    emailcontroller.dispose();
-    passwordcontroller.dispose();
-    super.dispose();
-  }
 }
-
-
