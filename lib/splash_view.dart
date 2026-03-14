@@ -79,8 +79,8 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
                   position: _slideAnimation,
                   child: SvgPicture.asset(
                     'assets/logo.svg',
-                    width: 130,
-                    height: 130,
+                    width: 100,
+                    height: 100,
                     colorFilter: const ColorFilter.mode(
                       primaryGreen,
                       BlendMode.srcIn,

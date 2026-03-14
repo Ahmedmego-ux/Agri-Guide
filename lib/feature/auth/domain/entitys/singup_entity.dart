@@ -4,15 +4,14 @@ class SingupEntity {
   final String password;
   final String email;
 
-  final double latitude;
-  final double longitude;
+  final String cityName;
 
-  SingupEntity({
+  SingupEntity( {
     required this.firstName,
     required this.lastName,
     required this.password,
     required this.email,
-    required this.latitude,
-    required this.longitude,
+    required this.cityName,
+  
   });
 }

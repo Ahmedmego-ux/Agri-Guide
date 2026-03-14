@@ -10,7 +10,8 @@ class CustomeTextFormField extends StatelessWidget {
     this.prefixIcon,
     this.bordercolor, 
     required this.labelText,
-    this.validator, this.keyboardType, // أضفنا validator كـ parameter
+    this.validator, this.keyboardType,
+       this.readOnly, // أضفنا validator كـ parameter
   });
 
   final String hintText;
@@ -22,6 +23,7 @@ class CustomeTextFormField extends StatelessWidget {
   final Color? bordercolor;
   final String? Function(String?)? validator; // نوع الـ validator
   final TextInputType? keyboardType;
+  final bool? readOnly;
 
   @override
   Widget build(BuildContext context) {
