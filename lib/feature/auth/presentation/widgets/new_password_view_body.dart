@@ -1,12 +1,12 @@
 import 'package:agri_guide_app/feature/auth/domain/entitys/reset_password/update_password_entity.dart';
-import 'package:agri_guide_app/feature/auth/view/manger/reset_password/reset_password_cubit.dart';
-import 'package:agri_guide_app/feature/auth/view/view/login_view.dart';
-import 'package:agri_guide_app/feature/auth/view/widgets/custom_textformfiled.dart';
-import 'package:agri_guide_app/feature/auth/view/widgets/custome_auth_buttom.dart';
+import 'package:agri_guide_app/feature/auth/presentation/manger/reset_password/reset_password_cubit.dart';
+import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
+import 'package:agri_guide_app/feature/auth/presentation/widgets/custom_textformfiled.dart';
+import 'package:agri_guide_app/feature/auth/presentation/widgets/custome_auth_buttom.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import '../widgets/auth_header.dart';
+import 'auth_header.dart';
 import 'new_password_header.dart';
 import 'new_password_requirements.dart';
 import 'new_password_strength.dart';

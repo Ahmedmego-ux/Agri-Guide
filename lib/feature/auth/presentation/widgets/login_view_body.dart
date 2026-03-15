@@ -1,12 +1,13 @@
 import 'package:agri_guide_app/core/erorr/error_handler.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
-import 'package:agri_guide_app/feature/auth/view/manger/login/login_cubit.dart';
-import 'package:agri_guide_app/feature/auth/view/view/reset_password_view.dart';
+import 'package:agri_guide_app/feature/auth/presentation/manger/login/login_cubit.dart';
+import 'package:agri_guide_app/feature/auth/presentation/view/reset_password_view.dart';
 
-import 'package:agri_guide_app/feature/auth/view/view/signup_view.dart';
-import 'package:agri_guide_app/feature/auth/view/widgets/auth_header.dart';
-import 'package:agri_guide_app/feature/auth/view/widgets/auth_validator.dart';
-import 'package:agri_guide_app/feature/auth/view/widgets/custom_textformfiled.dart';
+import 'package:agri_guide_app/feature/auth/presentation/view/signup_view.dart';
+import 'package:agri_guide_app/feature/auth/presentation/widgets/auth_header.dart';
+import 'package:agri_guide_app/feature/auth/presentation/widgets/auth_validator.dart';
+import 'package:agri_guide_app/feature/auth/presentation/widgets/custom_textformfiled.dart';
+import 'package:agri_guide_app/feature/chat_bot/presentation/view/chat_bot_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -63,6 +64,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
             ),
           );
         } else if (state is LoginSuccess) {
+Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatBotView()));
          ErrorHandler.showSuccessSnackBar(context, 'Welcome back,${state.userData.firstName ?? state.userData.email} !')
          ;
         }

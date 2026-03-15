@@ -2,8 +2,8 @@ import 'dart:async';
 
 import 'package:agri_guide_app/feature/auth/domain/entitys/reset_password/reset_password_entity.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/reset_password/verify_otp_entity.dart';
-import 'package:agri_guide_app/feature/auth/view/manger/reset_password/reset_password_cubit.dart';
-import 'package:agri_guide_app/feature/auth/view/view/new_password_view.dart';
+import 'package:agri_guide_app/feature/auth/presentation/manger/reset_password/reset_password_cubit.dart';
+import 'package:agri_guide_app/feature/auth/presentation/view/new_password_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';

@@ -1,4 +1,4 @@
-import 'package:agri_guide_app/feature/auth/view/widgets/custome_auth_buttom.dart';
+import 'package:agri_guide_app/feature/auth/presentation/widgets/custome_auth_buttom.dart';
 import 'package:flutter/material.dart';
 
 class SignupButton extends StatelessWidget {

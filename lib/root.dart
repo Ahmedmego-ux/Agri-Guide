@@ -1,5 +1,5 @@
 import 'package:agri_guide_app/core/constans/app_colors.dart';
-import 'package:agri_guide_app/feature/auth/view/view/profile_view.dart';
+import 'package:agri_guide_app/feature/auth/presentation/view/profile_view.dart';
 import 'package:agri_guide_app/feature/onboard/widgets/onboard_page.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';

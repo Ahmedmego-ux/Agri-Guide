@@ -1,5 +1,5 @@
-import 'package:agri_guide_app/feature/auth/view/manger/singup/sing_up_cubit.dart';
-import 'package:agri_guide_app/feature/auth/view/widgets/sing_up_view_body.dart';
+import 'package:agri_guide_app/feature/auth/presentation/manger/singup/sing_up_cubit.dart';
+import 'package:agri_guide_app/feature/auth/presentation/widgets/sing_up_view_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
