@@ -1,3 +1,6 @@
+import 'package:agri_guide_app/feature/profile/presentation/view/widgets/profile_avater.dart';
+import 'package:agri_guide_app/feature/profile/presentation/view/widgets/profile_feild_tile.dart';
+import 'package:agri_guide_app/feature/profile/presentation/view/widgets/profile_save_button.dart';
 import 'package:flutter/material.dart';
 
 class ProfileView extends StatefulWidget {
@@ -9,10 +12,11 @@ class ProfileView extends StatefulWidget {
 
 class _ProfileViewState extends State<ProfileView> {
   final _formKey = GlobalKey<FormState>();
+  bool _isEditing = false;
 
   final _firstNameController = TextEditingController(text: 'Ahmed');
   final _lastNameController  = TextEditingController(text: 'Mohamed');
-  final _emailController     = TextEditingController(text: 'ahmed@example.com');
+  final _emailController     = TextEditingController(text: 'ahmed@gmail.com');
   final _locationController  = TextEditingController(text: 'Cairo, Egypt');
 
   @override
@@ -23,6 +27,26 @@ class _ProfileViewState extends State<ProfileView> {
     _locationController.dispose();
     super.dispose();
   }
+
+  void _toggleEdit() {
+    setState(() => _isEditing = !_isEditing);
+  }
+
+  void _saveChanges() {
+    if (_formKey.currentState!.validate()) {
+      setState(() => _isEditing = false);
+      // حط هنا الـ save logic
+    }
+  }
+
+  String get _initials {
+    final f = _firstNameController.text;
+    final l = _lastNameController.text;
+    return '${f.isNotEmpty ? f[0] : ''}${l.isNotEmpty ? l[0] : ''}'.toUpperCase();
+  }
+
+  String get _fullName =>
+      '${_firstNameController.text} ${_lastNameController.text}';
 
   @override
   Widget build(BuildContext context) {
@@ -43,30 +67,100 @@ class _ProfileViewState extends State<ProfileView> {
             color: Color(0xFF1A1A1A),
           ),
         ),
+        actions: [
+          TextButton(
+            onPressed: _toggleEdit,
+            child: Text(
+              _isEditing ? 'Cancel' : 'Edit',
+              style: TextStyle(
+                fontSize: 14,
+                fontWeight: FontWeight.w500,
+                color: _isEditing
+                    ? const Color(0xFFE24B4A)
+                    : const Color(0xFF2E9E47),
+              ),
+            ),
+          ),
+        ],
       ),
       body: SingleChildScrollView(
-        padding: const EdgeInsets.symmetric(horizontal: 16),
         child: Form(
           key: _formKey,
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const SizedBox(height: 32),
-              const ProfileAvatar(name: 'Ahmed Mohamed'),
-              const SizedBox(height: 28),
-              ProfileFormCard(
-                firstNameController: _firstNameController,
-                lastNameController: _lastNameController,
-                emailController: _emailController,
-                locationController: _locationController,
+              const SizedBox(height: 24),
+
+            
+              ProfileAvatar(
+                initials: _initials,
+                fullName: _fullName,
               ),
+
               const SizedBox(height: 28),
-              ProfileSaveButton(
-                onPressed: () {
-                  if (_formKey.currentState!.validate()) {
-                    // حط هنا الـ save logic
-                  }
-                },
-              ),
+
+            
+              _buildSectionHeader('PERSONAL INFO'),
+              _buildFormGroup([
+                ProfileFieldTile(
+                  controller: _firstNameController,
+                  label: 'First Name',
+                  icon: Icons.person_outline,
+                  iconBg: const Color(0xFFE8F5E9),
+                  iconColor: const Color(0xFF2E9E47),
+                  isEditing: _isEditing,
+                  validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                ),
+                const Divider(height: 20, indent: 68, color: Color(0xFFEEEEEE)),
+                ProfileFieldTile(
+                  controller: _lastNameController,
+                  label: 'Last Name',
+                  icon: Icons.person_outline,
+                  iconBg: const Color(0xFFE8F5E9),
+                  iconColor: const Color(0xFF2E9E47),
+                  isEditing: _isEditing,
+                  validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                ),
+              ]),
+
+              // ─── CONTACT ─────────────────────────────────
+              _buildSectionHeader('CONTACT'),
+              _buildFormGroup([
+                ProfileFieldTile(
+                  controller: _emailController,
+                  label: 'Email',
+                  icon: Icons.email_outlined,
+                  iconBg: const Color(0xFFE8EAF6),
+                  iconColor: const Color(0xFF3949AB),
+                  isEditing: _isEditing,
+                  keyboardType: TextInputType.emailAddress,
+                  validator: (v) {
+                    if (v == null || v.isEmpty) return 'Required';
+                    if (!v.contains('@gmail.com')) return 'Invalid email';
+                    return null;
+                  },
+                ),
+                const Divider(height: 20, indent: 68, color: Color(0xFFEEEEEE)),
+                ProfileFieldTile(
+                  controller: _locationController,
+                  label: 'Location',
+                  icon: Icons.location_on_outlined,
+                  iconBg: const Color(0xFFFFF3E0),
+                  iconColor: const Color(0xFFE65100),
+                  isEditing: _isEditing,
+                  validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                ),
+              ]),
+
+              const SizedBox(height: 8),
+
+              // ─── Save Button ──────────────────────────────
+              if (_isEditing)
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  child: ProfileSaveButton(onPressed: _saveChanges),
+                ),
+
               const SizedBox(height: 32),
             ],
           ),
@@ -74,226 +168,33 @@ class _ProfileViewState extends State<ProfileView> {
       ),
     );
   }
-}
 
-// ─── ProfileAvatar ────────────────────────────────────────────
-class ProfileAvatar extends StatelessWidget {
-  final String name;
-
-  const ProfileAvatar({super.key, required this.name});
-
-  String get _initials {
-    final parts = name.trim().split(' ');
-    if (parts.length >= 2) {
-      return '${parts[0][0]}${parts[1][0]}'.toUpperCase();
-    }
-    return parts[0][0].toUpperCase();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      children: [
-        Container(
-          width: 96,
-          height: 96,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            gradient: const LinearGradient(
-              colors: [Color(0xFF43A85A), Color(0xFF2E9E47)],
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: const Color(0xFF2E9E47).withOpacity(0.35),
-                blurRadius: 16,
-                offset: const Offset(0, 6),
-              ),
-            ],
-          ),
-          child: Center(
-            child: Text(
-              _initials,
-              style: const TextStyle(
-                fontSize: 34,
-                fontWeight: FontWeight.w600,
-                color: Colors.white,
-                letterSpacing: 1,
-              ),
-            ),
-          ),
+  Widget _buildSectionHeader(String title) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(16, 4, 16, 6),
+      child: Text(
+        title,
+        style: const TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w500,
+          color: Color(0xFF9E9E9E),
+          letterSpacing: 0.8,
         ),
-        const SizedBox(height: 12),
-        Text(
-          name,
-          style: const TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1A1A),
-          ),
-        ),
-      ],
+      ),
     );
   }
-}
 
-// ─── ProfileFormCard ──────────────────────────────────────────
-class ProfileFormCard extends StatelessWidget {
-  final TextEditingController firstNameController;
-  final TextEditingController lastNameController;
-  final TextEditingController emailController;
-  final TextEditingController locationController;
-
-  const ProfileFormCard({
-    super.key,
-    required this.firstNameController,
-    required this.lastNameController,
-    required this.emailController,
-    required this.locationController,
-  });
-
-  @override
-  Widget build(BuildContext context) {
+  Widget _buildFormGroup(List<Widget> items) {
     return Container(
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       decoration: BoxDecoration(
         color: Colors.white,
-        borderRadius: BorderRadius.circular(16),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.04),
-            blurRadius: 10,
-            offset: const Offset(0, 2),
-          ),
-        ],
+        borderRadius: BorderRadius.circular(12),
       ),
-      padding: const EdgeInsets.all(20),
-      child: Column(
-        children: [
-          ProfileTextField(
-            controller: firstNameController,
-            label: 'First Name',
-            icon: Icons.person_outline,
-            validator: (v) => v == null || v.isEmpty ? 'Required' : null,
-          ),
-          const SizedBox(height: 16),
-          ProfileTextField(
-            controller: lastNameController,
-            label: 'Last Name',
-            icon: Icons.person_outline,
-            validator: (v) => v == null || v.isEmpty ? 'Required' : null,
-          ),
-          const SizedBox(height: 16),
-          ProfileTextField(
-            controller: emailController,
-            label: 'Email',
-            icon: Icons.email_outlined,
-            keyboardType: TextInputType.emailAddress,
-            validator: (v) {
-              if (v == null || v.isEmpty) return 'Required';
-              if (!v.contains('@')) return 'Invalid email';
-              return null;
-            },
-          ),
-          const SizedBox(height: 16),
-          ProfileTextField(
-            controller: locationController,
-            label: 'Location',
-            icon: Icons.location_on_outlined,
-            validator: (v) => v == null || v.isEmpty ? 'Required' : null,
-          ),
-        ],
-      ),
+      child: Column(children: items),
     );
   }
 }
 
-// ─── ProfileTextField ─────────────────────────────────────────
-class ProfileTextField extends StatelessWidget {
-  final TextEditingController controller;
-  final String label;
-  final IconData icon;
-  final TextInputType keyboardType;
-  final String? Function(String?)? validator;
 
-  const ProfileTextField({
-    super.key,
-    required this.controller,
-    required this.label,
-    required this.icon,
-    this.keyboardType = TextInputType.text,
-    this.validator,
-  });
 
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      validator: validator,
-      style: const TextStyle(
-        fontSize: 15,
-        color: Color(0xFF1A1A1A),
-      ),
-      decoration: InputDecoration(
-        labelText: label,
-        labelStyle: const TextStyle(
-          fontSize: 14,
-          color: Color(0xFF9E9E9E),
-        ),
-        prefixIcon: Icon(icon, color: const Color(0xFF2E9E47), size: 20),
-        filled: true,
-        fillColor: const Color(0xFFF8F9FA),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFFEEEEEE)),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFFEEEEEE)),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFF2E9E47), width: 1.5),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(10),
-          borderSide: const BorderSide(color: Color(0xFFE24B4A)),
-        ),
-      ),
-    );
-  }
-}
-
-// ─── ProfileSaveButton ────────────────────────────────────────
-class ProfileSaveButton extends StatelessWidget {
-  final VoidCallback onPressed;
-
-  const ProfileSaveButton({super.key, required this.onPressed});
-
-  @override
-  Widget build(BuildContext context) {
-    return SizedBox(
-      width: double.infinity,
-      height: 52,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: const Color(0xFF2E9E47),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(12),
-          ),
-          elevation: 0,
-        ),
-        child: const Text(
-          'Save Changes',
-          style: TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w600,
-            color: Colors.white,
-          ),
-        ),
-      ),
-    );
-  }
-}
