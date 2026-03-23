@@ -1,8 +1,11 @@
+import 'dart:io';
+
+import 'package:agri_guide_app/feature/chat_bot/presentation/widget/drawer_chats.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+
 import 'package:gap/gap.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:uuid/uuid.dart';
@@ -101,27 +104,13 @@ class _ChatBotViewState extends State<ChatBotView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      endDrawer: Drawer(
-  child: ListView(
-    children: [
-     
-       
-        const Text(
-          ' Chats',
-          style: TextStyle(color: Colors.black, ),
-        ),
-      
-      ListTile(
-        leading: const Icon(Icons.chat, color: Color(0xff00A63E)),
-        title: const Text('Chat 1'),
-        onTap: () => Navigator.pop(context),
-      ),
-    ],
-  ),
-),
+      endDrawer: DrawerChats(),
+
       appBar: AppBar(
+        leading:IconButton(onPressed:() => Navigator.pop(context), icon: Icon(Icons.arrow_back,color: Colors.white,),),
 actions: [
-  IconButton(onPressed: () => _scaffoldKey.currentState?.openEndDrawer(), icon: Icon(Icons.menu,color:Colors.white,size:30))
+  IconButton(onPressed: () => _scaffoldKey.currentState?.openEndDrawer(), 
+  icon: Icon(Icons.menu,color:Colors.white,size:30))
 ],
         
         toolbarHeight: 80,

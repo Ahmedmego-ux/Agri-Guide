@@ -8,7 +8,8 @@ import 'package:agri_guide_app/feature/auth/presentation/widgets/auth_validator.
 import 'package:agri_guide_app/feature/auth/presentation/widgets/google_button.dart';
 import 'package:agri_guide_app/feature/auth/presentation/widgets/or_divider.dart';
 import 'package:agri_guide_app/feature/auth/presentation/widgets/sing_up_botton.dart';
-import 'package:agri_guide_app/root.dart';
+
+import 'package:agri_guide_app/feature/home/presentation/widgets/home_view_body.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -120,7 +121,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
 
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const Root()),
+            MaterialPageRoute(builder: (_) => const HomeViewBody()),
           );
         }
       },

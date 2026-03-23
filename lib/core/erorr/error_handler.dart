@@ -1,6 +1,5 @@
-// lib/core/error/error_handler.dart
-
 import 'package:flutter/material.dart';
+import 'package:postgrest/postgrest.dart';
 
 class ErrorHandler {
   // دالة لمعالجة أخطاء التسجيل
@@ -30,21 +29,40 @@ class ErrorHandler {
     else if (errorString.contains('timeout')) {
       errorMessage = 'Request timed out. Please try again.';
     }
-   else if (errorString.contains('invalid login credentials')) {
-    return 'Invalid email or password. Please try again.';
-  }
- else if (errorString.contains('email not confirmed')) {
-    return 'Please verify your email first.';
-  }
-  else if (errorString.contains('unexpected_failure')) {
-  errorMessage = 'Failed to send email. Please try again.';
-} else if (errorString.contains('same_password')) {
-  errorMessage = 'New password must be different from the old password';
-}else if (errorString.contains('least 6 characters')) {
-  errorMessage = 'Password must be at least 6 characters';
-}
+    else if (errorString.contains('invalid login credentials') ||
+             errorString.contains('invalid_credentials')) {
+      errorMessage = 'Invalid email or password. Please try again.';
+    }
+    else if (errorString.contains('email not confirmed')) {
+      errorMessage = 'Please verify your email first.';
+    }
+    else if (errorString.contains('unexpected_failure')) {
+      errorMessage = 'Failed to send email. Please try again.';
+    }
+    else if (errorString.contains('same_password')) {
+      errorMessage = 'New password must be different from the old password';
+    }
+    else if (errorString.contains('least 6 characters')) {
+      errorMessage = 'Password must be at least 6 characters';
+    }
     
     return errorMessage;
+  }
+
+  // دالة لمعالجة أخطاء PostgREST / Supabase
+  static String handlePostgrestError(dynamic error) {
+    if (error is PostgrestException) {
+      switch (error.code) {
+        case '23503':
+          return 'Operation failed: related user does not exist.';
+        case '23505':
+          return 'Duplicate entry. This record already exists.';
+        default:
+          return 'Database error: ${error.message}';
+      }
+    } else {
+      return error.toString();
+    }
   }
 
   // دالة لعرض SnackBar مع الخطأ

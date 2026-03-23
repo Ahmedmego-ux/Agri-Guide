@@ -51,6 +51,7 @@ dependencies:
   flutter_chat_types: ^3.6.2
   uuid: ^4.4.0
   image_picker: ^1.2.1
+  convex_bottom_bar: ^3.2.0
 
  # google_api_headers: ^1.0.0
 
@@ -93,10 +94,10 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
+  fonts:
+     - family: Poppins
+       fonts:
+         - asset: assets/fonts/Poppins-Regular.ttf
   #       - asset: fonts/Schyler-Italic.ttf
   #         style: italic
   #   - family: Trajan Pro
