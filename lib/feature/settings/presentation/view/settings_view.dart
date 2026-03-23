@@ -1,4 +1,5 @@
 
+import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/profile/presentation/view/profile_view.dart';
 import 'package:agri_guide_app/feature/settings/presentation/widgets/help_faq_view.dart';
 import 'package:agri_guide_app/feature/settings/presentation/widgets/privacy_policy_view.dart';
@@ -7,7 +8,10 @@ import 'package:agri_guide_app/feature/settings/presentation/widgets/settings_to
 import 'package:flutter/material.dart';
 
 class SettingsView extends StatefulWidget {
-  const SettingsView({super.key});
+   final LoginEntity loginEntity;
+
+ SettingsView({super.key,required this.loginEntity});
+ 
 
   @override
   State<SettingsView> createState() => _SettingsViewState();
@@ -50,7 +54,7 @@ class _SettingsViewState extends State<SettingsView> {
                 iconColor: const Color(0xFF2E9E47),
                 title: 'Account',
                 subtitle: 'Manage your profile',
-                onTap:()=> Navigator.push(context,MaterialPageRoute(builder: (context)=>ProfileView())),
+                onTap:()=> Navigator.push(context,MaterialPageRoute(builder: (context)=>ProfileView(loginEntity: widget.loginEntity,))),
               ),
             ]),
             SizedBox(height: 30,),

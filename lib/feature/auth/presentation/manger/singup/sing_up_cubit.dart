@@ -2,6 +2,7 @@ import 'package:agri_guide_app/core/erorr/error_handler.dart';
 import 'package:agri_guide_app/feature/auth/data/repos/auth_repositry_impl.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/singup_entity.dart';
 import 'package:agri_guide_app/feature/auth/domain/repos/auth_repo.dart';
+import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
 
 import 'package:agri_guide_app/feature/home/presentation/view/home_view.dart';
 
@@ -23,16 +24,7 @@ class SingUpCubit extends Cubit<SingUpState> {
     
     try {
       await authRepo.singup(singupEntity: singupEntity);
-      
-      if (context.mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Account created successfully')),
-        );
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => const HomeView()),
-        );
-      }
+     
       
       emit(SingUpSuccess());
     } catch (e) {

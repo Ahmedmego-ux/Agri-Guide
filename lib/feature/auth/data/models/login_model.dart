@@ -52,7 +52,7 @@ class LoginModel {
     return LoginModel(
       id: json['id'] as String?,
       email: json['email'] as String,
-      password: '', // الباسورد مش بيجى من API للأمان
+      password: '',
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
       cityName: json['city_name'] as String?,

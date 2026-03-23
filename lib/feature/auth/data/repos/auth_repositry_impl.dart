@@ -30,36 +30,42 @@ Future<LoginEntity> login({required LoginEntity loginEntity}) async {
       password: model.password,
     );
 
-    // ✅ التعديل هنا: لو الـ user == null يبقى غلط
+    
     if (response.user == null) {
       throw Exception('Login failed: User not found');
     }
-
-    // ✅ هنا بقى المستوجب موجود، نجيب بياناته من profiles
+ 
+ 
     final profileData = await supabase
         .from('profiles')
-        .select()
+        .select('id, email, first_name, last_name, city_name')
         .eq('id', response.user!.id)
         .maybeSingle();
 
-    // ✅ لو فيه بيانات بروفايل، نرجعها
-    if (profileData != null) {
-      final profileModel = LoginModel.fromJson(profileData);
-      return LoginEntity(
-        id: profileModel.id,
-        email: profileModel.email,
-        password: '', // الباسورد مش موجود في البروفايل
-        firstName: profileModel.firstName,
-        lastName: profileModel.lastName,
-        cityName: profileModel.cityName,
-      );}
+            
 
-    // ✅ لو مفيش بروفايل، نرجع البيانات الأساسية
-    return LoginEntity(
-      id: response.user!.id,
-      email: response.user!.email ?? '',
-      password: '',
-    );
+     if (profileData != null) {
+        print('Profile data from Supabase: $profileData');
+        return LoginEntity(
+          id: profileData['id'],
+          email: profileData['email'],
+          password: '',
+          firstName: profileData['first_name'] ?? '',
+          lastName: profileData['last_name'] ?? '',
+          cityName: profileData['city_name'] ?? '', 
+        );
+      }
+
+      // لو مفيش بيانات بروفايل (مستخدم جديد)
+      return LoginEntity(
+        id: response.user!.id,
+        email: response.user!.email ?? '',
+        password: '',
+        firstName: '',
+        lastName: '',
+        cityName: '',
+      );
+
 
   } on AuthException catch (e) {
     throw Exception('Login failed: ${e.message}');

@@ -56,6 +56,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
   @override
   Widget build(BuildContext context) {
+   
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
@@ -67,10 +68,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           );
         } else if (state is LoginSuccess) {
 
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeView()));
-        //  ErrorHandler.showSuccessSnackBar(context,
-        //   'Welcome back,${state.userData.firstName ?? state.userData.email} !')
-        //  ;
+        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeView(loginEntity: state.userData,)));
+        
         } 
       },
       builder: (context, state) {

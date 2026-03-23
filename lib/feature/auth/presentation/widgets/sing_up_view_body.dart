@@ -1,12 +1,11 @@
-import 'dart:convert';
+
 
 import 'package:agri_guide_app/core/service/location_handler.dart';
-import 'package:agri_guide_app/core/service/location_service.dart';
+
 import 'package:agri_guide_app/feature/auth/domain/entitys/singup_entity.dart';
 import 'package:agri_guide_app/feature/auth/presentation/manger/singup/sing_up_cubit.dart';
 import 'package:agri_guide_app/feature/auth/presentation/widgets/auth_validator.dart';
-import 'package:agri_guide_app/feature/auth/presentation/widgets/google_button.dart';
-import 'package:agri_guide_app/feature/auth/presentation/widgets/or_divider.dart';
+
 import 'package:agri_guide_app/feature/auth/presentation/widgets/sing_up_botton.dart';
 
 import 'package:agri_guide_app/feature/home/presentation/widgets/home_view_body.dart';
@@ -19,8 +18,6 @@ import 'package:agri_guide_app/feature/auth/presentation/widgets/auth_header.dar
 import 'package:agri_guide_app/feature/auth/presentation/widgets/custom_textformfiled.dart';
 import 'package:agri_guide_app/feature/auth/presentation/widgets/location_field.dart';
 
-import 'package:geolocator/geolocator.dart';
-import 'package:http/http.dart' as http;
 
 class SignupViewBody extends StatefulWidget {
   const SignupViewBody({super.key});
@@ -121,7 +118,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
 
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => const HomeViewBody()),
+            MaterialPageRoute(builder: (_) =>LoginView() ),
           );
         }
       },

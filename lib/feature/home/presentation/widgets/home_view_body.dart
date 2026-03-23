@@ -1,4 +1,5 @@
 
+import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/view/chat_bot_view.dart';
 import 'package:agri_guide_app/feature/home/presentation/view/home_view.dart';
 import 'package:agri_guide_app/feature/home/presentation/widgets/action_card.dart';
@@ -13,7 +14,8 @@ import 'package:flutter/material.dart';
 
 
 class HomeViewBody extends StatefulWidget {
-  const HomeViewBody({super.key});
+  const HomeViewBody({super.key, required this.loginEntity});
+  final LoginEntity loginEntity;
 
   @override
   State<HomeViewBody> createState() => _HomeViewBodyState();
@@ -22,8 +24,11 @@ class HomeViewBody extends StatefulWidget {
 class _HomeViewBodyState extends State<HomeViewBody> {
   int _currentIndex =0;
 
+ 
+  
   @override
   Widget build(BuildContext context) {
+    
   
   return  Scaffold(
       backgroundColor: Color(0xffFFFFFF),
@@ -32,9 +37,9 @@ body: SafeArea(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children: const [
+            children:  [
               SizedBox(height: 16),
-              HomeHeader(),
+              HomeHeader(loginEntity:widget.loginEntity ,),
               SizedBox(height: 24),
               HomeActionCards(),
               SizedBox(height: 28),
@@ -64,8 +69,8 @@ shape: CircularNotchedRectangle(),
 
       _buildNavItem(Icons.home, 'Home', 0, ()  {
         setState(() => _currentIndex = 0);
-        _currentIndex!=0?
-         Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeView())):null;
+        _currentIndex!=0;
+      //   Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeView())):null;
          
         },),
 
@@ -86,7 +91,7 @@ shape: CircularNotchedRectangle(),
 
          _buildNavItem(Icons.settings, 'settings', 4, ()async  {setState(() => _currentIndex =4);
         _currentIndex!=0?
-        await Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsView())):null;
+        await Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsView(loginEntity: widget.loginEntity,))):null;
           setState(() => _currentIndex = 0);
         },),
 

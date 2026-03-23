@@ -1,7 +1,7 @@
 import 'package:agri_guide_app/core/erorr/error_handler.dart';
 import 'package:agri_guide_app/feature/auth/data/repos/auth_repositry_impl.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
-import 'package:agri_guide_app/feature/home/presentation/view/home_view.dart';
+
 
 
 import 'package:bloc/bloc.dart';
@@ -21,21 +21,9 @@ try {
 
   final response=  await authRepo.login(loginEntity: userData);
  
-    if (context.mounted) {
-      // ScaffoldMessenger.of(context).showSnackBar(
-      //   SnackBar(
-      //     content: Text('Welcome ${userData.firstName ?? userData.email}!'),
-      //     backgroundColor: Colors.green,
-      //   ),
-      // );
+   
 
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (_) => const HomeView()),
-      );
-    }
-
-  emit(LoginSuccess(userData: userData));
+  emit(LoginSuccess(userData: response));
 
 }  catch (e) {
   print('🔴 Error: $e');
