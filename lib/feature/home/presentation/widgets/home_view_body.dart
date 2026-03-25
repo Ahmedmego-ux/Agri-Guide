@@ -8,9 +8,11 @@ import 'package:agri_guide_app/feature/home/presentation/widgets/action_card.dar
 import 'package:agri_guide_app/feature/home/presentation/widgets/home_header.dart';
 
 import 'package:agri_guide_app/feature/home/presentation/widgets/info_item.dart';
+import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/settings/presentation/view/settings_view.dart';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 
 class HomeViewBody extends StatefulWidget {
@@ -91,7 +93,15 @@ shape: CircularNotchedRectangle(),
 
          _buildNavItem(Icons.settings, 'settings', 4, ()async  {setState(() => _currentIndex =4);
         _currentIndex!=0?
-        await Navigator.push(context, MaterialPageRoute(builder: (context)=>SettingsView(loginEntity: widget.loginEntity,))):null;
+        await Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => BlocProvider.value(
+      value: context.read<ProfileCubit>(), 
+      child: SettingsView(loginEntity: widget.loginEntity,),
+    ),
+  ),
+):null;
           setState(() => _currentIndex = 0);
         },),
 

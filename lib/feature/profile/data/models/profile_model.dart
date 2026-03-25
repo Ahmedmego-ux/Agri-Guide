@@ -32,4 +32,15 @@ class ProfileModel {
        );
     }
 
+   Map<String, dynamic> toJson() {
+    return {
+      'email': email,
+      'id':id,
+      'first_name':firstName,
+      'last_name':lastName,
+      'city_name':location
+
+    };
+  }
+
 }

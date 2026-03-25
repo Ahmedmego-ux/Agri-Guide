@@ -2,12 +2,16 @@ import 'package:agri_guide_app/core/erorr/error_handler.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/profile/domain/entitys/profile_entity.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
+import 'package:agri_guide_app/feature/profile/presentation/widgets/profile_feild_tile.dart';
+
+import 'package:agri_guide_app/feature/profile/presentation/widgets/profile_save_button.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileViewBody extends StatefulWidget {
   final LoginEntity loginEntity;
+  
   
   const ProfileViewBody({super.key,required this.loginEntity});
 
@@ -16,6 +20,9 @@ class ProfileViewBody extends StatefulWidget {
 }
 
 class _ProfileViewBodyState extends State<ProfileViewBody> {
+
+  bool _isEditing = false;
+  final _formKey = GlobalKey<FormState>();
   // Controllers
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
@@ -57,8 +64,33 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
   String get _fullName =>
       '${_firstNameController.text} ${_lastNameController.text}';
 
+
+       void _toggleEdit() {
+    setState(() => _isEditing = !_isEditing);
+  }
+  void _saveChanges() async{
+    if (_formKey.currentState!.validate()) {
+     
+    final currentState = context.read<ProfileCubit>().state;
+
+  final updatedProfile = ProfileEntity(
+    id:  widget.loginEntity.id,  
+    firstName: _firstNameController.text.trim(),
+    lastName: _lastNameController.text.trim(),
+    email: _emailController.text.trim(),
+    location: _locationController.text.trim(),
+  );
+ await context.read<ProfileCubit>().updateData(profile: updatedProfile);
+
+  setState(() => _isEditing = false);
+
+    }
+    
+  }
+
   @override
   Widget build(BuildContext context) {
+    
     return Scaffold(
       backgroundColor: const Color(0xFFF2F4F7),
       appBar: AppBar(
@@ -76,25 +108,18 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             color: Color(0xFF1A1A1A),
           ),
         ),
-        // ✅ ضيفت Edit button بس مش هيشتغل
+        
         actions: [
           TextButton(
-            onPressed: () {
-              // فاضية - مش هتعمل حاجة
-              // هتظهر Toast أو SnackBar عشان يقولك إنها لسة تحت التطوير
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                  content: Text('Edit feature coming soon!'),
-                  duration: Duration(seconds: 2),
-                ),
-              );
-            },
-            child: const Text(
-              'Edit',
+            onPressed: _toggleEdit,
+            child: Text(
+              _isEditing ? 'Cancel' : 'Edit',
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: Color(0xFF2E9E47),
+                color: _isEditing
+                    ? const Color(0xFFE24B4A)
+                    : const Color(0xFF2E9E47),
               ),
             ),
           ),
@@ -105,9 +130,12 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           if (state is ProfileFaliure) {
             ErrorHandler.showErrorSnackBar(context, state.errmessage);
           }
+           if (state is ProfileSuccessUpdate) { 
+    ErrorHandler.showSuccessSnackBar(context, 'Profile updated successfully');
+  }
         },
         builder: (context, state) {
-          // ✅ حالة التحميل
+         
           if (state is ProfileLoading) {
             return const Center(
               child: Column(
@@ -121,7 +149,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             );
           }
 
-          // ✅ حالة الخطأ
+          
           if (state is ProfileFaliure) {
             return Center(
               child: Column(
@@ -151,87 +179,119 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             );
           }
 
-          // ✅ حالة النجاح - عرض البيانات
+          
           if (state is ProfileSuccess) {
             if (_firstNameController.text.isEmpty) {
               _updateControllers(state.profileEntity);
             }
             
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  const SizedBox(height: 24),
+            return Form(
+              key: _formKey,
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(16),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
                   
-                  // الصورة والاسم
-                  Center(
-                    child: Column(
-                      children: [
-                        CircleAvatar(
-                          radius: 50,
-                          backgroundColor: Colors.green.shade100,
-                          child: Text(
-                            _initials,
-                            style: TextStyle(
-                              fontSize: 32,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.green.shade800,
+                    
+                    
+                    Center(
+                      child: Column(
+                        children: [
+                          CircleAvatar(
+                            radius: 50,
+                            backgroundColor: Colors.green.shade100,
+                            child: Text(
+                              _initials,
+                              style: TextStyle(
+                                fontSize: 32,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.green.shade800,
+                              ),
                             ),
                           ),
-                        ),
-                        const SizedBox(height: 12),
-                        Text(
-                          _fullName,
-                          style: const TextStyle(
-                            fontSize: 20,
-                            fontWeight: FontWeight.bold,
+                          const SizedBox(height: 12),
+                          Text(
+                            _fullName,
+                            style: const TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  
-                  const SizedBox(height: 32),
-                  
-                  //个人信息
-                  _buildSectionHeader('PERSONAL INFO'),
-                  _buildInfoCard(
-                    icon: Icons.person_outline,
+                    
+                  //  const SizedBox(height: 32),
+                    
+                   
+                    // ─── PERSONAL INFO ───────────────────────────
+                _buildSectionHeader('PERSONAL INFO'),
+                _buildFormGroup([
+                  ProfileFieldTile(
+                    controller: _firstNameController,
                     label: 'First Name',
-                    value: _firstNameController.text,
-                    iconColor: Colors.green,
-                    iconBg: Colors.green.shade50,
-                  ),
-                  _buildInfoCard(
                     icon: Icons.person_outline,
+                    iconBg: const Color(0xFFE8F5E9),
+                    iconColor: const Color(0xFF2E9E47),
+                    isEditing: _isEditing,
+                    validator: (v) => v == null || v.isEmpty ? 'Required' : null,
+                  ),
+                  const Divider(height: 1, indent: 68, color: Color(0xFFEEEEEE)),
+                  ProfileFieldTile(
+                    controller: _lastNameController,
                     label: 'Last Name',
-                    value: _lastNameController.text,
-                    iconColor: Colors.green,
-                    iconBg: Colors.green.shade50,
+                    icon: Icons.person_outline,
+                    iconBg: const Color(0xFFE8F5E9),
+                    iconColor: const Color(0xFF2E9E47),
+                    isEditing: _isEditing,
+                    validator: (v) => v == null || v.isEmpty ? 'Required' : null,
                   ),
-                  
-                  const SizedBox(height: 16),
-                  
-                  //联系方式
-                  _buildSectionHeader('CONTACT INFO'),
-                  _buildInfoCard(
-                    icon: Icons.email_outlined,
+                ]),
+               
+                // ─── CONTACT ─────────────────────────────────
+                _buildSectionHeader('CONTACT'),
+                _buildFormGroup([
+                  ProfileFieldTile(
+                    controller: _emailController,
                     label: 'Email',
-                    value: _emailController.text,
-                    iconColor: Colors.blue,
-                    iconBg: Colors.blue.shade50,
+                    icon: Icons.email_outlined,
+                    iconBg: const Color(0xFFE8EAF6),
+                    iconColor: const Color(0xFF3949AB),
+                    isEditing: _isEditing,
+                    keyboardType: TextInputType.emailAddress,
+                    validator: (v) {
+                      if (v == null || v.isEmpty) return 'Required';
+                      if (!v.contains('@')) return 'Invalid email';
+                      return null;
+                    },
                   ),
-                  _buildInfoCard(
-                    icon: Icons.location_on_outlined,
+                  const Divider(height: 1, indent: 68, color: Color(0xFFEEEEEE)),
+                  ProfileFieldTile(
+                    controller: _locationController,
                     label: 'Location',
-                    value: _locationController.text,
-                    iconColor: Colors.orange,
-                    iconBg: Colors.orange.shade50,
+                    icon: Icons.location_on_outlined,
+                    iconBg: const Color(0xFFFFF3E0),
+                    iconColor: const Color(0xFFE65100),
+                    isEditing: _isEditing,
+                    validator: (v) => v == null || v.isEmpty ? 'Required' : null,
                   ),
-                  
-                  const SizedBox(height: 32),
-                ],
+                ]),
+               
+                const SizedBox(height: 8),
+               
+                // ─── Save Button ──────────────────────────────
+                if (_isEditing)
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: ProfileSaveButton(onPressed: _saveChanges),
+                  ),
+               
+                const SizedBox(height: 32),
+              
+              
+                  ],
+                ),
               ),
             );
           }
@@ -256,54 +316,15 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
       ),
     );
   }
-
-  Widget _buildInfoCard({
-    required IconData icon,
-    required String label,
-    required String value,
-    required Color iconColor,
-    required Color iconBg,
-  }) {
+  Widget _buildFormGroup(List<Widget> items) {
     return Container(
-      margin: const EdgeInsets.only(bottom: 12),
+      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.grey.withOpacity(0.05),
-            spreadRadius: 1,
-            blurRadius: 4,
-            offset: const Offset(0, 1),
-          ),
-        ],
       ),
-      child: ListTile(
-        leading: Container(
-          padding: const EdgeInsets.all(8),
-          decoration: BoxDecoration(
-            color: iconBg,
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Icon(icon, color: iconColor, size: 20),
-        ),
-        title: Text(
-          label,
-          style: TextStyle(
-            fontSize: 12,
-            color: Colors.grey[600],
-            fontWeight: FontWeight.w500,
-          ),
-        ),
-        subtitle: Text(
-          value.isEmpty ? 'Not provided' : value,
-          style: const TextStyle(
-            fontSize: 16,
-            fontWeight: FontWeight.w500,
-            color: Color(0xFF1A1A1A),
-          ),
-        ),
-      ),
+      child: Column(children: items),
     );
   }
+  
 }

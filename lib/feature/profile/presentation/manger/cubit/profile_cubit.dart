@@ -27,16 +27,18 @@ class ProfileCubit extends Cubit<ProfileState> {
     }
   }
 
-  // // ✅ دالة لتحديث البيانات (اختياري)
-  // Future<void> updateProfile(ProfileEntity profile) async {
-  //   emit(ProfileLoading());
-    
-  //   try {
-  //     await profileRepo.updateProfile(profile);
-  //     emit(ProfileUpdateSuccess()); // نجاح التحديث
-  //     await getProfileData(); // إعادة تحميل البيانات بعد التحديث
-  //   } catch (e) {
-  //     emit(ProfileError(e.toString()));
-  //   }
-  // }
+
+Future<void>updateData({required ProfileEntity profile})async{
+emit(ProfileLoading());
+try {
+  await profileRepo.updateData(profile);
+  emit(ProfileSuccessUpdate());
+  await getProfileData(); 
+}  catch (e) {
+emit(ProfileFaliure(errmessage: e.toString()));
+}
+
+
+}
+  
 }

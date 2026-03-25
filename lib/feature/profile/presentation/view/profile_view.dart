@@ -11,9 +11,6 @@ final LoginEntity loginEntity;
   Widget build(BuildContext context) {
       print('========== profileView ==========');
     print('User ID: ${loginEntity.id}');
-    return BlocProvider(
-      create: (context) => ProfileCubit(userId:loginEntity.id!)..getProfileData(),
-      child: ProfileViewBody(loginEntity: loginEntity,),
-    );
+    return ProfileViewBody(loginEntity: loginEntity,);
   }
 }

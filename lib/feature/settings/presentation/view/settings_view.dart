@@ -1,11 +1,13 @@
 
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
+import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/profile/presentation/view/profile_view.dart';
 import 'package:agri_guide_app/feature/settings/presentation/widgets/help_faq_view.dart';
 import 'package:agri_guide_app/feature/settings/presentation/widgets/privacy_policy_view.dart';
 import 'package:agri_guide_app/feature/settings/presentation/widgets/settings_item.dart';
 import 'package:agri_guide_app/feature/settings/presentation/widgets/settings_toggle_item.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsView extends StatefulWidget {
    final LoginEntity loginEntity;
@@ -54,7 +56,15 @@ class _SettingsViewState extends State<SettingsView> {
                 iconColor: const Color(0xFF2E9E47),
                 title: 'Account',
                 subtitle: 'Manage your profile',
-                onTap:()=> Navigator.push(context,MaterialPageRoute(builder: (context)=>ProfileView(loginEntity: widget.loginEntity,))),
+                onTap:()=>Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => BlocProvider.value(
+      value: context.read<ProfileCubit>(), // 👈 نفس الكيوبت
+      child: ProfileView(loginEntity: widget.loginEntity),
+    ),
+  ),
+)
               ),
             ]),
             SizedBox(height: 30,),

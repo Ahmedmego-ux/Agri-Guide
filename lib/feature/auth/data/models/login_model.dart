@@ -41,7 +41,7 @@ class LoginModel {
     );
   }
 
-  /// ✅ لتحويل Model لـ JSON (للبعث لـ Supabase Auth)
+  
   Map<String, dynamic> toJson() {
     return {
       'email': email,

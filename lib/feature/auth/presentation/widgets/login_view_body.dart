@@ -9,6 +9,7 @@ import 'package:agri_guide_app/feature/auth/presentation/widgets/auth_validator.
 import 'package:agri_guide_app/feature/auth/presentation/widgets/custom_textformfiled.dart';
 
 import 'package:agri_guide_app/feature/home/presentation/view/home_view.dart';
+import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -68,7 +69,15 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           );
         } else if (state is LoginSuccess) {
 
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeView(loginEntity: state.userData,)));
+        Navigator.pushReplacement(
+  context,
+  MaterialPageRoute(
+    builder: (_) => BlocProvider(
+      create: (_) => ProfileCubit(userId: state.userData.id!)..getProfileData(),
+      child: HomeView(loginEntity:state.userData ),
+    ),
+  ),
+);
         
         } 
       },

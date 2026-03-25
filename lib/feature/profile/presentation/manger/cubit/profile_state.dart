@@ -11,6 +11,11 @@ final class ProfileSuccess extends ProfileState {
   ProfileSuccess({required this.profileEntity});
 
 }
+
+final class ProfileSuccessUpdate extends ProfileState {
+  
+
+}
 final class ProfileFaliure extends ProfileState {
   final String errmessage;
 
