@@ -1,6 +1,7 @@
 import 'package:agri_guide_app/feature/auth/domain/entitys/reset_password/update_password_entity.dart';
 import 'package:agri_guide_app/feature/auth/presentation/manger/reset_password/reset_password_cubit.dart';
 import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
+import 'package:agri_guide_app/feature/auth/presentation/view/reset_password_view.dart';
 import 'package:agri_guide_app/feature/auth/presentation/widgets/custom_textformfiled.dart';
 import 'package:agri_guide_app/feature/auth/presentation/widgets/custome_auth_buttom.dart';
 import 'package:flutter/material.dart';
@@ -43,7 +44,8 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
   bool get _hasUppercase => _passwordController.text.contains(RegExp(r'[A-Z]'));
   bool get _hasLowercase => _passwordController.text.contains(RegExp(r'[a-z]'));
   bool get _hasNumber => _passwordController.text.contains(RegExp(r'[0-9]'));
-  bool get _hasSpecial => _passwordController.text.contains(RegExp(r'[!@#$%^&*]'));
+  bool get _hasSpecial =>
+      _passwordController.text.contains(RegExp(r'[!@#$%^&*]'));
 
   double get _passwordStrength {
     if (_passwordController.text.isEmpty) return 0;
@@ -64,8 +66,8 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
     return 'Very Strong';
   }
 
-  Color get _strengthColor {
-    if (_passwordStrength <= 0.2) return Colors.red;
+  Color _strengthColor(ThemeData theme) {
+    if (_passwordStrength <= 0.2) return theme.colorScheme.error;
     if (_passwordStrength <= 0.4) return Colors.orange;
     if (_passwordStrength <= 0.6) return Colors.yellow;
     if (_passwordStrength <= 0.8) return Colors.lightGreen;
@@ -96,24 +98,33 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
 
   void _listener(BuildContext context, ResetPasswordState state) {
     if (state is UpdatePasswordSuccess) {
-      _showSnack('Password updated successfully!', Colors.green);
-      Navigator.push(context, MaterialPageRoute(builder: (context)=>LoginView()));
+      _showSnack('Password updated successfully!',
+          Theme.of(context).colorScheme.primary);
+      Navigator.pushAndRemoveUntil(
+          context, MaterialPageRoute(builder: (context) => LoginView()),
+          (route)=>false
+          );
     }
     if (state is UpdatePasswordFailure) {
-      _showSnack(state.errmessage, Colors.red);
+      _showSnack(state.errmessage, Theme.of(context).colorScheme.error);
     }
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xffFFFFFFF2),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-          onPressed: () => Navigator.pop(context),
+          icon: Icon(Icons.arrow_back_ios, color: theme.colorScheme.primary),
+          onPressed: () =>  Navigator.pushReplacement(
+          context, MaterialPageRoute(builder: (context) => ResetPasswordView()),
+          
+          ),
         ),
       ),
       body: SafeArea(
@@ -131,15 +142,15 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
                     const Gap(40),
                     const NewPasswordHeader(),
                     const Gap(40),
-                    _buildPasswordField(),
+                    _buildPasswordField(theme),
                     const Gap(16),
                     NewPasswordStrength(
                       passwordStrength: _passwordStrength,
                       strengthText: _strengthText,
-                      strengthColor: _strengthColor,
+                      strengthColor: _strengthColor(theme),
                     ),
                     const Gap(24),
-                    _buildConfirmField(),
+                    _buildConfirmField(theme),
                     const Gap(32),
                     CustomAuthButton(
                       text: 'Reset Password',
@@ -165,16 +176,16 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
     );
   }
 
-  Widget _buildPasswordField() {
+  Widget _buildPasswordField(ThemeData theme) {
     return CustomeTextFormField(
       hintText: 'Enter new password',
       labelText: 'New Password',
-      prefixIcon: const Icon(Icons.lock_outline, color: Colors.green),
+      prefixIcon: Icon(Icons.lock_outline, color: theme.colorScheme.primary),
       suffixIcon: IconButton(
         onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
         icon: Icon(
           _obscurePassword ? Icons.visibility_off : Icons.visibility,
-          color: Colors.grey,
+          color: theme.iconTheme.color,
         ),
       ),
       controller: _passwordController,
@@ -182,16 +193,16 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
     );
   }
 
-  Widget _buildConfirmField() {
+  Widget _buildConfirmField(ThemeData theme) {
     return CustomeTextFormField(
       hintText: 'Confirm new password',
       labelText: 'Confirm Password',
-      prefixIcon: const Icon(Icons.lock_outline, color: Colors.green),
+      prefixIcon: Icon(Icons.lock_outline, color: theme.colorScheme.primary),
       suffixIcon: IconButton(
         onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),
         icon: Icon(
           _obscureConfirm ? Icons.visibility_off : Icons.visibility,
-          color: Colors.grey,
+          color: theme.iconTheme.color,
         ),
       ),
       controller: _confirmPasswordController,

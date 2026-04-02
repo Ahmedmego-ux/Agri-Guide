@@ -15,13 +15,17 @@ class NewPasswordStrength extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final textColor = theme.textTheme.bodyMedium?.color ?? Colors.black;
+    final backgroundColor = theme.dividerColor.withOpacity(0.2);
+
     return Column(
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(8),
           child: LinearProgressIndicator(
             value: passwordStrength,
-            backgroundColor: Colors.grey.shade200,
+            backgroundColor: backgroundColor,
             valueColor: AlwaysStoppedAnimation<Color>(strengthColor),
             minHeight: 8,
           ),
@@ -32,7 +36,7 @@ class NewPasswordStrength extends StatelessWidget {
           children: [
             Text(
               'Password Strength:',
-              style: TextStyle(fontSize: 13, color: Colors.grey[600]),
+              style: TextStyle(fontSize: 13, color: textColor),
             ),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 4),

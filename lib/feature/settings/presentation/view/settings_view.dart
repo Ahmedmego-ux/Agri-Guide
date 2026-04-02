@@ -1,4 +1,3 @@
-
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/profile/presentation/view/profile_view.dart';
@@ -10,10 +9,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsView extends StatefulWidget {
-   final LoginEntity loginEntity;
+  final LoginEntity loginEntity;
 
- SettingsView({super.key,required this.loginEntity});
- 
+  const SettingsView({super.key, required this.loginEntity});
 
   @override
   State<SettingsView> createState() => _SettingsViewState();
@@ -24,54 +22,46 @@ class _SettingsViewState extends State<SettingsView> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F4F7),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1A1A1A)),
+          icon: Icon(Icons.arrow_back, color: theme.appBarTheme.foregroundColor),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Settings',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1A1A),
-          ),
-        ),
+        title: const Text('Settings'),
         centerTitle: false,
       ),
       body: SingleChildScrollView(
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // ─── PROFILE ───────────────────────────────────
-            _buildSectionHeader('PROFILE'),
-            _buildSettingsGroup([
+            _buildSectionHeader(context, 'PROFILE'),
+            _buildSettingsGroup(context, [
               SettingItem(
                 icon: Icons.person_outline,
-                iconBg: const Color(0xFFE8F5E9),
-                iconColor: const Color(0xFF2E9E47),
+                iconBg: cs.primaryContainer,
+                iconColor: cs.onPrimaryContainer,
                 title: 'Account',
                 subtitle: 'Manage your profile',
-                onTap:()=>Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => BlocProvider.value(
-      value: context.read<ProfileCubit>(), // 👈 نفس الكيوبت
-      child: ProfileView(loginEntity: widget.loginEntity),
-    ),
-  ),
-)
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => BlocProvider.value(
+                      value: context.read<ProfileCubit>(),
+                      child: ProfileView(loginEntity: widget.loginEntity),
+                    ),
+                  ),
+                ),
               ),
             ]),
-            SizedBox(height: 30,),
+            const SizedBox(height: 30),
 
-            // ─── PREFERENCES ───────────────────────────────
-            _buildSectionHeader('PREFERENCES'),
-            _buildSettingsGroup([
+            _buildSectionHeader(context, 'PREFERENCES'),
+            _buildSettingsGroup(context, [
               SettingItem(
                 icon: Icons.language_outlined,
                 iconBg: const Color(0xFFE8EAF6),
@@ -80,7 +70,7 @@ class _SettingsViewState extends State<SettingsView> {
                 subtitle: 'English',
                 onTap: () {},
               ),
-              const Divider(height: 10, indent: 68, endIndent: 0, color: Color(0xFFEEEEEE)),
+              Divider(height: 10, indent: 68, color: theme.dividerTheme.color),
               SettingToggleItem(
                 icon: Icons.dark_mode_outlined,
                 iconBg: const Color(0xFFEDE7F6),
@@ -91,63 +81,69 @@ class _SettingsViewState extends State<SettingsView> {
                 onChanged: (val) => setState(() => _isDarkMode = val),
               ),
             ]),
-             SizedBox(height: 30,),
+            const SizedBox(height: 30),
 
-            // ─── SUPPORT ───────────────────────────────────
-            _buildSectionHeader('SUPPORT'),
-            _buildSettingsGroup([
+            _buildSectionHeader(context, 'SUPPORT'),
+            _buildSettingsGroup(context, [
               SettingItem(
                 icon: Icons.help_outline,
                 iconBg: const Color(0xFFFFF8E1),
                 iconColor: const Color(0xFFF9A825),
                 title: 'Help & FAQ',
                 subtitle: 'Get answers to common questions',
-                 onTap:()=> Navigator.push(context,MaterialPageRoute(builder: (context)=>HelpFaqView())),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => HelpFaqView()),
+                ),
               ),
-              const Divider(height: 10, indent: 68, endIndent: 0, color: Color(0xFFEEEEEE)),
+              Divider(height: 10, indent: 68, color: theme.dividerTheme.color),
               SettingItem(
                 icon: Icons.security_outlined,
-                iconBg: const Color(0xFFF3F3F3),
-                iconColor: const Color(0xFF757575),
+                iconBg: cs.surfaceContainerHighest,
+                iconColor: cs.onSurfaceVariant,
                 title: 'Privacy Policy',
                 subtitle: 'Learn how we protect your data',
-                 onTap:()=> Navigator.push(context,MaterialPageRoute(builder: (context)=>PrivacyPolicyView())),
+                onTap: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => PrivacyPolicyView()),
+                ),
               ),
             ]),
 
             const SizedBox(height: 32),
-           
           ],
         ),
       ),
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    final cs = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(16, 20, 16, 6),
       child: Text(
         title,
-        style: const TextStyle(
+        style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: Color(0xFF9E9E9E),
+          color: cs.onSurfaceVariant,
           letterSpacing: 0.8,
         ),
       ),
     );
   }
 
-  Widget _buildSettingsGroup(List<Widget> items) {
+  Widget _buildSettingsGroup(BuildContext context, List<Widget> items) {
+    final theme = Theme.of(context);
+
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(children: items),
     );
   }
 }
-
-

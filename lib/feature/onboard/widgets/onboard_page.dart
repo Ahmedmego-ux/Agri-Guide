@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 
 class OnBoardingPage extends StatelessWidget {
-  const OnBoardingPage({super.key, required this.imagePath,
-   required this.icon,
+  const OnBoardingPage({
+    super.key,
+    required this.imagePath,
+    required this.icon,
     required this.title,
-     required this.subtitle});
+    required this.subtitle,
+  });
 
   final String imagePath;
   final IconData icon;
@@ -13,7 +16,10 @@ class OnBoardingPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 20),
         child: Column(
@@ -37,28 +43,32 @@ class OnBoardingPage extends StatelessWidget {
             Container(
               height: 60,
               width: 60,
-              decoration: const BoxDecoration(
-                color: Colors.green,
+              decoration: BoxDecoration(
+                color: theme.colorScheme.primary,
                 shape: BoxShape.circle,
               ),
-              child:  Icon(icon, color: Colors.white),
+              child: Icon(icon, color: theme.colorScheme.onPrimary),
             ),
 
             const SizedBox(height: 20),
 
             /// Title
-             Text(
+            Text(
               title,
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+              style: theme.textTheme.titleMedium?.copyWith(
+                fontWeight: FontWeight.w600,
+              ),
             ),
 
             const SizedBox(height: 10),
 
             /// Description
-             Text(
+            Text(
               subtitle,
               textAlign: TextAlign.center,
-              style: TextStyle(fontSize: 14, color: Colors.grey),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onBackground.withOpacity(0.7),
+              ),
             ),
           ],
         ),

@@ -30,21 +30,25 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
   }
 
   void _showSnack(String text, Color color) {
-    ScaffoldMessenger.of(
-      context,
-    ).showSnackBar(SnackBar(content: Text(text), backgroundColor: color));
+    ScaffoldMessenger.of(context)
+        .showSnackBar(SnackBar(content: Text(text), backgroundColor: color));
   }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Scaffold(
-      backgroundColor: const Color(0xffFFFFFFF2),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.transparent,
+        backgroundColor: theme.appBarTheme.backgroundColor,
         elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back_ios, color: Colors.green),
-          onPressed: () => Navigator.push(context, MaterialPageRoute(builder: (_)=>LoginView())),
+          icon: Icon(Icons.arrow_back_ios, color: theme.colorScheme.primary),
+          onPressed: () => Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => LoginView()),
+          ),
         ),
       ),
       body: SafeArea(
@@ -63,7 +67,7 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                   );
                 }
                 if (state is ResetPasswordFailure) {
-                  _showSnack(state.errmessage, Colors.red);
+                  _showSnack(state.errmessage, theme.colorScheme.error);
                 }
               },
               builder: (context, state) {
@@ -73,31 +77,23 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                     const Gap(20),
                     const AuthHeader(),
                     const Gap(40),
-                    const Text(
+                    Text(
                       'Reset Password',
-                      style: TextStyle(
-                        fontSize: 28,
+                      style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
-                        color: Colors.black87,
                       ),
                     ),
                     const Gap(12),
                     Text(
                       'Enter your email address and we\'ll send you a verification code to reset your password.',
-                      style: TextStyle(
-                        fontSize: 15,
-                        color: Colors.grey[700],
-                        height: 1.5,
-                      ),
+                      style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
                     ),
                     const Gap(40),
                     CustomeTextFormField(
                       hintText: 'farmer@example.com',
                       labelText: 'Email Address',
-                      prefixIcon: const Icon(
-                        Icons.email_outlined,
-                        color: Colors.green,
-                      ),
+                      prefixIcon: Icon(Icons.email_outlined,
+                          color: theme.iconTheme.color),
                       controller: _emailController,
                       isPassword: false,
                       keyboardType: TextInputType.emailAddress,
@@ -112,14 +108,14 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                               if (_emailController.text.trim().isEmpty) {
                                 _showSnack(
                                   "Please enter your email",
-                                  Colors.red,
+                                  theme.colorScheme.error,
                                 );
                                 return;
                               }
 
                               context.read<ResetPasswordCubit>().resetPassword(
-                                entity: _buildEntity(),
-                              );
+                                    entity: _buildEntity(),
+                                  );
                             },
                     ),
                     const Gap(20),
@@ -128,16 +124,15 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                         onPressed: () => Navigator.pop(context),
                         child: Text(
                           'Back to Login',
-                          style: TextStyle(
-                            color: Colors.green[600],
-                            fontSize: 15,
+                          style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w600,
+                            color: theme.colorScheme.primary,
                           ),
                         ),
                       ),
                     ),
                     const Gap(40),
-                    _buildSecurityTips(),
+                    _buildSecurityTips(theme),
                     const Gap(30),
                   ],
                 );
@@ -149,28 +144,29 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
     );
   }
 
-  Widget _buildSecurityTips() {
+  Widget _buildSecurityTips(ThemeData theme) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.08),
+        color: theme.colorScheme.primary.withOpacity(0.08),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.green.withOpacity(0.2), width: 1),
+        border: Border.all(
+            color: theme.colorScheme.primary.withOpacity(0.2), width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.security, color: Colors.green[700], size: 22),
+              Icon(Icons.security,
+                  color: theme.colorScheme.primary, size: 22),
               const Gap(8),
               Text(
                 'Security Tips',
-                style: TextStyle(
-                  fontSize: 16,
+                style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
-                  color: Colors.green[800],
+                  color: theme.colorScheme.primary,
                 ),
               ),
             ],
@@ -179,34 +175,36 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
           _buildSecurityTip(
             icon: Icons.lock_outline,
             text: 'Use a unique password you don\'t use elsewhere',
+            theme: theme,
           ),
           const Gap(12),
           _buildSecurityTip(
             icon: Icons.password,
             text: 'Include letters, numbers, and symbols',
+            theme: theme,
           ),
           const Gap(12),
           _buildSecurityTip(
             icon: Icons.share,
             text: 'Never share your password with anyone',
+            theme: theme,
           ),
         ],
       ),
     );
   }
 
-  Widget _buildSecurityTip({required IconData icon, required String text}) {
+  Widget _buildSecurityTip(
+      {required IconData icon, required String text, required ThemeData theme}) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Icon(icon, size: 18, color: Colors.green[600]),
+        Icon(icon, size: 18, color: theme.colorScheme.primary),
         const Gap(12),
         Expanded(
           child: Text(
             text,
-            style: TextStyle(
-              fontSize: 14,
-              color: Colors.grey[700],
+            style: theme.textTheme.bodySmall?.copyWith(
               height: 1.4,
             ),
           ),

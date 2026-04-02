@@ -2,32 +2,34 @@ import 'package:flutter/material.dart';
 
 class InfoItem extends StatelessWidget {
   final IconData icon;
-  final Color iconColor;
-  final Color iconBg;
+  final Color? iconColor;
+  final Color? iconBg;
   final String title;
   final String subtitle;
   final String? time;
- 
+
   const InfoItem({
     super.key,
     required this.icon,
-    required this.iconColor,
-    required this.iconBg,
+    this.iconColor,
+    this.iconBg,
     required this.title,
     required this.subtitle,
-     this.time,
+    this.time,
   });
- 
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Container(
       padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(14),
+        color: theme.cardTheme.color, // ✅ surfaceContainerLow من الثيم
+        borderRadius: BorderRadius.circular(12), // ✅ متوافق مع _kRadius
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.04),
+            color: theme.shadowColor.withOpacity(0.06),
             blurRadius: 6,
             offset: const Offset(0, 2),
           ),
@@ -39,10 +41,14 @@ class InfoItem extends StatelessWidget {
             width: 42,
             height: 42,
             decoration: BoxDecoration(
-              color: iconBg,
+              color: iconBg ?? theme.colorScheme.primaryContainer,
               borderRadius: BorderRadius.circular(10),
             ),
-            child: Icon(icon, color: iconColor, size: 22),
+            child: Icon(
+              icon,
+              color: iconColor ?? theme.colorScheme.onPrimaryContainer,
+              size: 22,
+            ),
           ),
           const SizedBox(width: 12),
           Expanded(
@@ -51,35 +57,32 @@ class InfoItem extends StatelessWidget {
               children: [
                 Text(
                   title,
-                  style: const TextStyle(
+                  style: theme.textTheme.bodyMedium?.copyWith(
                     fontWeight: FontWeight.w600,
-                    fontSize: 14,
-                    color: Color(0xFF1A1A1A),
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
                 const SizedBox(height: 2),
                 Text(
                   subtitle,
-                  style: const TextStyle(
-                    fontSize: 12,
-                    color: Color(0xFF888888),
+                  style: theme.textTheme.bodySmall?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
               ],
             ),
           ),
-          if (time != null)
-  Text(
-    time!,
-    style: const TextStyle(
-      fontSize: 12,
-      color: Color(0xFF888888),
-    ),
-  ),
-       
+          if (time != null) ...[
+            const SizedBox(width: 8),
+            Text(
+              time!,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurfaceVariant,
+              ),
+            ),
+          ],
         ],
       ),
     );
   }
 }
- 

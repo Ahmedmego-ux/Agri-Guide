@@ -2,16 +2,16 @@ import 'package:flutter/material.dart';
 
 class CustomeTextFormField extends StatelessWidget {
   const CustomeTextFormField({
-    super.key, 
-    required this.hintText, 
-    required this.controller, 
-    this.suffixIcon,  
-    required this.isPassword, 
+    super.key,
+    required this.hintText,
+    required this.controller,
+    this.suffixIcon,
+    required this.isPassword,
     this.prefixIcon,
-    this.bordercolor, 
     required this.labelText,
-    this.validator, this.keyboardType,
-       this.readOnly, // أضفنا validator كـ parameter
+    this.validator,
+    this.keyboardType,
+    this.readOnly,
   });
 
   final String hintText;
@@ -20,13 +20,14 @@ class CustomeTextFormField extends StatelessWidget {
   final Icon? prefixIcon;
   final TextEditingController controller;
   final bool isPassword;
-  final Color? bordercolor;
-  final String? Function(String?)? validator; // نوع الـ validator
+  final String? Function(String?)? validator;
   final TextInputType? keyboardType;
   final bool? readOnly;
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -35,81 +36,46 @@ class CustomeTextFormField extends StatelessWidget {
           padding: const EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
             labelText,
-            style: TextStyle(
-              fontSize: 14,
+            style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
-              color: Colors.grey[700],
-              fontFamily: 'Poppins',
+              color: theme.colorScheme.onSurface,
             ),
           ),
         ),
-        
-        // TextFormField
+
+        // TextField
         TextFormField(
-          validator: validator ?? (value) { // استخدام validator لو مديتهولوا
-            if (value == null || value.isEmpty) {
-              return 'Please enter your $labelText'; // رسالة أحسن
-            }
-            return null; // هنا كانت المشكلة الرئيسية
-          },
+          readOnly: readOnly ?? false,
+          validator: validator ??
+              (value) {
+                if (value == null || value.isEmpty) {
+                  return 'Please enter your $labelText';
+                }
+                return null;
+              },
           keyboardType: keyboardType,
           obscureText: isPassword,
           controller: controller,
+          style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface),
           decoration: InputDecoration(
-            prefixIcon: prefixIcon,
-            filled: true,
-            fillColor: Colors.white,
+            prefixIcon: prefixIcon != null
+                ? Icon(
+                    prefixIcon!.icon,
+                    color: theme.iconTheme.color,
+                    size: theme.iconTheme.size,
+                  )
+                : null,
             suffixIcon: suffixIcon,
-            
-            // الـ hint (داخل الحقل)
-            hintStyle: TextStyle(
-              color: Colors.grey[400], // خفينا اللون شوية
-              fontSize: 14,
-            ),
             hintText: hintText,
-            
-            // الـ border في الحالات المختلفة
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12), // 12 في كل الحالات
-            ),
-            
-            enabledBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(
-                width: 1.5, // خففنا السمك شوية
-                color: bordercolor ?? Colors.grey.shade300,
-              ),
-            ),
-            
-            focusedBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Colors.green, // أخضر ثابت مش بوردير كولور
-                width: 2,
-              ),
-            ),
-            
-            // أضفنا error borders
-            errorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Colors.red,
-                width: 1.5,
-              ),
-            ),
-            
-            focusedErrorBorder: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(
-                color: Colors.red,
-                width: 2,
-              ),
-            ),
-            
-            contentPadding: const EdgeInsets.symmetric(
-              horizontal: 16,
-              vertical: 16,
-            ),
+            hintStyle: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            filled: true,
+            fillColor: theme.inputDecorationTheme.fillColor,
+            contentPadding: theme.inputDecorationTheme.contentPadding,
+            border: theme.inputDecorationTheme.border,
+            enabledBorder: theme.inputDecorationTheme.enabledBorder,
+            focusedBorder: theme.inputDecorationTheme.focusedBorder,
+            errorBorder: theme.inputDecorationTheme.errorBorder,
+            focusedErrorBorder: theme.inputDecorationTheme.focusedErrorBorder,
           ),
         ),
       ],

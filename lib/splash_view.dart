@@ -1,6 +1,6 @@
-import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
+
 import 'package:agri_guide_app/feature/onboard/view/onboard_view.dart';
-import 'package:agri_guide_app/feature/onboard/widgets/onboard_page.dart';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -11,7 +11,8 @@ class SplashView extends StatefulWidget {
   State<SplashView> createState() => _SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView> with SingleTickerProviderStateMixin {
+class _SplashViewState extends State<SplashView>
+    with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
@@ -26,18 +27,20 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
-    );
+    _fadeAnimation = Tween<double>(
+      begin: 0.0,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
 
     _slideAnimation = Tween<Offset>(
       begin: const Offset(0, 0.3),
       end: Offset.zero,
     ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
 
-    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
-      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
-    );
+    _scaleAnimation = Tween<double>(
+      begin: 0.8,
+      end: 1.0,
+    ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
 
     _controller.forward();
 
@@ -59,15 +62,14 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
 
   @override
   Widget build(BuildContext context) {
-    const Color primaryGreen = Color(0xFF008236);
-    
+    final Color primaryGreen = Theme.of(context).colorScheme.primary;
+    final Color backgroundColor = Theme.of(context).scaffoldBackgroundColor;
+
     return Scaffold(
       body: Container(
         width: double.infinity,
         height: double.infinity,
-        decoration: const BoxDecoration(
-          color: Colors.white
-        ),
+        decoration: BoxDecoration(color: backgroundColor),
         child: SafeArea(
           child: FadeTransition(
             opacity: _fadeAnimation,
@@ -81,21 +83,20 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
                     'assets/logo.svg',
                     width: 100,
                     height: 100,
-                    colorFilter: const ColorFilter.mode(
+                    colorFilter: ColorFilter.mode(
                       primaryGreen,
                       BlendMode.srcIn,
                     ),
                   ),
                 ),
-                
+
                 const SizedBox(height: 25),
-                
-              
+
                 Column(
                   children: [
                     SlideTransition(
                       position: _slideAnimation,
-                      child: const Text(
+                      child: Text(
                         'Agri guide',
                         style: TextStyle(
                           color: primaryGreen,
@@ -104,9 +105,9 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
                         ),
                       ),
                     ),
-                    
+
                     const SizedBox(height: 12),
-                    
+
                     ScaleTransition(
                       scale: _scaleAnimation,
                       child: Text(
@@ -120,11 +121,8 @@ class _SplashViewState extends State<SplashView> with SingleTickerProviderStateM
                     ),
                   ],
                 ),
-                
+
                 const SizedBox(height: 50),
-                
-               
-                
               ],
             ),
           ),

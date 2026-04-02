@@ -21,3 +21,4 @@ final class ProfileFaliure extends ProfileState {
 
   ProfileFaliure({required this.errmessage});
 }
+final class DeleteSuccess extends ProfileState {}

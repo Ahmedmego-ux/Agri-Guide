@@ -40,5 +40,15 @@ emit(ProfileFaliure(errmessage: e.toString()));
 
 
 }
+Future<void>deletData( {required String userId})async{
+emit(ProfileLoading());
+try {
+  await profileRepo.deletData(userId);
+  emit(DeleteSuccess());
+}  catch (e) {
+ emit(ProfileFaliure(errmessage: e.toString()));
+}
+}
+
   
 }

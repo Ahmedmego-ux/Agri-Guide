@@ -19,53 +19,62 @@ class NewPasswordRequirements extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final successColor = theme.colorScheme.primary;
+    final borderColor = theme.colorScheme.primary.withOpacity(0.2);
+    final bgColor = theme.colorScheme.primary.withOpacity(0.05);
+    final textColor = theme.textTheme.bodyMedium?.color ?? Colors.black;
+
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
-        color: Colors.green.withOpacity(0.05),
+        color: bgColor,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.green.withOpacity(0.2), width: 1),
+        border: Border.all(color: borderColor, width: 1),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.rule, color: Colors.green[700], size: 20),
+              Icon(Icons.rule, color: successColor, size: 20),
               const Gap(8),
               Text(
                 'Password Requirements',
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
-                  color: Colors.green[800],
+                  color: successColor,
                 ),
               ),
             ],
           ),
           const Gap(16),
-          _buildItem('At least 8 characters', hasMinLength),
+          _buildItem('At least 8 characters', hasMinLength, theme),
           const Gap(12),
-          _buildItem('At least one uppercase letter (A-Z)', hasUppercase),
+          _buildItem('At least one uppercase letter (A-Z)', hasUppercase, theme),
           const Gap(12),
-          _buildItem('At least one lowercase letter (a-z)', hasLowercase),
+          _buildItem('At least one lowercase letter (a-z)', hasLowercase, theme),
           const Gap(12),
-          _buildItem('At least one number (0-9)', hasNumber),
+          _buildItem('At least one number (0-9)', hasNumber, theme),
           const Gap(12),
-          _buildItem('At least one special character (!@#\$%^&*)', hasSpecial),
+          _buildItem('At least one special character (!@#\$%^&*)', hasSpecial, theme),
         ],
       ),
     );
   }
 
-  Widget _buildItem(String text, bool isMet) {
+  Widget _buildItem(String text, bool isMet, ThemeData theme) {
+    final successColor = theme.colorScheme.primary;
+    final defaultColor = theme.textTheme.bodyMedium?.color?.withOpacity(0.6) ?? Colors.grey;
+
     return Row(
       children: [
         Icon(
           isMet ? Icons.check_circle : Icons.circle_outlined,
           size: 18,
-          color: isMet ? Colors.green : Colors.grey.shade400,
+          color: isMet ? successColor : defaultColor,
         ),
         const Gap(12),
         Expanded(
@@ -73,7 +82,7 @@ class NewPasswordRequirements extends StatelessWidget {
             text,
             style: TextStyle(
               fontSize: 13,
-              color: isMet ? Colors.green[700] : Colors.grey[600],
+              color: isMet ? successColor : defaultColor,
               fontWeight: isMet ? FontWeight.w500 : FontWeight.normal,
             ),
           ),

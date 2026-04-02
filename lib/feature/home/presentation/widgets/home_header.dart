@@ -9,21 +9,22 @@ class HomeHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return BlocBuilder<ProfileCubit, ProfileState>(
       builder: (context, state) {
-       
         String firstName = loginEntity.firstName;
         String lastName = loginEntity.lastName;
         String cityName = loginEntity.cityName;
-        
+
         if (state is ProfileSuccess) {
           firstName = state.profileEntity.firstName;
           lastName = state.profileEntity.lastName;
           cityName = state.profileEntity.location;
         }
-        
+
         final String fullName = '$firstName $lastName'.trim();
-      
+
         return Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
@@ -32,29 +33,51 @@ class HomeHeader extends StatelessWidget {
               children: [
                 Text(
                   'Welcome,',
-                  style: TextStyle(
-                    fontSize: 28,
+                  style: theme.textTheme.headlineMedium?.copyWith(
                     fontWeight: FontWeight.bold,
-                    color: Color(0xFF1A1A1A),
+                    color: theme.colorScheme.onSurface,
                   ),
                 ),
-                SizedBox(height: 2),
+                const SizedBox(height: 2),
                 Text(
                   fullName,
-                  style: TextStyle(
-                    fontSize: 20,
-                    color: Color(0xFF888888),
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    color: theme.colorScheme.onSurfaceVariant,
                   ),
                 ),
                 if (cityName.isNotEmpty)
-                  Text(
-                    cityName,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                  Row(
+                    children: [
+                      Icon(
+                        Icons.location_on_outlined,
+                        size: 13,
+                        color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                      ),
+                      const SizedBox(width: 2),
+                      Text(
+                        cityName,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: theme.colorScheme.onSurfaceVariant.withOpacity(0.7),
+                        ),
+                      ),
+                    ],
                   ),
               ],
+            ),
+            // ✅ Notification icon بالثيم
+            IconButton(
+              onPressed: () {},
+              icon: Icon(
+                Icons.notifications_outlined,
+                color: theme.colorScheme.onSurfaceVariant,
+                size: 26,
+              ),
+              style: IconButton.styleFrom(
+                backgroundColor: theme.colorScheme.surfaceContainerHighest,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+              ),
             ),
           ],
         );

@@ -1,64 +1,50 @@
-import 'package:agri_guide_app/core/constans/app_colors.dart';
-
 import 'package:flutter/material.dart';
 
 class CustomAuthButton extends StatelessWidget {
   const CustomAuthButton({
-    super.key, 
-    required this.text, 
-    this.backgroundColor, 
-    this.textColor, 
-    this.borderColor,
+    super.key,
+    required this.text,
     this.onPressed,
     this.isLoading = false,
   });
 
   final String text;
-  final Color? backgroundColor;
-  final Color? textColor;
-  final Color? borderColor;
   final VoidCallback? onPressed;
   final bool isLoading;
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: isLoading ? null : onPressed,
-      child: Container(
-        height: 55, // Height ثابت أفضل من MediaQuery
-        width: double.infinity,
-        decoration: BoxDecoration(
-          border: Border.all(
-            color: borderColor ?? (onPressed == null ? Colors.grey.shade300 : backgroundColor ?? maincolor),
-            width: borderColor != null ? 2 : 1,
+    final theme = Theme.of(context);
+
+    return SizedBox(
+      height: 55,
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: isLoading ? null : onPressed,
+        style: ElevatedButton.styleFrom(
+          elevation: theme.elevatedButtonTheme.style?.elevation?.resolve({}) ?? 0,
+          backgroundColor: theme.elevatedButtonTheme.style?.backgroundColor?.resolve({}) ?? theme.colorScheme.primary,
+          foregroundColor: theme.elevatedButtonTheme.style?.foregroundColor?.resolve({}) ?? theme.colorScheme.onPrimary,
+          shape: theme.elevatedButtonTheme.style?.shape?.resolve({}) ?? RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12),
           ),
-          borderRadius: BorderRadius.circular(12), // 12 بدل 8 عشان يكون متناسق
-          color: isLoading 
-              ? Colors.grey.shade300 
-              : (backgroundColor ?? (onPressed == null ? Colors.grey.shade200 : maincolor)),
+          textStyle: theme.elevatedButtonTheme.style?.textStyle?.resolve({}),
         ),
-        child: Center(
-          child: isLoading
-              ? const SizedBox(
-                  height: 20,
-                  width: 20,
-                  child: CircularProgressIndicator(
-                    strokeWidth: 2,
-                    color: Colors.white,
-                  ),
-                )
-              : Text(
-                  text,
-                  style: TextStyle(
-                    fontSize: 16, // 16 أنسب من 20
-                    fontWeight: FontWeight.w600,
-                    color: isLoading 
-                        ? Colors.grey.shade600
-                        : (textColor ?? (onPressed == null ? Colors.grey.shade600 : Colors.white)),
-                    fontFamily: 'Poppins',
-                  ),
+        child: isLoading
+            ? SizedBox(
+                height: 20,
+                width: 20,
+                child: CircularProgressIndicator(
+                  strokeWidth: 2,
+                  color: theme.colorScheme.onPrimary,
                 ),
-        ),
+              )
+            : Text(
+                text,
+                style: theme.elevatedButtonTheme.style?.textStyle?.resolve({})?.copyWith(
+                      fontWeight: FontWeight.w600,
+                    ),
+              ),
       ),
     );
   }

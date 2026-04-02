@@ -1,19 +1,13 @@
-
+import 'package:agri_guide_app/core/constans/app_colors.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/view/chat_bot_view.dart';
-import 'package:agri_guide_app/feature/home/presentation/view/home_view.dart';
 import 'package:agri_guide_app/feature/home/presentation/widgets/action_card.dart';
-
-
 import 'package:agri_guide_app/feature/home/presentation/widgets/home_header.dart';
-
 import 'package:agri_guide_app/feature/home/presentation/widgets/info_item.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/settings/presentation/view/settings_view.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 
 class HomeViewBody extends StatefulWidget {
   const HomeViewBody({super.key, required this.loginEntity});
@@ -24,129 +18,122 @@ class HomeViewBody extends StatefulWidget {
 }
 
 class _HomeViewBodyState extends State<HomeViewBody> {
-  int _currentIndex =0;
+  int _currentIndex = 0;
 
- 
-  
   @override
   Widget build(BuildContext context) {
-    
-  
-  return  Scaffold(
-      backgroundColor: Color(0xffFFFFFF),
-body: SafeArea(
-  child: SingleChildScrollView(
+    final theme = Theme.of(context);
+    final isCameraSelected = _currentIndex == 2;
+
+    return Scaffold(
+      backgroundColor: theme.scaffoldBackgroundColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
           padding: const EdgeInsets.symmetric(horizontal: 16),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
-            children:  [
-              SizedBox(height: 16),
-              HomeHeader(loginEntity:widget.loginEntity ,),
-              SizedBox(height: 24),
-              HomeActionCards(),
-              SizedBox(height: 28),
-              HomeRecentScans(),
-              SizedBox(height: 28),
-              HomeQuickTips(),
-              SizedBox(height: 24),
+            children: [
+              const SizedBox(height: 16),
+              HomeHeader(loginEntity: widget.loginEntity),
+              const SizedBox(height: 24),
+              const HomeActionCards(),
+              const SizedBox(height: 28),
+              const HomeRecentScans(),
+              const SizedBox(height: 28),
+              const HomeQuickTips(),
+              const SizedBox(height: 24),
             ],
           ),
         ),
-),
-
-
+      ),
       floatingActionButton: FloatingActionButton(
-  onPressed: () => setState(() => _currentIndex = 2), 
-  child: Icon(Icons.camera_alt),
-  backgroundColor:_currentIndex==2? Colors.green:Colors.grey.shade300,
-),
-floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-     bottomNavigationBar: BottomAppBar(
-      height: 90,
-shape: CircularNotchedRectangle(),
-  notchMargin: 6,
-  child: Row(
-    mainAxisAlignment: MainAxisAlignment.spaceAround,
-    children: [
-
-      _buildNavItem(Icons.home, 'Home', 0, ()  {
-        setState(() => _currentIndex = 0);
-        _currentIndex!=0;
-      //   Navigator.push(context, MaterialPageRoute(builder: (context)=>HomeView())):null;
-         
-        },),
-
-
-
-         _buildNavItem(Icons.chat, 'Chat',1, () async {setState(() => _currentIndex =1);
-        _currentIndex!=0?
-        await Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatBotView())):null;
-         setState(() => _currentIndex = 0);
-        },),
-        SizedBox(width: 50),
-
-         _buildNavItem(Icons.eco, 'Crops', 3, () async {setState(() => _currentIndex =3);
-        _currentIndex!=0?
-       await  Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatBotView())):null;
-          setState(() => _currentIndex = 0);
-        },),
-
-         _buildNavItem(Icons.settings, 'settings', 4, ()async  {setState(() => _currentIndex =4);
-        _currentIndex!=0?
-        await Navigator.push(
-  context,
-  MaterialPageRoute(
-    builder: (_) => BlocProvider.value(
-      value: context.read<ProfileCubit>(), 
-      child: SettingsView(loginEntity: widget.loginEntity,),
-    ),
-  ),
-):null;
-          setState(() => _currentIndex = 0);
-        },),
-
-     
-    ],
-  ),
-),
-     
+        onPressed: () => setState(() => _currentIndex = 2),
+        backgroundColor: isCameraSelected
+            ? theme.colorScheme.primary
+            : theme.colorScheme.surfaceContainerHighest,
+        foregroundColor: isCameraSelected
+            ? theme.colorScheme.onPrimary
+            : theme.colorScheme.onSurfaceVariant,
+        child: const Icon(Icons.camera_alt),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      bottomNavigationBar: BottomAppBar(
+        height: 90,
+        color: theme.bottomNavigationBarTheme.backgroundColor,
+        shape: const CircularNotchedRectangle(),
+        notchMargin: 6,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceAround,
+          children: [
+            _buildNavItem(Icons.home, 'Home', 0, () {
+              setState(() => _currentIndex = 0);
+            }),
+            _buildNavItem(Icons.chat, 'Chat', 1, () async {
+              setState(() => _currentIndex = 1);
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChatBotView()),
+              );
+              setState(() => _currentIndex = 0);
+            }),
+            const SizedBox(width: 50),
+            _buildNavItem(Icons.eco, 'Crops', 3, () async {
+              setState(() => _currentIndex = 3);
+              await Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ChatBotView()),
+              );
+              setState(() => _currentIndex = 0);
+            }),
+            _buildNavItem(Icons.settings, 'Settings', 4, () async {
+              setState(() => _currentIndex = 4);
+              await Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider.value(
+                    value: context.read<ProfileCubit>(),
+                    child: SettingsView(loginEntity: widget.loginEntity),
+                  ),
+                ),
+              );
+              setState(() => _currentIndex = 0);
+            }),
+          ],
+        ),
+      ),
     );
   }
-  
-  Widget _buildNavItem(IconData icon, String label, int index,VoidCallback onPressed) {
+
+  Widget _buildNavItem(IconData icon, String label, int index, VoidCallback onPressed) {
+    final theme = Theme.of(context);
     final isSelected = _currentIndex == index;
+    final color = isSelected
+        ? theme.colorScheme.primary
+        : theme.bottomNavigationBarTheme.unselectedItemColor;
+
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: [
-    
-        IconButton(onPressed:onPressed , icon:  Icon(icon,
-            color: isSelected ? Colors.green : Colors.grey,
-            size: 26),),
-       
-        Text(label,
-            style: TextStyle(
-              fontSize:12,
-              color: isSelected ? Colors.green : Colors.grey,
-            )),
+        IconButton(
+          onPressed: onPressed,
+          icon: Icon(icon, color: color, size: 26),
+        ),
+        Text(
+          label,
+          style: TextStyle(fontSize: 12, color: color),
+        ),
       ],
     );
   }
-
-
-
 }
 
-
-
-
-
- 
-// ─── Action Cards ──────────────────────────────────────────────
 class HomeActionCards extends StatelessWidget {
   const HomeActionCards({super.key});
- 
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Row(
       children: [
         Expanded(
@@ -154,7 +141,7 @@ class HomeActionCards extends StatelessWidget {
             icon: Icons.camera_alt_outlined,
             title: 'Scan Plant',
             subtitle: 'Analyze plant health',
-            color: const Color(0xFF2E9E47),
+            color: maincolor,
             onTap: () {},
           ),
         ),
@@ -164,36 +151,34 @@ class HomeActionCards extends StatelessWidget {
             icon: Icons.chat_bubble_outline,
             title: 'AI Chat',
             subtitle: 'Ask expert advice',
-            color: const Color(0xFF2D5BE3),
-            onTap: () =>Navigator.push(context, MaterialPageRoute(builder: (context)=>ChatBotView())),
+            color: const Color.fromARGB(255, 3, 33, 121),
+            onTap: () => Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const ChatBotView()),
+            ),
           ),
         ),
       ],
     );
   }
 }
- 
 
- 
-// ─── Recent Scans ──────────────────────────────────────────────
 class HomeRecentScans extends StatelessWidget {
   const HomeRecentScans({super.key});
- 
+
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Text(
           'Recent Scans',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1A1A1A),
-          ),
+          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 12),
-        InfoItem(
+        const SizedBox(height: 12),
+        const InfoItem(
           icon: Icons.warning_amber_outlined,
           iconColor: Color(0xFFE6A817),
           iconBg: Color(0xFFFFF3DC),
@@ -201,8 +186,8 @@ class HomeRecentScans extends StatelessWidget {
           subtitle: 'Early Blight',
           time: '2 days ago',
         ),
-        SizedBox(height: 10),
-        InfoItem(
+        const SizedBox(height: 10),
+        const InfoItem(
           icon: Icons.eco_outlined,
           iconColor: Color(0xFF2E9E47),
           iconBg: Color(0xFFE1F5E6),
@@ -214,36 +199,31 @@ class HomeRecentScans extends StatelessWidget {
     );
   }
 }
- 
-
 
 class HomeQuickTips extends StatelessWidget {
   const HomeQuickTips({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
-      children: const [
+      children: [
         Text(
           'Quick Tips',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: Color(0xFF1A1A1A),
-          ),
+          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 12),
-        InfoItem(                          
+        const SizedBox(height: 12),
+        const InfoItem(
           icon: Icons.eco_outlined,
           iconColor: Color(0xFF2E9E47),
           iconBg: Color(0xFFE1F5E6),
           title: 'Spring Planting',
           subtitle: 'Best time to start your vegetable garden',
-         
         ),
-        SizedBox(height: 10),
-        InfoItem(                        
+        const SizedBox(height: 10),
+        const InfoItem(
           icon: Icons.trending_up,
           iconColor: Color(0xFF2D5BE3),
           iconBg: Color(0xFFE8EDFC),
@@ -254,8 +234,3 @@ class HomeQuickTips extends StatelessWidget {
     );
   }
 }
- 
-
-
-
-

@@ -1,20 +1,17 @@
-import 'package:agri_guide_app/core/erorr/error_handler.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
+
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/auth/presentation/manger/login/login_cubit.dart';
 import 'package:agri_guide_app/feature/auth/presentation/view/reset_password_view.dart';
-
 import 'package:agri_guide_app/feature/auth/presentation/view/signup_view.dart';
 import 'package:agri_guide_app/feature/auth/presentation/widgets/auth_header.dart';
 import 'package:agri_guide_app/feature/auth/presentation/widgets/auth_validator.dart';
 import 'package:agri_guide_app/feature/auth/presentation/widgets/custom_textformfiled.dart';
-
+import 'package:agri_guide_app/feature/auth/presentation/widgets/custome_auth_buttom.dart';
 import 'package:agri_guide_app/feature/home/presentation/view/home_view.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
-
-import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:gap/gap.dart';
-import 'package:agri_guide_app/core/constans/app_strings.dart';
 
 class LoginViewBody extends StatefulWidget {
   const LoginViewBody({super.key});
@@ -24,14 +21,9 @@ class LoginViewBody extends StatefulWidget {
 }
 
 class _LoginViewBodyState extends State<LoginViewBody> {
-  // Controllers
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-
-  // Form Key
   final _formKey = GlobalKey<FormState>();
-
-  // State
   bool _obscureText = true;
 
   @override
@@ -41,45 +33,44 @@ class _LoginViewBodyState extends State<LoginViewBody> {
     super.dispose();
   }
 
-  
-
-  // Login logic
   void _login() {
     if (!_formKey.currentState!.validate()) return;
 
-    final  entity = LoginEntity(
+    final entity = LoginEntity(
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
     );
 
-    context.read<LoginCubit>().login(userData:entity, context: context);
+    context.read<LoginCubit>().login(userData: entity, context: context);
   }
 
   @override
   Widget build(BuildContext context) {
-   
+    final theme = Theme.of(context);
+
     return BlocConsumer<LoginCubit, LoginState>(
       listener: (context, state) {
         if (state is LoginFailure) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text(state.errmessage),
-              backgroundColor: Colors.red,
+              backgroundColor: theme.colorScheme.error,
             ),
           );
         } else if (state is LoginSuccess) {
-
-        Navigator.pushReplacement(
-  context,
-  MaterialPageRoute(
-    builder: (_) => BlocProvider(
-      create: (_) => ProfileCubit(userId: state.userData.id!)..getProfileData(),
-      child: HomeView(loginEntity:state.userData ),
-    ),
-  ),
-);
-        
-        } 
+          Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(
+              builder: (_) => BlocProvider(
+                create: (_) =>
+                    ProfileCubit(userId: state.userData.id!)..getProfileData(),
+                child: HomeView(loginEntity: state.userData),
+              ),
+            ),
+            (route) => false,
+            
+          );
+        }
       },
       builder: (context, state) {
         return GestureDetector(
@@ -87,7 +78,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
           child: Form(
             key: _formKey,
             child: Scaffold(
-              backgroundColor: const Color(0xffFFFFFFF2),
+              backgroundColor: theme.scaffoldBackgroundColor,
               body: SafeArea(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -105,21 +96,18 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                               Center(
                                 child: Text(
                                   'Login with your Email',
-                                  style: TextStyle(
-                                    fontSize: 16,
+                                  style: theme.textTheme.bodyMedium?.copyWith(
+                                    color: theme.colorScheme.onSurfaceVariant,
                                     fontWeight: FontWeight.w500,
-                                    color: Colors.grey[700],
-                                    fontFamily: fontFamily,
                                   ),
                                 ),
                               ),
                               const Gap(50),
 
-                              // Email Field
                               CustomeTextFormField(
                                 hintText: 'Enter your email',
                                 labelText: 'Email',
-                                prefixIcon: const Icon(Icons.email, color: Colors.green),
+                                prefixIcon: Icon(Icons.email, color: theme.iconTheme.color),
                                 controller: _emailController,
                                 validator: AuthValidators.validateEmail,
                                 isPassword: false,
@@ -127,16 +115,15 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
                               const Gap(30),
 
-                              // Password Field
                               CustomeTextFormField(
                                 hintText: 'Enter your password',
                                 labelText: 'Password',
-                                prefixIcon: const Icon(Icons.lock, color: Colors.green),
+                                prefixIcon: Icon(Icons.lock, color: theme.iconTheme.color),
                                 suffixIcon: IconButton(
                                   onPressed: () => setState(() => _obscureText = !_obscureText),
                                   icon: Icon(
                                     _obscureText ? Icons.visibility_off : Icons.visibility,
-                                    color: Colors.grey,
+                                    color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),
                                 controller: _passwordController,
@@ -146,75 +133,60 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
                               const Gap(10),
 
-                              // Forgot Password
                               Align(
                                 alignment: Alignment.centerRight,
                                 child: TextButton(
                                   onPressed: () {
                                     Navigator.push(
                                       context,
-                                      MaterialPageRoute(builder: (_) => const ResetPasswordView()),
+                                      MaterialPageRoute(
+                                        builder: (_) => const ResetPasswordView(),
+                                      ),
                                     );
                                   },
-                                  child: const Text(
+                                  child: Text(
                                     'Forgot Password?',
-                                    style: TextStyle(color: Colors.green, fontSize: 14),
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: theme.colorScheme.primary,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                 ),
                               ),
 
                               const Gap(30),
 
-                              // Login Button
-                              SizedBox(
-                                width: double.infinity,
-                                height: 55,
-                                child: ElevatedButton(
-                                  onPressed: (state is LoginLoading) ? null : _login,
-                                  style: ElevatedButton.styleFrom(
-                                    backgroundColor: Colors.green,
-                                    foregroundColor: Colors.white,
-                                    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-                                    elevation: 0,
-                                    disabledBackgroundColor: Colors.grey[300],
-                                  ),
-                                  child: (state is LoginLoading)
-                                      ? const SizedBox(
-                                          height: 20,
-                                          width: 20,
-                                          child: CircularProgressIndicator(
-                                            color: Colors.white,
-                                            strokeWidth: 2,
-                                          ),
-                                        )
-                                      : const Text(
-                                          'Log In',
-                                          style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
-                                        ),
-                                ),
+                              CustomAuthButton(
+                                text: 'Log In',
+                                isLoading: state is LoginLoading,
+                                onPressed: _login,
                               ),
 
                               const Gap(20),
 
-                              // Go to Sign Up
                               Row(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
                                     "Don't have an account? ",
-                                    style: TextStyle(color: Colors.grey[600], fontSize: 14),
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      color: theme.colorScheme.onSurfaceVariant,
+                                      fontSize: 14,
+                                    ),
                                   ),
                                   GestureDetector(
                                     onTap: () {
                                       Navigator.push(
                                         context,
-                                        MaterialPageRoute(builder: (_) => const SignupView()),
+                                        MaterialPageRoute(
+                                          builder: (_) => const SignupView(),
+                                        ),
                                       );
                                     },
-                                    child: const Text(
+                                    child: Text(
                                       'Sign Up',
-                                      style: TextStyle(
-                                        color: Colors.green,
+                                      style: theme.textTheme.bodyMedium?.copyWith(
+                                        color: theme.colorScheme.primary,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,
                                       ),

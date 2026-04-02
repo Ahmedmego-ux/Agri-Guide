@@ -24,11 +24,16 @@ class ProfileFieldTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final textTheme = theme.textTheme;
+    final inputTheme = theme.inputDecorationTheme;
+
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
       child: Row(
         children: [
-          // Icon
+          
           Container(
             width: 40,
             height: 40,
@@ -39,65 +44,66 @@ class ProfileFieldTile extends StatelessWidget {
             child: Icon(icon, color: iconColor, size: 20),
           ),
           const SizedBox(width: 12),
-          // Field
+         
           Expanded(
-            child: isEditing
-                ? TextFormField(
-                    controller: controller,
-                    keyboardType: keyboardType,
-                    validator: validator,
-                    style: const TextStyle(
-                      fontSize: 14,
-                      color: Color(0xFF1A1A1A),
-                    ),
-                    decoration: InputDecoration(
-                      labelText: label,
-                      labelStyle: const TextStyle(
-                        fontSize: 12,
-                        color: Color(0xFF9E9E9E),
-                      ),
-                      border: InputBorder.none,
-                      enabledBorder: InputBorder.none,
-                      focusedBorder: UnderlineInputBorder(
-                        borderSide: BorderSide(color: iconColor, width: 1.5),
-                      ),
-                      errorBorder: const UnderlineInputBorder(
-                        borderSide: BorderSide(color: Color(0xFFE24B4A)),
-                      ),
-                      isDense: true,
-                      contentPadding: const EdgeInsets.symmetric(vertical: 8),
-                    ),
-                  )
-                : Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        label,
-                        style: const TextStyle(
-                          fontSize: 11,
-                          color: Color(0xFF9E9E9E),
-                        ),
-                      ),
-                      const SizedBox(height: 2),
-                      Text(
-                        controller.text,
-                        style: const TextStyle(
-                          fontSize: 14,
-                          color: Color(0xFF1A1A1A),
-                        ),
-                      ),
-                    ],
-                  ),
-          ),
+  child: isEditing
+      ? Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+
+          Text(
+              label,
+              style: textTheme.labelSmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 2),
+          TextFormField(
+              controller: controller,
+              keyboardType: keyboardType,
+              validator: validator,
+              style: textTheme.bodyMedium, 
+              decoration: InputDecoration(
+               // labelText: label,
+                labelStyle: textTheme.labelSmall?.copyWith(
+                  color: colorScheme.onSurfaceVariant,
+                ),
+                filled: true,
+                fillColor: inputTheme.fillColor,
+                contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16), 
+                isDense: true,
+                border: inputTheme.border,
+                enabledBorder: inputTheme.enabledBorder,
+                focusedBorder: inputTheme.focusedBorder,
+                errorBorder: inputTheme.errorBorder,
+                focusedErrorBorder: inputTheme.focusedErrorBorder,
+                hintStyle: inputTheme.hintStyle,
+                errorStyle: inputTheme.errorStyle,
+              ),
+            ),
+        ],
+      )
+      : Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              label,
+              style: textTheme.labelSmall?.copyWith(
+                color: colorScheme.onSurfaceVariant,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              controller.text,
+              style: textTheme.bodyMedium?.copyWith(
+                color: colorScheme.onSurface,
+              ),
+            ),
+          ],
+        ),
+),
         ],
       ),
-
     );
-    
   }
-      
- 
 }
-  
-
-

@@ -1,29 +1,28 @@
 import 'package:agri_guide_app/core/erorr/error_handler.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
+import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
 import 'package:agri_guide_app/feature/profile/domain/entitys/profile_entity.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/profile/presentation/widgets/profile_feild_tile.dart';
-
 import 'package:agri_guide_app/feature/profile/presentation/widgets/profile_save_button.dart';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:http/http.dart';
 
 class ProfileViewBody extends StatefulWidget {
   final LoginEntity loginEntity;
-  
-  
-  const ProfileViewBody({super.key,required this.loginEntity});
+
+  const ProfileViewBody({super.key, required this.loginEntity});
 
   @override
   State<ProfileViewBody> createState() => _ProfileViewBodyState();
 }
 
 class _ProfileViewBodyState extends State<ProfileViewBody> {
-
   bool _isEditing = false;
   final _formKey = GlobalKey<FormState>();
-  // Controllers
+
   late TextEditingController _firstNameController;
   late TextEditingController _lastNameController;
   late TextEditingController _emailController;
@@ -64,51 +63,38 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
   String get _fullName =>
       '${_firstNameController.text} ${_lastNameController.text}';
 
+  void _toggleEdit() => setState(() => _isEditing = !_isEditing);
 
-       void _toggleEdit() {
-    setState(() => _isEditing = !_isEditing);
-  }
-  void _saveChanges() async{
+  void _saveChanges() async {
     if (_formKey.currentState!.validate()) {
-     
-    final currentState = context.read<ProfileCubit>().state;
-
-  final updatedProfile = ProfileEntity(
-    id:  widget.loginEntity.id,  
-    firstName: _firstNameController.text.trim(),
-    lastName: _lastNameController.text.trim(),
-    email: _emailController.text.trim(),
-    location: _locationController.text.trim(),
-  );
- await context.read<ProfileCubit>().updateData(profile: updatedProfile);
-
-  setState(() => _isEditing = false);
-
+      final updatedProfile = ProfileEntity(
+        id: widget.loginEntity.id,
+        firstName: _firstNameController.text.trim(),
+        lastName: _lastNameController.text.trim(),
+        email: _emailController.text.trim(),
+        location: _locationController.text.trim(),
+      );
+      await context.read<ProfileCubit>().updateData(profile: updatedProfile);
+      setState(() => _isEditing = false);
     }
-    
   }
 
   @override
   Widget build(BuildContext context) {
-    
+    final theme = Theme.of(context);
+    final cs = theme.colorScheme;
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF2F4F7),
+      backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
-        backgroundColor: Colors.white,
-        elevation: 0,
         leading: IconButton(
-          icon: const Icon(Icons.arrow_back, color: Color(0xFF1A1A1A)),
+          icon: Icon(
+            Icons.arrow_back,
+            color: theme.appBarTheme.foregroundColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'My Profile',
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.w600,
-            color: Color(0xFF1A1A1A),
-          ),
-        ),
-        
+        title: const Text('My Profile'),
         actions: [
           TextButton(
             onPressed: _toggleEdit,
@@ -117,9 +103,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
               style: TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
-                color: _isEditing
-                    ? const Color(0xFFE24B4A)
-                    : const Color(0xFF2E9E47),
+                color: _isEditing ? cs.error : cs.surface,
               ),
             ),
           ),
@@ -130,48 +114,62 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
           if (state is ProfileFaliure) {
             ErrorHandler.showErrorSnackBar(context, state.errmessage);
           }
-           if (state is ProfileSuccessUpdate) { 
-    ErrorHandler.showSuccessSnackBar(context, 'Profile updated successfully');
-  }
+           if (state is DeleteSuccess) {
+             Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => LoginView(),
+                                  ),
+                                  (route) => false,
+                                );
+            ErrorHandler.showErrorSnackBar(context, 'Account Deleted');
+          }
+          if (state is ProfileSuccessUpdate) {
+            ErrorHandler.showSuccessSnackBar(
+              context,
+              'Profile updated successfully',
+            );
+          }
         },
         builder: (context, state) {
-         
           if (state is ProfileLoading) {
-            return const Center(
+            return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  CircularProgressIndicator(),
-                  SizedBox(height: 16),
-                  Text('Loading profile...'),
+                  CircularProgressIndicator(color: cs.primary),
+                  const SizedBox(height: 16),
+                  Text('Loading profile...', style: theme.textTheme.bodyMedium),
                 ],
               ),
             );
           }
 
-          
           if (state is ProfileFaliure) {
             return Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 48, color: Colors.red[300]),
+                  Icon(Icons.error_outline, size: 48, color: cs.error),
                   const SizedBox(height: 16),
                   Text(
                     'Failed to load profile',
-                    style: TextStyle(fontSize: 16, color: Colors.grey[600]),
+                    style: theme.textTheme.bodyLarge?.copyWith(
+                      color: cs.onSurfaceVariant,
+                    ),
                   ),
-                  const SizedBox(height: 16),
+                  const SizedBox(height: 8),
                   Text(
                     state.errmessage,
-                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                    style: theme.textTheme.bodySmall?.copyWith(
+                      color: cs.onSurfaceVariant,
+                    ),
                     textAlign: TextAlign.center,
                   ),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: () {
-                      context.read<ProfileCubit>().getProfileData();
-                    },
+                    onPressed: () =>
+                        context.read<ProfileCubit>().getProfileData(),
                     child: const Text('Retry'),
                   ),
                 ],
@@ -179,12 +177,11 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             );
           }
 
-          
           if (state is ProfileSuccess) {
             if (_firstNameController.text.isEmpty) {
               _updateControllers(state.profileEntity);
             }
-            
+
             return Form(
               key: _formKey,
               child: SingleChildScrollView(
@@ -192,104 +189,138 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                  
-                    
-                    
                     Center(
                       child: Column(
                         children: [
                           CircleAvatar(
-                            radius: 50,
-                            backgroundColor: Colors.green.shade100,
+                            radius: 42,
+                            backgroundColor: cs.primaryContainer,
                             child: Text(
                               _initials,
-                              style: TextStyle(
-                                fontSize: 32,
+                              style: theme.textTheme.headlineSmall?.copyWith(
                                 fontWeight: FontWeight.bold,
-                                color: Colors.green.shade800,
+                                color: cs.onPrimaryContainer,
                               ),
                             ),
                           ),
                           const SizedBox(height: 12),
                           Text(
                             _fullName,
-                            style: const TextStyle(
-                              fontSize: 20,
+                            style: theme.textTheme.titleLarge?.copyWith(
                               fontWeight: FontWeight.bold,
+                              color: cs.onSurface,
                             ),
                           ),
                         ],
                       ),
                     ),
-                    
-                  //  const SizedBox(height: 32),
-                    
-                   
-                    // ─── PERSONAL INFO ───────────────────────────
-                _buildSectionHeader('PERSONAL INFO'),
-                _buildFormGroup([
-                  ProfileFieldTile(
-                    controller: _firstNameController,
-                    label: 'First Name',
-                    icon: Icons.person_outline,
-                    iconBg: const Color(0xFFE8F5E9),
-                    iconColor: const Color(0xFF2E9E47),
-                    isEditing: _isEditing,
-                    validator: (v) => v == null || v.isEmpty ? 'Required' : null,
-                  ),
-                  const Divider(height: 1, indent: 68, color: Color(0xFFEEEEEE)),
-                  ProfileFieldTile(
-                    controller: _lastNameController,
-                    label: 'Last Name',
-                    icon: Icons.person_outline,
-                    iconBg: const Color(0xFFE8F5E9),
-                    iconColor: const Color(0xFF2E9E47),
-                    isEditing: _isEditing,
-                    validator: (v) => v == null || v.isEmpty ? 'Required' : null,
-                  ),
-                ]),
-               
-                // ─── CONTACT ─────────────────────────────────
-                _buildSectionHeader('CONTACT'),
-                _buildFormGroup([
-                  ProfileFieldTile(
-                    controller: _emailController,
-                    label: 'Email',
-                    icon: Icons.email_outlined,
-                    iconBg: const Color(0xFFE8EAF6),
-                    iconColor: const Color(0xFF3949AB),
-                    isEditing: _isEditing,
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (v) {
-                      if (v == null || v.isEmpty) return 'Required';
-                      if (!v.contains('@')) return 'Invalid email';
-                      return null;
-                    },
-                  ),
-                  const Divider(height: 1, indent: 68, color: Color(0xFFEEEEEE)),
-                  ProfileFieldTile(
-                    controller: _locationController,
-                    label: 'Location',
-                    icon: Icons.location_on_outlined,
-                    iconBg: const Color(0xFFFFF3E0),
-                    iconColor: const Color(0xFFE65100),
-                    isEditing: _isEditing,
-                    validator: (v) => v == null || v.isEmpty ? 'Required' : null,
-                  ),
-                ]),
-               
-                const SizedBox(height: 8),
-               
-                // ─── Save Button ──────────────────────────────
-                if (_isEditing)
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16),
-                    child: ProfileSaveButton(onPressed: _saveChanges),
-                  ),
-               
-                const SizedBox(height: 32),
-              
-              
+                    _buildSectionHeader(context, 'PERSONAL INFO'),
+                    SizedBox(height: 10),
+                    _buildFormGroup(context, [
+                      ProfileFieldTile(
+                        controller: _firstNameController,
+                        label: 'First Name',
+                        icon: Icons.person_outline,
+                        iconBg: cs.primaryContainer,
+                        iconColor: cs.onPrimaryContainer,
+                        isEditing: _isEditing,
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Required' : null,
+                      ),
+                      Divider(
+                        height: 15,
+                        indent: 68,
+                        color: theme.dividerTheme.color,
+                      ),
+                      ProfileFieldTile(
+                        controller: _lastNameController,
+                        label: 'Last Name',
+                        icon: Icons.person_outline,
+                        iconBg: cs.primaryContainer,
+                        iconColor: cs.onPrimaryContainer,
+                        isEditing: _isEditing,
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Required' : null,
+                      ),
+                    ]),
+                    _buildSectionHeader(context, 'CONTACT'),
+                    _buildFormGroup(context, [
+                      ProfileFieldTile(
+                        controller: _emailController,
+                        label: 'Email',
+                        icon: Icons.email_outlined,
+                        iconBg: const Color(0xFFE8EAF6),
+                        iconColor: const Color(0xFF3949AB),
+                        isEditing: _isEditing,
+                        keyboardType: TextInputType.emailAddress,
+                        validator: (v) {
+                          if (v == null || v.isEmpty) return 'Required';
+                          if (!v.contains('@')) return 'Invalid email';
+                          return null;
+                        },
+                      ),
+                      Divider(
+                        height: 15,
+                        indent: 68,
+                        color: theme.dividerTheme.color,
+                      ),
+                      ProfileFieldTile(
+                        controller: _locationController,
+                        label: 'Location',
+                        icon: Icons.location_on_outlined,
+                        iconBg: const Color(0xFFFFF3E0),
+                        iconColor: const Color(0xFFE65100),
+                        isEditing: _isEditing,
+                        validator: (v) =>
+                            v == null || v.isEmpty ? 'Required' : null,
+                      ),
+                    ]),
+                    const SizedBox(height: 32),
+                    if (_isEditing)
+                      Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 16),
+                        child: ProfileButton(
+                          value: "Save Changes",
+                          onPressed: _saveChanges,
+                        ),
+                      ),
+
+                    if (!_isEditing)
+                      Row(
+                        children: [
+                          Expanded(
+                            child: ProfileButton(
+                              onPressed: () {
+                                Navigator.pushAndRemoveUntil(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (_) => LoginView(),
+                                  ),
+                                  (route) => false,
+                                );
+                              },
+                              icon: Icons.delete,
+                              iconColor: const Color(0xffE7000B),
+                              textColor: const Color(0xffE7000B),
+                              backgroundColor: const Color(0xffFEF2F2),
+                              value: "Log Out",
+                            ),
+                          ),
+                          SizedBox(width: 20),
+                          Expanded(
+                            child: ProfileButton(
+                              onPressed: () =>context.read<ProfileCubit>().deletData(userId: widget.loginEntity.id),
+                              icon: Icons.logout,
+                              backgroundColor: Color(0xffF3F4F6),
+                              iconColor: Color(0xff4A5565),
+                              textColor: Color(0xff4A5565),
+                              value: "Delet Acount",
+                            ),
+                          ),
+                        ],
+                      ),
+
+                    const SizedBox(height: 32),
                   ],
                 ),
               ),
@@ -302,7 +333,9 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
     );
   }
 
-  Widget _buildSectionHeader(String title) {
+  Widget _buildSectionHeader(BuildContext context, String title) {
+    final cs = Theme.of(context).colorScheme;
+
     return Padding(
       padding: const EdgeInsets.only(left: 8, bottom: 8, top: 8),
       child: Text(
@@ -310,21 +343,24 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
         style: TextStyle(
           fontSize: 12,
           fontWeight: FontWeight.w500,
-          color: Colors.grey[600],
+          color: cs.onSurfaceVariant,
           letterSpacing: 0.8,
         ),
       ),
     );
   }
-  Widget _buildFormGroup(List<Widget> items) {
+
+  Widget _buildFormGroup(BuildContext context, List<Widget> items) {
+    final theme = Theme.of(context);
+
     return Container(
+      padding: EdgeInsets.symmetric(vertical: 10),
       margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: theme.cardTheme.color,
         borderRadius: BorderRadius.circular(12),
       ),
       child: Column(children: items),
     );
   }
-  
 }

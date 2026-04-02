@@ -43,5 +43,20 @@ final supabase=Supabase.instance.client;
   ErrorHandler.handlePostgrestError(e.toString());
 }
   }
+  
+  @override
+  Future<void> deletData(String userId)async {
+    try {
+   await supabase
+        .from('profiles')
+        .delete()
+        .eq('id', userId);
+
+    // تاني سجل خروج
+    await supabase.auth.signOut();
+}  catch (e) {
+   ErrorHandler.handlePostgrestError(e.toString());
+}
+  }
 
 }

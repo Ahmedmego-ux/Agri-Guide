@@ -4,5 +4,6 @@ abstract class ProfileRepo {
 
 Future<ProfileEntity> getProfile(String userId);
 Future<void> updateData(ProfileEntity entity);
+Future<void> deletData(String userId);
 
 }

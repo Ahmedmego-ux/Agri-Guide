@@ -28,9 +28,9 @@ class AuthHeader extends StatelessWidget {
            Center(
              child: Text(
                        'Agri Guide',
-                       style: TextStyle(
+                      style: TextStyle(
                          fontSize: 25,
-                         color: const Color.fromARGB(199, 0, 0, 0),
+                     
                          fontFamily: fontFamily,
                        ),
                      ),
