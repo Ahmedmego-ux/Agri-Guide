@@ -11,9 +11,8 @@ import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:http/http.dart';
 
 class ProfileViewBody extends StatefulWidget {
-  final LoginEntity loginEntity;
 
-  const ProfileViewBody({super.key, required this.loginEntity});
+  const ProfileViewBody({super.key});
 
   @override
   State<ProfileViewBody> createState() => _ProfileViewBodyState();
@@ -68,7 +67,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
   void _saveChanges() async {
     if (_formKey.currentState!.validate()) {
       final updatedProfile = ProfileEntity(
-        id: widget.loginEntity.id,
+        id: context.read<ProfileCubit>().userId,
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
         email: _emailController.text.trim(),
@@ -309,7 +308,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                           SizedBox(width: 20),
                           Expanded(
                             child: ProfileButton(
-                              onPressed: () =>context.read<ProfileCubit>().deletData(userId: widget.loginEntity.id),
+                              onPressed: () =>context.read<ProfileCubit>().deletData(userId: context.read<ProfileCubit>().userId),
                               icon: Icons.logout,
                               backgroundColor: Color(0xffF3F4F6),
                               iconColor: Color(0xff4A5565),

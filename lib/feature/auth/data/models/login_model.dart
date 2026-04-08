@@ -10,25 +10,14 @@ class LoginModel {
   final String? firstName;
   final String? lastName;
   final String? cityName;
+  final double ?latitude;
+ final double ?longitude;
 
   
  
  
 
-  LoginModel({
-    // أساسي
-    required this.email,
-    required this.password,
-    
-    // بروفايل
-    this.id,
-    this.firstName,
-    this.lastName,
-    this.cityName,
-    
-    
-    
-  });
+  
 
   /// ✅ من Entity لـ Model (للبعث لـ API)
   factory LoginModel.fromEntity(LoginEntity entity) {
@@ -37,7 +26,10 @@ class LoginModel {
       password: entity.password,
       firstName: entity.firstName,
       lastName: entity.lastName,
-      cityName: entity.cityName
+      cityName: entity.cityName, 
+      id: entity.id,
+       latitude: entity.latitude,
+        longitude: entity.longitude
     );
   }
 
@@ -56,71 +48,20 @@ class LoginModel {
       firstName: json['first_name'] as String?,
       lastName: json['last_name'] as String?,
       cityName: json['city_name'] as String?,
+       latitude:json['latitude'] as double?, 
+        longitude: json['longitude'] as double?,
      
     );
   }
 
-  /// ✅ لتحويل بيانات المستخدم بعد login (لتخزينها في جدول users/profiles)
-  // static Map<String, dynamic> userToJson({
-  //   required String userId,
-  //   required String email,
-  //   String? firstName,
-  //   String? lastName,
-  //   String? cityName,
-   
-  // }) {
-  //   return {
-  //     'id': userId,
-  //     'email': email,
-  //     if (firstName != null) 'first_name': firstName,
-  //     if (lastName != null) 'last_name': lastName,
-  //     if (cityName != null) 'city_name': cityName,
-     
-  //     'updated_at': DateTime.now().toIso8601String(),
-  //   };
-  // }
-
-  /// ✅ من JSON (الراجع من Supabase) لـ Model
- 
-
-  
-
-  // String get initials {
-  //   if (firstName != null && lastName != null) {
-  //     return '${firstName![0]}${lastName![0]}'.toUpperCase();
-  //   } else if (firstName != null) {
-  //     return firstName![0].toUpperCase();
-  //   } else if (lastName != null) {
-  //     return lastName![0].toUpperCase();
-  //   } else {
-  //     return email[0].toUpperCase();
-  //   }
-  // }
+  LoginModel({required this.email, 
+  required this.password, 
+  required this.id, 
+  required this.firstName, 
+  required this.lastName,
+   required this.cityName,
+    required this.latitude,
+    required this.longitude});
 
 
-  /// ✅ لتحويل Model لـ Entity (عشان تستخدمه في الـ UI)
-  // LoginEntity toEntity() {
-  //   return LoginEntity(
-  //     email: email,
-  //     password: password,
-  //   );
-  // }
-
-  // /// ✅ لعمل كوبي من المودل مع تغيير بعض القيم
-  // LoginModel copyWith({
-  //   String? firstName,
-  //   String? lastName,
-  //   String? cityName,
-   
-  // }) {
-  //   return LoginModel(
-  //     id: id,
-  //     email: email,
-  //     password: password,
-  //     firstName: firstName ?? this.firstName,
-  //     lastName: lastName ?? this.lastName,
-  //     cityName: cityName ?? this.cityName,
-     
-  //   );
-  // }
 }

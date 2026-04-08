@@ -25,9 +25,10 @@ class HomeHeader extends StatelessWidget {
 
         final String fullName = '$firstName $lastName'.trim();
 
-        return Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
+        return
+        // Row(
+        //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+       //   children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -63,24 +64,8 @@ class HomeHeader extends StatelessWidget {
                     ],
                   ),
               ],
-            ),
-            // ✅ Notification icon بالثيم
-            IconButton(
-              onPressed: () {},
-              icon: Icon(
-                Icons.notifications_outlined,
-                color: theme.colorScheme.onSurfaceVariant,
-                size: 26,
-              ),
-              style: IconButton.styleFrom(
-                backgroundColor: theme.colorScheme.surfaceContainerHighest,
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-              ),
-            ),
-          ],
-        );
+            );
+            
       },
     );
   }

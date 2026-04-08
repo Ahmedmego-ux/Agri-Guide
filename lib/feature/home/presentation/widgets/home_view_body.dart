@@ -1,9 +1,11 @@
 import 'package:agri_guide_app/core/constans/app_colors.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/view/chat_bot_view.dart';
+
 import 'package:agri_guide_app/feature/home/presentation/widgets/action_card.dart';
 import 'package:agri_guide_app/feature/home/presentation/widgets/home_header.dart';
 import 'package:agri_guide_app/feature/home/presentation/widgets/info_item.dart';
+import 'package:agri_guide_app/feature/home/presentation/widgets/weather_widget.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/settings/presentation/view/settings_view.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +37,10 @@ class _HomeViewBodyState extends State<HomeViewBody> {
             children: [
               const SizedBox(height: 16),
               HomeHeader(loginEntity: widget.loginEntity),
-              const SizedBox(height: 24),
+
+              const SizedBox(height: 16),
+const WeatherWidget(), 
+const SizedBox(height: 24),
               const HomeActionCards(),
               const SizedBox(height: 28),
               const HomeRecentScans(),
@@ -81,7 +86,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               setState(() => _currentIndex = 3);
               await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => const ChatBotView()),
+                MaterialPageRoute(builder: (context) =>  ChatBotView()),
               );
               setState(() => _currentIndex = 0);
             }),
@@ -92,7 +97,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
                 MaterialPageRoute(
                   builder: (_) => BlocProvider.value(
                     value: context.read<ProfileCubit>(),
-                    child: SettingsView(loginEntity: widget.loginEntity),
+                    child: SettingsView(),
                   ),
                 ),
               );
@@ -154,7 +159,7 @@ class HomeActionCards extends StatelessWidget {
             color: const Color.fromARGB(255, 3, 33, 121),
             onTap: () => Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const ChatBotView()),
+              MaterialPageRoute(builder: (context) => ChatBotView()),
             ),
           ),
         ),

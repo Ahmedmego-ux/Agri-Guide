@@ -59,20 +59,26 @@ class LocationHandler {
         'User-Agent': 'AgriGuideApp/1.0',
       });
 
-      if (response.statusCode == 200) {
-        final data = json.decode(response.body);
+if (response.statusCode == 200) {
+  final data = json.decode(response.body);
 
-        final city = data['address']['city'] ??
-            data['address']['town'] ??
-            data['address']['village'] ??
-            data['address']['county'];
+  final city = data['address']['city'] ??
+      data['address']['town'] ??
+      data['address']['village'] ??
+      data['address']['suburb'];
 
-        final country = data['address']['country'];
+  final governorate = data['address']['state'];
+  final country = data['address']['country'];
 
-        if (city != null && country != null) return '$city, $country';
-        if (city != null) return city;
-        if (country != null) return country;
-      }
+  // ✅ "منوف، المنوفية، مصر"
+  if (city != null && governorate != null && country != null) {
+    return '$city، $governorate، $country';
+  }
+  if (city != null && governorate != null) return '$city، $governorate';
+  if (city != null) return city;
+  if (governorate != null) return governorate;
+  if (country != null) return country;
+}
     } catch (e) {
       print('Error getting city name: $e');
     }

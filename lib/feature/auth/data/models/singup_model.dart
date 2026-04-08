@@ -6,16 +6,19 @@ class SignUpModel {
   final String password;
   final String email;
  final String cityName;
+ final double latitude;
+ final double longitude;
 
-  SignUpModel({
-    required this.firstName,
-    required this.lastName,
+  SignUpModel({required this.firstName,
+   required this.lastName,
     required this.password,
-    required this.email,
-    required this.cityName,
-    
-   
-  });
+     required this.email,
+      required this.cityName,
+       required this.latitude, 
+       required this.longitude});
+  
+
+
   Map<String, dynamic> toJson(String userId) {
     return {
       'id': userId,
@@ -23,6 +26,8 @@ class SignUpModel {
       'last_name': lastName,
       'email': email,
       'city_name':cityName,
+      'latitude':latitude,
+      'longitude':longitude
       
     };
   }
@@ -32,8 +37,11 @@ class SignUpModel {
        lastName: entity.lastName,
         password:entity.password,
          email: entity.email, cityName: entity.cityName,
+          latitude: entity.latitude, 
+          longitude:entity.longitude ,
           );
 
   }
+
   
 }

@@ -1,3 +1,4 @@
+import 'package:agri_guide_app/core/utils/theme/mange_theme/cubit/theme_cubit.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/profile/presentation/view/profile_view.dart';
@@ -7,23 +8,25 @@ import 'package:agri_guide_app/feature/settings/presentation/widgets/settings_it
 import 'package:agri_guide_app/feature/settings/presentation/widgets/settings_toggle_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 
-class SettingsView extends StatefulWidget {
-  final LoginEntity loginEntity;
+class SettingsView extends StatelessWidget {
 
-  const SettingsView({super.key, required this.loginEntity});
-
-  @override
-  State<SettingsView> createState() => _SettingsViewState();
-}
-
-class _SettingsViewState extends State<SettingsView> {
-  bool _isDarkMode = false;
+  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
+
+    bool isDark(){
+   final mode=context.watch<ThemeCubit>().state;
+   if(mode ==ThemeMode.system)
+  { return MediaQuery.of(context).platformBrightness == Brightness.dark;
+   }else 
+   return mode==ThemeMode.dark;
+
+    }
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
@@ -52,7 +55,7 @@ class _SettingsViewState extends State<SettingsView> {
                   MaterialPageRoute(
                     builder: (_) => BlocProvider.value(
                       value: context.read<ProfileCubit>(),
-                      child: ProfileView(loginEntity: widget.loginEntity),
+                      child: ProfileView(),
                     ),
                   ),
                 ),
@@ -77,8 +80,8 @@ class _SettingsViewState extends State<SettingsView> {
                 iconColor: const Color(0xFF673AB7),
                 title: 'Dark Mode',
                 subtitle: 'Switch to dark theme',
-                value: _isDarkMode,
-                onChanged: (val) => setState(() => _isDarkMode = val),
+                value: isDark(),
+                onChanged: (val) => context.read<ThemeCubit>().themeToggle(val)
               ),
             ]),
             const SizedBox(height: 30),

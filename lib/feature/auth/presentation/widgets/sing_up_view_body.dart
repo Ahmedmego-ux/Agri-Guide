@@ -28,8 +28,8 @@ class _SignupViewBodyState extends State<SignupViewBody> {
   final _confirmPasswordController = TextEditingController();
   final _locationController = TextEditingController();
 
-  double? _latitude;
-  double? _longitude;
+  late double _latitude;
+  late double _longitude;
   
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
@@ -68,6 +68,8 @@ class _SignupViewBodyState extends State<SignupViewBody> {
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
       cityName: _locationController.text.trim(),
+      longitude:_longitude, 
+      latitude: _latitude,
     );
   }
 
