@@ -39,8 +39,8 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               HomeHeader(loginEntity: widget.loginEntity),
 
               const SizedBox(height: 16),
-const WeatherWidget(), 
-const SizedBox(height: 24),
+                WeatherWidget(latitude: widget.loginEntity.latitude, longitude: widget.loginEntity.longitude,), 
+              const SizedBox(height: 24),
               const HomeActionCards(),
               const SizedBox(height: 28),
               const HomeRecentScans(),
