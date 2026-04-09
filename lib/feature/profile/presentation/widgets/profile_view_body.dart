@@ -1,6 +1,8 @@
 import 'package:agri_guide_app/core/erorr/error_handler.dart';
+import 'package:agri_guide_app/core/service/location_service.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
+import 'package:agri_guide_app/feature/home/presentation/manger/cubit/weather_cubit.dart';
 import 'package:agri_guide_app/feature/profile/domain/entitys/profile_entity.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/profile/presentation/widgets/profile_feild_tile.dart';
@@ -65,14 +67,35 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
   void _toggleEdit() => setState(() => _isEditing = !_isEditing);
 
   void _saveChanges() async {
+    final locationName = _locationController.text.trim();
+
+    double? lat;
+    double ?lon;
+    
+    final coords =
+        await LocationService().getCoordinatesFromCity(locationName);
+        print(coords);
+
+    if (coords != null) {
+      lat = coords['lat'];
+      lon = coords['lon'];
+     
+      print("jjjjjjjjjjjjjjj$lat jjjjjjjj$lon");
+    } else {
+     
+      print('Could not get coordinates for $locationName');
+    }
     if (_formKey.currentState!.validate()) {
       final updatedProfile = ProfileEntity(
         id: context.read<ProfileCubit>().userId,
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
         email: _emailController.text.trim(),
-        location: _locationController.text.trim(),
+        location:locationName,
+        lat: lat,
+        lon: lon
       );
+       context.read<WeatherCubit>().getWeather(lat,lon);
       await context.read<ProfileCubit>().updateData(profile: updatedProfile);
       setState(() => _isEditing = false);
     }
@@ -254,7 +277,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                         keyboardType: TextInputType.emailAddress,
                         validator: (v) {
                           if (v == null || v.isEmpty) return 'Required';
-                          if (!v.contains('@')) return 'Invalid email';
+                          if (!v.contains('@gmail')) return 'Your Email Isnot Type Of Gmail';
                           return null;
                         },
                       ),

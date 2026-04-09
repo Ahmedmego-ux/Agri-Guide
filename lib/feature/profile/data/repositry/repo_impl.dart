@@ -23,6 +23,8 @@ final supabase=Supabase.instance.client;
      lastName: response['last_name'],
      email: response['email'],
      location: response['city_name'], 
+     lat: response['latitude'],
+     lon: response['longitude'],
    );
 }catch (e) {
       throw Exception('Failed to Load profile: $e');

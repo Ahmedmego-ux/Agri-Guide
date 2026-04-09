@@ -1,4 +1,8 @@
+import 'dart:convert';
+
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
+import 'package:http/http.dart' as http;
 import 'package:permission_handler/permission_handler.dart';
 
 
@@ -56,4 +60,21 @@ class LocationService {
       return null;
     }
   }
+
+ 
+
+Future<Map<String, double>?> getCoordinatesFromCity(String cityName) async {
+  try {
+    List<Location> locations = await locationFromAddress(cityName);
+    if (locations.isNotEmpty) {
+      return {
+        'lat': locations.first.latitude,
+        'lon': locations.first.longitude,
+      };
+    }
+  } catch (e) {
+    print('Error getting coordinates: $e');
+  }
+  return null;
+}
 }

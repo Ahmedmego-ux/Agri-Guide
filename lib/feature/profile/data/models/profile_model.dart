@@ -6,12 +6,17 @@ class ProfileModel {
   final String lastName;
   final String email;
   final String location;
+  final double? lat;
+  final double? lon;
 
-  ProfileModel({required this.id, 
+  ProfileModel( {required this.id, 
   required this.firstName, 
   required this.lastName,
    required this.email,
-    required this.location});
+    required this.location,
+  required this.lat,
+    required this.lon,
+    });
 
 
     factory ProfileModel.fromEntity(ProfileEntity entity){
@@ -19,7 +24,8 @@ class ProfileModel {
        firstName: entity.firstName, 
        lastName: entity.lastName,
         email: entity.email,
-         location: entity.location);
+         location: entity.location, 
+         lat: entity.lat, lon: entity.lon);
     }
 
     factory ProfileModel.fromJson(Map<String,dynamic>json){
@@ -29,6 +35,9 @@ class ProfileModel {
       lastName: json['last_name'] as String,
       email: json['email'] as String,
       location: json['city_name'] as String,
+       lat: json['latitude'] as double,
+        lon: json['longitude'] as double,
+      
        );
     }
 
@@ -38,8 +47,9 @@ class ProfileModel {
       'id':id,
       'first_name':firstName,
       'last_name':lastName,
-      'city_name':location
-
+      'city_name':location,
+      'latitude':lat,
+      'longitude':lon
     };
   }
 

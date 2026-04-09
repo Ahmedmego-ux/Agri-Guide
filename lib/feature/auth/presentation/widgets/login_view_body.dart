@@ -64,6 +64,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               builder: (_) => BlocProvider(
                 create: (_) =>
                     ProfileCubit(userId: state.userData.id!)..getProfileData(),
+                    
                 child: HomeView(loginEntity: state.userData),
               ),
             ),

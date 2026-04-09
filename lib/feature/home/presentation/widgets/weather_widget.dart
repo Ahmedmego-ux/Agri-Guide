@@ -45,7 +45,8 @@ void initState() {
           return Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: cs.primary,
+             // color: weatherEnum.backgroundColor,
+              gradient: weatherEnum.backgroundGradient,
               borderRadius: BorderRadius.circular(16),
             ),
             child: Column(

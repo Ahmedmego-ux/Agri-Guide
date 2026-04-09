@@ -34,19 +34,105 @@ extension WeatherEnumEx on WeatherEnum {
         return Icons.ac_unit;
     }
   }
-  Color get backgroundColor {
+LinearGradient get backgroundGradient {
   switch (this) {
     case WeatherEnum.sunny:
-      return Colors.orange;
+      return const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color(0xFFFFB74D),
+          Color(0xFFFF9800),
+          Color(0xFFF57C00),
+        ],
+        stops: [0.0, 0.5, 1.0],
+      );
+
     case WeatherEnum.rainy:
-      return Colors.blue;
+      return const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color(0xFF4FC3F7),
+          Color(0xFF0288D1),
+          Color(0xFF01579B),
+        ],
+        stops: [0.0, 0.5, 1.0],
+      );
+
     case WeatherEnum.cloudy:
-      return Colors.grey;
-    default:
-      return Colors.green;
+      return const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color(0xFFB0BEC5),
+          Color(0xFF78909C),
+          Color(0xFF546E7A),
+        ],
+        stops: [0.0, 0.5, 1.0],
+      );
+
+    case WeatherEnum.partlyCloudy:
+      return const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color(0xFF90CAF9),
+          Color(0xFF64B5F6),
+          Color(0xFFFFCA28),
+        ],
+        stops: [0.0, 0.6, 1.0],
+      );
+
+    case WeatherEnum.windy:
+      return const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color(0xFF81D4FA),
+          Color(0xFF4FC3F7),
+          Color(0xFF29B6F6),
+        ],
+        stops: [0.0, 0.5, 1.0],
+      );
+
+    case WeatherEnum.highHumidity:
+      return const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color(0xFF80DEEA),
+          Color(0xFF26C6DA),
+          Color(0xFF0097A7),
+        ],
+        stops: [0.0, 0.5, 1.0],
+      );
+
+    case WeatherEnum.highUV:
+      return const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color(0xFFFFA726),
+          Color(0xFFFF7043),
+          Color(0xFFD84315),
+        ],
+        stops: [0.0, 0.5, 1.0],
+      );
+
+    case WeatherEnum.cold:
+      return const LinearGradient(
+        begin: Alignment.topLeft,
+        end: Alignment.bottomRight,
+        colors: [
+          Color(0xFFB3E5FC),
+          Color(0xFF4FC3F7),
+          Color(0xFF0288D1),
+        ],
+        stops: [0.0, 0.5, 1.0],
+      );
   }
 }
-
   Color get iconColor {
     switch (this) {
       case WeatherEnum.sunny:
