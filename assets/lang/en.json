@@ -1,0 +1,32 @@
+{
+  "welcomeTitle": "Welcome to Agri Guide",
+  "welcomeSubtitle": "Welcome to the Agri Guide! This is a simple application that helps you manage your agricultural data. It includes features such as crop tracking, pest control, and fertilizer management.",
+  "agriGuide": "Agri Guide",
+  "instantPlantAnalysis": "Instant Plant Analysis",
+  "analysisSubtitle": "Take a photo and get instant analysis of your plant's health",
+  "next": "Next",
+  "getStarted": "Get Started",
+  "skip": "Skip",
+  "back": "Back",
+
+  "fieldCannotBeEmpty": "{} cannot be empty",
+  "emailCannotBeEmpty": "Email cannot be empty",
+  "invalidEmail": "Please enter a valid email",
+  "passwordCannotBeEmpty": "Password cannot be empty",
+  "passwordTooShort": "Password must be at least 6 characters",
+   "email": "Email",
+  "password": "Password",
+  "pleaseEnterField": "Please enter your {}",
+  "location": "Location",
+  "yourLocation": "Your Location",
+  "loginWithEmail": "Login With Your Email",
+  "enterYourEmail": "Enter Your Email",
+  "enterYourPassword": "Enter Your Password",
+
+  "forgotPassword": "Forgot Password?",
+  "login": "Log In",
+  "dontHaveAccount": "Don't have an account? ",
+  "signUp": "Sign Up",
+  "createNewPassword": "Create New Password",
+  "createStrongPassword": "Create a strong password that you don't use on other sites."
+}

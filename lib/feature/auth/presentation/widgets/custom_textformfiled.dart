@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class CustomeTextFormField extends StatelessWidget {
@@ -35,7 +36,7 @@ class CustomeTextFormField extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
-            labelText,
+            labelText.tr(), // ✅ ترجمة
             style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
               color: theme.colorScheme.onSurface,
@@ -49,14 +50,15 @@ class CustomeTextFormField extends StatelessWidget {
           validator: validator ??
               (value) {
                 if (value == null || value.isEmpty) {
-                  return 'Please enter your $labelText';
+                  return 'pleaseEnterField'.tr(args: [labelText.tr()]);
                 }
                 return null;
               },
           keyboardType: keyboardType,
           obscureText: isPassword,
           controller: controller,
-          style: theme.textTheme.bodyMedium?.copyWith(color: theme.colorScheme.onSurface),
+          style: theme.textTheme.bodyMedium
+              ?.copyWith(color: theme.colorScheme.onSurface),
           decoration: InputDecoration(
             prefixIcon: prefixIcon != null
                 ? Icon(
@@ -66,8 +68,9 @@ class CustomeTextFormField extends StatelessWidget {
                   )
                 : null,
             suffixIcon: suffixIcon,
-            hintText: hintText,
-            hintStyle: theme.textTheme.bodySmall?.copyWith(color: theme.colorScheme.onSurfaceVariant),
+            hintText: hintText.tr(), // ✅ ترجمة
+            hintStyle: theme.textTheme.bodySmall
+                ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             filled: true,
             fillColor: theme.inputDecorationTheme.fillColor,
             contentPadding: theme.inputDecorationTheme.contentPadding,
@@ -75,7 +78,8 @@ class CustomeTextFormField extends StatelessWidget {
             enabledBorder: theme.inputDecorationTheme.enabledBorder,
             focusedBorder: theme.inputDecorationTheme.focusedBorder,
             errorBorder: theme.inputDecorationTheme.errorBorder,
-            focusedErrorBorder: theme.inputDecorationTheme.focusedErrorBorder,
+            focusedErrorBorder:
+                theme.inputDecorationTheme.focusedErrorBorder,
           ),
         ),
       ],

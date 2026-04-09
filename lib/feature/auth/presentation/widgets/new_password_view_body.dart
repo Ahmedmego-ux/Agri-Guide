@@ -100,10 +100,10 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
     if (state is UpdatePasswordSuccess) {
       _showSnack('Password updated successfully!',
           Theme.of(context).colorScheme.primary);
-      // Navigator.pushAndRemoveUntil(
-      //     context, MaterialPageRoute(builder: (context) => LoginView()),
-      //     (route)=>false
-      //     );
+       Navigator.pushAndRemoveUntil(
+           context, MaterialPageRoute(builder: (context) => LoginView()),
+           (route)=>false
+       );
     }
     if (state is UpdatePasswordFailure) {
       _showSnack(state.errmessage, Theme.of(context).colorScheme.error);
@@ -121,10 +121,10 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: theme.colorScheme.primary),
-          onPressed: () =>  Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => ResetPasswordView()),
-          
-          ),
+          onPressed: () =>   Navigator.pushAndRemoveUntil(
+           context, MaterialPageRoute(builder: (context) => ResetPasswordView()),
+           (route)=>false
+       )
         ),
       ),
       body: SafeArea(

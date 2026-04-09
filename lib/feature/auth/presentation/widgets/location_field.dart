@@ -1,4 +1,5 @@
 import 'package:agri_guide_app/feature/auth/presentation/widgets/custom_textformfiled.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class LocationField extends StatelessWidget {
@@ -16,8 +17,8 @@ class LocationField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomeTextFormField(
-      hintText: 'Your location',
-      labelText: 'Location',
+      hintText: 'Your location'.tr(),
+      labelText: 'Location'.tr(),
       prefixIcon: const Icon(Icons.location_on),
       suffixIcon: IconButton(
         onPressed: isLoading ? null : onTap,

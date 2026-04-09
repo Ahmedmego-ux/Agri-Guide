@@ -2,6 +2,7 @@ import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
 import 'package:agri_guide_app/feature/onboard/widgets/onboard_page.dart';
 import 'package:flutter/material.dart';
 import 'package:phosphor_flutter/phosphor_flutter.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OnboardView extends StatefulWidget {
   const OnboardView({super.key});
@@ -11,59 +12,62 @@ class OnboardView extends StatefulWidget {
 }
 
 class _OnboardViewState extends State<OnboardView> {
-  late List<Widget> screans;
-  int indexcurrent = 0;
+  late List<Widget> screens;
+  int currentIndex = 0;
   late PageController _pageController;
+
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    screans = [
-     
+    screens = [
       OnBoardingPage(
         imagePath: 'assets/onboard1.png',
-        icon:PhosphorIcons.plant(),
-        title: 'Welcome to Agri Guide',
-        subtitle:
-            'Your personal farming assistant. Get expert advice, weather updates, and crop management tools all in one place.',
+        icon: PhosphorIcons.plant(),
+        title: 'welcomeTitle',
+        subtitle: 'welcomeSubtitle',
       ),
       OnBoardingPage(
         imagePath: 'assets/onboard2.png',
-        icon:  Icons.eco,
-        title: 'AgriGuide ',
-        subtitle:
-            'Your AI-powered companion for healthy crops and sustainable farming',
+        icon: Icons.eco,
+        title: 'agriGuide',
+        subtitle: 'welcomeSubtitle', // لو عايز Subtitle مختلف اعمله key جديد
       ),
-       OnBoardingPage(
+      OnBoardingPage(
         imagePath: 'assets/onboard3.png',
         icon: Icons.camera_alt,
-        title: 'Instant Plant Analysis',
-        subtitle:
-            'Take a photo of your plant and get instant disease diagnosis and treatment recommendations',
+        title: 'instantPlantAnalysis',
+        subtitle: 'analysisSubtitle',
       ),
     ];
-    _pageController = PageController(initialPage: indexcurrent);
+    _pageController = PageController(initialPage: currentIndex);
   }
 
   @override
   Widget build(BuildContext context) {
+     print('========== LANGUAGE DEBUG ==========');
+  print('Current locale: ${context.locale}');
+  print('Language code: ${context.locale.languageCode}');
+  print('Is Arabic: ${context.locale.languageCode == "ar"}');
+  print('Welcome title translation: ${"welcomeTitle".tr()}');
+  print('Next button translation: ${"next".tr()}');
+  print('Skip button translation: ${"skip".tr()}');
+  print('=====================================');
+  
     return Scaffold(
       appBar: AppBar(
         leadingWidth: 100,
         leading: TextButton(
           onPressed: () {
-            setState(() {
-              if (indexcurrent != 0) {
-                _pageController.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut,
-                );
-              }
-            });
+            if (currentIndex != 0) {
+              _pageController.previousPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut,
+              );
+            }
           },
           child: Text(
-            indexcurrent == 0 ? "" : "Back",
-            style: TextStyle(fontSize: 16, color: Colors.green),
+            currentIndex == 0 ? "" : "back".tr(),
+            style: const TextStyle(fontSize: 16, color: Colors.green),
             maxLines: 1,
           ),
         ),
@@ -72,37 +76,35 @@ class _OnboardViewState extends State<OnboardView> {
             onPressed: () {
               Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) => LoginView()),
+                MaterialPageRoute(builder: (context) => const LoginView()),
               );
             },
-            child: const Text(
-              "Skip",
-              style: TextStyle(fontSize: 16, color: Colors.green),
+            child: Text(
+              "skip".tr(),
+              style: const TextStyle(fontSize: 16, color: Colors.green),
             ),
           ),
         ],
       ),
       body: PageView.builder(
-        itemCount: screans.length,
+        itemCount: screens.length,
         controller: _pageController,
         physics: const NeverScrollableScrollPhysics(),
         onPageChanged: (value) {
           setState(() {
-            indexcurrent = value;
+            currentIndex = value;
           });
         },
         itemBuilder: (context, index) {
           return Column(
             children: [
-              Expanded(child: screans[index]),
-
+              Expanded(child: screens[index]),
               const SizedBox(height: 20),
-
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: ElevatedButton(
                   onPressed: () {
-                    if (indexcurrent < screans.length - 1) {
+                    if (currentIndex < screens.length - 1) {
                       _pageController.nextPage(
                         duration: const Duration(milliseconds: 300),
                         curve: Curves.easeInOut,
@@ -110,7 +112,7 @@ class _OnboardViewState extends State<OnboardView> {
                     } else {
                       Navigator.pushReplacement(
                         context,
-                        MaterialPageRoute(builder: (_) => LoginView()),
+                        MaterialPageRoute(builder: (_) => const LoginView()),
                       );
                     }
                   },
@@ -122,12 +124,13 @@ class _OnboardViewState extends State<OnboardView> {
                     ),
                   ),
                   child: Text(
-                    indexcurrent == screans.length - 1 ? "Get Started" : "Next",
-                    style: TextStyle(color: Colors.white, fontSize: 16),
+                    currentIndex == screens.length - 1
+                        ? 'getStarted'.tr()
+                        : 'next'.tr(),
+                    style: const TextStyle(color: Colors.white, fontSize: 16),
                   ),
                 ),
               ),
-
               const SizedBox(height: 30),
             ],
           );

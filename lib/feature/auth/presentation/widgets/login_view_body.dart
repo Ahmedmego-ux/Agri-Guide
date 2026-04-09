@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/auth/presentation/manger/login/login_cubit.dart';
@@ -64,12 +65,10 @@ class _LoginViewBodyState extends State<LoginViewBody> {
               builder: (_) => BlocProvider(
                 create: (_) =>
                     ProfileCubit(userId: state.userData.id!)..getProfileData(),
-                    
                 child: HomeView(loginEntity: state.userData),
               ),
             ),
             (route) => false,
-            
           );
         }
       },
@@ -94,21 +93,24 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const Gap(20),
+
                               Center(
                                 child: Text(
-                                  'Login with your Email',
+                                  'loginWithEmail'.tr(),
                                   style: theme.textTheme.bodyMedium?.copyWith(
                                     color: theme.colorScheme.onSurfaceVariant,
                                     fontWeight: FontWeight.w500,
                                   ),
                                 ),
                               ),
+
                               const Gap(50),
 
                               CustomeTextFormField(
-                                hintText: 'Enter your email',
-                                labelText: 'Email',
-                                prefixIcon: Icon(Icons.email, color: theme.iconTheme.color),
+                                hintText: 'enterYourEmail',
+                                labelText: 'email',
+                                prefixIcon: Icon(Icons.email,
+                                    color: theme.iconTheme.color),
                                 controller: _emailController,
                                 validator: AuthValidators.validateEmail,
                                 isPassword: false,
@@ -117,13 +119,17 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                               const Gap(30),
 
                               CustomeTextFormField(
-                                hintText: 'Enter your password',
-                                labelText: 'Password',
-                                prefixIcon: Icon(Icons.lock, color: theme.iconTheme.color),
+                                hintText: 'enterYourPassword',
+                                labelText: 'password',
+                                prefixIcon: Icon(Icons.lock,
+                                    color: theme.iconTheme.color),
                                 suffixIcon: IconButton(
-                                  onPressed: () => setState(() => _obscureText = !_obscureText),
+                                  onPressed: () => setState(
+                                      () => _obscureText = !_obscureText),
                                   icon: Icon(
-                                    _obscureText ? Icons.visibility_off : Icons.visibility,
+                                    _obscureText
+                                        ? Icons.visibility_off
+                                        : Icons.visibility,
                                     color: theme.colorScheme.onSurfaceVariant,
                                   ),
                                 ),
@@ -141,12 +147,13 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                        builder: (_) => const ResetPasswordView(),
+                                        builder: (_) =>
+                                            const ResetPasswordView(),
                                       ),
                                     );
                                   },
                                   child: Text(
-                                    'Forgot Password?',
+                                    'forgotPassword'.tr(),
                                     style: theme.textTheme.bodyMedium?.copyWith(
                                       color: theme.colorScheme.primary,
                                       fontSize: 14,
@@ -158,7 +165,7 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                               const Gap(30),
 
                               CustomAuthButton(
-                                text: 'Log In',
+                                text: 'login'.tr(),
                                 isLoading: state is LoginLoading,
                                 onPressed: _login,
                               ),
@@ -169,9 +176,10 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Text(
-                                    "Don't have an account? ",
+                                    'dontHaveAccount'.tr(),
                                     style: theme.textTheme.bodyMedium?.copyWith(
-                                      color: theme.colorScheme.onSurfaceVariant,
+                                      color:
+                                          theme.colorScheme.onSurfaceVariant,
                                       fontSize: 14,
                                     ),
                                   ),
@@ -180,13 +188,15 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                                       Navigator.push(
                                         context,
                                         MaterialPageRoute(
-                                          builder: (_) => const SignupView(),
+                                          builder: (_) =>
+                                              const SignupView(),
                                         ),
                                       );
                                     },
                                     child: Text(
-                                      'Sign Up',
-                                      style: theme.textTheme.bodyMedium?.copyWith(
+                                      'signUp'.tr(),
+                                      style: theme.textTheme.bodyMedium
+                                          ?.copyWith(
                                         color: theme.colorScheme.primary,
                                         fontWeight: FontWeight.bold,
                                         fontSize: 14,

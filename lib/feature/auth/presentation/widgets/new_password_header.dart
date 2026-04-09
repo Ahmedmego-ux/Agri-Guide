@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class NewPasswordHeader extends StatelessWidget {
   const NewPasswordHeader({super.key});
@@ -7,14 +8,16 @@ class NewPasswordHeader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-    final titleColor = theme.textTheme.headlineMedium?.color ?? Colors.black87;
-    final subtitleColor = theme.textTheme.bodyMedium?.color?.withOpacity(0.7) ?? Colors.grey;
+    final titleColor =
+        theme.textTheme.headlineMedium?.color ?? Colors.black87;
+    final subtitleColor =
+        theme.textTheme.bodyMedium?.color?.withOpacity(0.7) ?? Colors.grey;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Create New Password',
+          'createNewPassword'.tr(), // ✅
           style: TextStyle(
             fontSize: 28,
             fontWeight: FontWeight.bold,
@@ -23,7 +26,7 @@ class NewPasswordHeader extends StatelessWidget {
         ),
         const Gap(12),
         Text(
-          'Create a strong password that you don\'t use on other sites.',
+          'createStrongPassword'.tr(), // ✅
           style: TextStyle(
             fontSize: 15,
             color: subtitleColor,
