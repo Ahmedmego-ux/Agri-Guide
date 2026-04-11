@@ -34,18 +34,17 @@ extension WeatherEnumEx on WeatherEnum {
         return Icons.ac_unit;
     }
   }
-LinearGradient get backgroundGradient {
+
+  LinearGradient get backgroundGradient {
   switch (this) {
     case WeatherEnum.sunny:
       return const LinearGradient(
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color(0xFFFFB74D),
-          Color(0xFFFF9800),
-          Color(0xFFF57C00),
+          Color(0xFFFFA726), // برتقالي فاتح
+          Color(0xFFFF7043), // برتقالي غامق
         ],
-        stops: [0.0, 0.5, 1.0],
       );
 
     case WeatherEnum.rainy:
@@ -53,11 +52,9 @@ LinearGradient get backgroundGradient {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color(0xFF4FC3F7),
-          Color(0xFF0288D1),
-          Color(0xFF01579B),
+          Color(0xFF1E88E5),
+          Color(0xFF1565C0),
         ],
-        stops: [0.0, 0.5, 1.0],
       );
 
     case WeatherEnum.cloudy:
@@ -65,11 +62,9 @@ LinearGradient get backgroundGradient {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color(0xFFB0BEC5),
-          Color(0xFF78909C),
+          Color(0xFF90A4AE),
           Color(0xFF546E7A),
         ],
-        stops: [0.0, 0.5, 1.0],
       );
 
     case WeatherEnum.partlyCloudy:
@@ -77,11 +72,9 @@ LinearGradient get backgroundGradient {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color(0xFF90CAF9),
           Color(0xFF64B5F6),
-          Color(0xFFFFCA28),
+          Color(0xFFFFCA28), // لمسة شمس خفيفة
         ],
-        stops: [0.0, 0.6, 1.0],
       );
 
     case WeatherEnum.windy:
@@ -89,11 +82,9 @@ LinearGradient get backgroundGradient {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color(0xFF81D4FA),
-          Color(0xFF4FC3F7),
-          Color(0xFF29B6F6),
+          Color(0xFF4DD0E1),
+          Color(0xFF0097A7),
         ],
-        stops: [0.0, 0.5, 1.0],
       );
 
     case WeatherEnum.highHumidity:
@@ -101,11 +92,9 @@ LinearGradient get backgroundGradient {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color(0xFF80DEEA),
-          Color(0xFF26C6DA),
-          Color(0xFF0097A7),
+          Color(0xFF4FC3F7),
+          Color(0xFF0288D1),
         ],
-        stops: [0.0, 0.5, 1.0],
       );
 
     case WeatherEnum.highUV:
@@ -113,11 +102,9 @@ LinearGradient get backgroundGradient {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color(0xFFFFA726),
           Color(0xFFFF7043),
           Color(0xFFD84315),
         ],
-        stops: [0.0, 0.5, 1.0],
       );
 
     case WeatherEnum.cold:
@@ -125,14 +112,15 @@ LinearGradient get backgroundGradient {
         begin: Alignment.topLeft,
         end: Alignment.bottomRight,
         colors: [
-          Color(0xFFB3E5FC),
-          Color(0xFF4FC3F7),
-          Color(0xFF0288D1),
+          Color(0xFF64B5F6),
+          Color(0xFF1A237E),
         ],
-        stops: [0.0, 0.5, 1.0],
       );
   }
 }
+
+
+
   Color get iconColor {
     switch (this) {
       case WeatherEnum.sunny:

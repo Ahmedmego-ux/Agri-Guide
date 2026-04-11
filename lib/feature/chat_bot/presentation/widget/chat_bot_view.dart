@@ -27,39 +27,8 @@ class _ChatBotViewBodyState extends State<ChatBotViewBody> {
   final _user = const types.User(id: 'user');
   final _bot = const types.User(id: 'bot');
 
-  Future<bool> _requestCameraPermission() async {
-    final status = await Permission.camera.request();
-    if (status.isGranted) return true;
-    if (status.isPermanentlyDenied) openAppSettings();
-    return false;
-  }
-
-  Future<bool> _requestGalleryPermission() async {
-    if (await Permission.photos.isGranted) return true;
-    final status = await Permission.photos.request();
-    if (status.isGranted) return true;
-    if (status.isPermanentlyDenied) openAppSettings();
-    return false;
-  }
-
-  Future<void> _sendImage(String path) async {
-    try {
-      final bytes = await File(path).readAsBytes();
-      final base64Image = base64Encode(bytes);
-
-      await context.read<chat_cubit.ChatCubit>().sendMessage(
-            imageBase64: base64Image,
-          );
-
-      context.read<SessionCubit>().getSessions();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Failed to send image: $e')),
-        );
-      }
-    }
-  }
+ 
+ 
 
   Future<void> _handleSendPressed(types.PartialText message) async {
     if (message.text.trim().isEmpty) return;
@@ -67,80 +36,7 @@ class _ChatBotViewBodyState extends State<ChatBotViewBody> {
     context.read<SessionCubit>().getSessions();
   }
 
-  Future<void> _handleAttachmentPressed() async {
-    final picker = ImagePicker();
-    final theme = Theme.of(context);
-
-    showModalBottomSheet(
-      context: context,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(12)),
-      ),
-      backgroundColor: theme.colorScheme.surfaceContainerHigh,
-      builder: (context) => SafeArea(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            ListTile(
-              leading: Icon(Icons.camera_alt, color: theme.colorScheme.primary),
-              title: Text('Camera',
-                  style: TextStyle(color: theme.colorScheme.onSurface)),
-              onTap: () async {
-                Navigator.pop(context);
-                final hasPermission = await _requestCameraPermission();
-                if (!hasPermission) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            'Camera permission denied. Please enable it in settings.')));
-                  }
-                  return;
-                }
-                try {
-                  final image = await picker.pickImage(
-                      source: ImageSource.camera, imageQuality: 70);
-                  if (image != null) await _sendImage(image.path);
-                } catch (e) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Camera error: $e')));
-                  }
-                }
-              },
-            ),
-            ListTile(
-              leading:
-                  Icon(Icons.photo_library, color: theme.colorScheme.primary),
-              title: Text('Gallery',
-                  style: TextStyle(color: theme.colorScheme.onSurface)),
-              onTap: () async {
-                Navigator.pop(context);
-                final hasPermission = await _requestGalleryPermission();
-                if (!hasPermission) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                        content: Text(
-                            'Gallery permission denied. Please enable it in settings.')));
-                  }
-                  return;
-                }
-                try {
-                  final image = await picker.pickImage(
-                      source: ImageSource.gallery, imageQuality: 70);
-                  if (image != null) await _sendImage(image.path);
-                } catch (e) {
-                  if (mounted) {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(content: Text('Gallery error: $e')));
-                  }
-                }
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -223,7 +119,7 @@ class _ChatBotViewBodyState extends State<ChatBotViewBody> {
                 ),
               ),
             ),
-            onAttachmentPressed: _handleAttachmentPressed,
+           // onAttachmentPressed: _handleAttachmentPressed,
             disableImageGallery: true,
             messages: messages,
             onSendPressed: _handleSendPressed,

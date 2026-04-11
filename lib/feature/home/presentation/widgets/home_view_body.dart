@@ -1,6 +1,8 @@
 import 'package:agri_guide_app/core/constans/app_colors.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/view/chat_bot_view.dart';
+import 'package:agri_guide_app/feature/crop_recom/presentation/view/crop_reco_view.dart';
+import 'package:agri_guide_app/feature/diagonals_image/presentaion/widgets/image_picker_service.dart';
 
 import 'package:agri_guide_app/feature/home/presentation/widgets/action_card.dart';
 import 'package:agri_guide_app/feature/home/presentation/widgets/home_header.dart';
@@ -52,7 +54,9 @@ class _HomeViewBodyState extends State<HomeViewBody> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => setState(() => _currentIndex = 2),
+        onPressed: () => {setState(() => _currentIndex = 2),
+        ImagePickerService(context).showPickerSheet()
+        },
         backgroundColor: isCameraSelected
             ? theme.colorScheme.primary
             : theme.colorScheme.surfaceContainerHighest,
@@ -86,7 +90,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               setState(() => _currentIndex = 3);
               await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  ChatBotView()),
+                MaterialPageRoute(builder: (context) =>  CropRecoView()),
               );
               setState(() => _currentIndex = 0);
             }),
