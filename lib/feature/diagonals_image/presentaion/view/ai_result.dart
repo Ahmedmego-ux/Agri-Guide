@@ -1,12 +1,20 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import 'package:agri_guide_app/feature/diagonals_image/presentaion/manger/scan/scan_cubit.dart';
+import 'package:agri_guide_app/feature/diagonals_image/presentaion/manger/history_scan/history_scan_cubit.dart';
 
 class AIResultScreen extends StatefulWidget {
   final String imagePath;
+  final bool isNetwork;
+  final String? result;
 
   const AIResultScreen({
     super.key,
     required this.imagePath,
+    required this.isNetwork,
+    this.result,
   });
 
   @override
@@ -14,79 +22,43 @@ class AIResultScreen extends StatefulWidget {
 }
 
 class _AIResultScreenState extends State<AIResultScreen> {
-  bool isLoading = true;
-  String? result;
+  bool _saved = false;
+
+  /// 🧪 MOCK RESULT (TEST ONLY)
+  final String mockResult = '''
+🌿 PLANT ANALYSIS TEST REPORT
+
+🔬 Disease: Early Blight (Test Data)
+📊 Confidence: 91%
+
+💊 Recommendations:
+- Remove infected leaves
+- Apply neem oil
+- Improve ventilation
+
+⚠️ This is a MOCK RESULT for testing only
+''';
 
   @override
   void initState() {
     super.initState();
-    _analyzeImage();
+
+    if (!widget.isNetwork) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        _saveScan();
+      });
+    }
   }
 
-  Future<void> _analyzeImage() async {
-    await Future.delayed(const Duration(seconds: 2));
+  void _saveScan() {
+    if (_saved) return;
 
-    setState(() {
-      isLoading = false;
-      result = '''
-🌿 PLANT ANALYSIS REPORT
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+    _saved = true;
 
-🔬 DISEASE DETECTION:
-• Disease: Early Blight (Alternaria solani)
-• Confidence: 92.4%
-• Severity: Moderate to High
-
-📊 SYMPTOMS MATCHED:
-• Dark brown spots with concentric rings — ✅ Matched (89%)
-• Yellowing of lower leaves — ✅ Matched (85%)
-• Leaf blight and defoliation — ✅ Matched (78%)
-• Stem lesions — ⚠️ Partially detected (54%)
-
-🦠 SECONDARY INFECTIONS:
-• No other pathogens detected
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-💊 TREATMENT RECOMMENDATIONS:
-
-1️⃣ IMMEDIATE ACTION (Next 24h):
-   • Remove and destroy all infected leaves
-   • Disinfect pruning tools with bleach solution
-   • Avoid watering leaves (water soil only)
-
-2️⃣ ORGANIC TREATMENT (Every 5-7 days):
-   • Neem oil spray (2ml/L water)
-   • Copper fungicide (Bordeaux mixture)
-   • Baking soda solution (1tsp/L + soap)
-
-3️⃣ CHEMICAL CONTROL (Severe cases):
-   • Chlorothalonil or Mancozeb based fungicides
-   • Apply every 7-10 days for 3 cycles
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-🌱 PREVENTION TIPS:
-✅ Crop rotation (4-year cycle)
-✅ Mulch around plants to prevent soil splash
-✅ Stake plants for better air circulation
-✅ Water early morning only
-✅ Space plants 45-60cm apart
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-
-📈 PROGNOSIS:
-• With treatment: 85% recovery within 14 days
-• Without treatment: Yield loss up to 40-60%
-
-⚠️ ALERT: Disease may spread to stems and fruits if untreated!
-
-━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
-🤖 AI Model: Custom CNN v2.3
-📅 Analysis Date: ${DateTime.now().day}/${DateTime.now().month}/${DateTime.now().year}
-⏱️ Processing Time: 1.8 seconds
-      ''';
-    });
+    context.read<ScanCubit>().saveScan(
+          file: File(widget.imagePath),
+          result: widget.result ?? mockResult,
+        );
   }
 
   @override
@@ -101,108 +73,86 @@ class _AIResultScreenState extends State<AIResultScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
-        child: Column(
-          children: [
-            Card(
-              elevation: 2,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(12),
-                child: Image.file(
-                  File(widget.imagePath),
-                  height: 220,
-                  width: double.infinity,
-                  fit: BoxFit.cover,
+        child: BlocListener<ScanCubit, ScanState>(
+          listener: (context, state) {
+            if (state is ScanSuccess) {
+              context.read<HistoryScanCubit>().refreshHistory();
+            }
+
+            if (state is ScanFailure) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+            }
+          },
+          child: Column(
+            children: [
+              /// IMAGE
+              Card(
+                elevation: 2,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.circular(12),
+                  child: widget.isNetwork
+                      ? Image.network(
+                          widget.imagePath,
+                          height: 220,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        )
+                      : Image.file(
+                          File(widget.imagePath),
+                          height: 220,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
                 ),
               ),
-            ),
 
-            const SizedBox(height: 20),
+              const SizedBox(height: 20),
 
-            Expanded(
-              child: isLoading
-                  ? const Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          CircularProgressIndicator(),
-                          SizedBox(height: 12),
-                          Text("Analyzing plant health..."),
-                          SizedBox(height: 4),
-                          Text("Please wait"),
-                        ],
-                      ),
-                    )
-                  : Container(
+              /// RESULT
+              Expanded(
+                child: BlocBuilder<ScanCubit, ScanState>(
+                  builder: (context, state) {
+                    if (state is ScanLoading) {
+                      return const Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+
+                    if (state is ScanFailure) {
+                      return Center(
+                        child: Text(
+                          state.message,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      );
+                    }
+
+                    return Container(
                       width: double.infinity,
                       decoration: BoxDecoration(
                         color: cs.surfaceContainerLow,
                         borderRadius: BorderRadius.circular(12),
-                        boxShadow: [
-                          BoxShadow(
-                            color: cs.shadow.withOpacity(0.4),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
                       ),
-                      child: SingleChildScrollView(  
-                        padding: const EdgeInsets.all(16),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisSize: MainAxisSize.min, 
-                          children: [
-                            Row(
-                              children: [
-                                Container(
-                                  padding: const EdgeInsets.all(8),
-                                  decoration: BoxDecoration(
-                                    color: cs.primaryContainer,
-                                    borderRadius: BorderRadius.circular(12),
-                                  ),
-                                  child: Icon(
-                                    Icons.check_circle,
-                                    color: cs.primary,
-                                    size: 28,
-                                  ),
-                                ),
-                                const SizedBox(width: 12),
-                                Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      "Analysis Complete",
-                                      style: textTheme.titleLarge?.copyWith(
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    ),
-                                    Text(
-                                      "AI Diagnosis Report",
-                                      style: textTheme.bodySmall?.copyWith(
-                                        color: cs.onSurfaceVariant,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ],
-                            ),
-                            const SizedBox(height: 16),  
-                            
-                            Text(
-                              result ?? "No result",
-                              style: textTheme.bodyMedium?.copyWith(
-                                height: 1.5,
-                              ),
-                            ),
-                            const SizedBox(height: 8), 
-                          ],
+                      padding: const EdgeInsets.all(16),
+                      child: SingleChildScrollView(
+                        child: Text(
+                          widget.result ?? mockResult,
+                          style: textTheme.bodyMedium?.copyWith(
+                            height: 1.5,
+                          ),
                         ),
                       ),
-                    ),
-            ),
-          ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

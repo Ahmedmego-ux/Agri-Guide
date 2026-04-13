@@ -36,12 +36,24 @@ Future<LoginEntity> login({required LoginEntity loginEntity}) async {
     }
  
  
-    final profileData = await supabase
-        .from('profiles')
-        .select('id, email, first_name, last_name, city_name')
-        .eq('id', response.user!.id)
-        .maybeSingle();
+   final profileData = await supabase
+    .from('profiles')
+    .select('id, email, first_name, last_name, city_name, latitude, longitude') // ✅
+    .eq('id', response.user!.id)
+    .maybeSingle();
 
+if (profileData != null) {
+  return LoginEntity(
+    id: profileData['id'],
+    email: profileData['email'],
+    password: '',
+    firstName: profileData['first_name'] ?? '',
+    lastName: profileData['last_name'] ?? '',
+    cityName: profileData['city_name'] ?? '',
+    latitude: (profileData['latitude'] ?? 0).toDouble(),   
+    longitude: (profileData['longitude'] ?? 0).toDouble(), 
+  );
+}
             
 
      if (profileData != null) {

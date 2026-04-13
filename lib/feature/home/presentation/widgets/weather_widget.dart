@@ -1,4 +1,3 @@
-import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/home/presentation/enums/weather_enum.dart';
 import 'package:agri_guide_app/feature/home/presentation/manger/cubit/weather_cubit.dart';
 import 'package:flutter/material.dart';

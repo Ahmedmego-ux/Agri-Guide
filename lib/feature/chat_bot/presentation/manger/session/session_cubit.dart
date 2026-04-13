@@ -2,7 +2,6 @@ import 'package:agri_guide_app/feature/chat_bot/domain/entity/chat_session_entit
 import 'package:agri_guide_app/feature/chat_bot/domain/repos/chat_repo.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
-import 'package:meta/meta.dart';
 
 part 'session_state.dart';
 

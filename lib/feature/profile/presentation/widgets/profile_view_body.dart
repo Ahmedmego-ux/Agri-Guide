@@ -1,6 +1,5 @@
 import 'package:agri_guide_app/core/erorr/error_handler.dart';
 import 'package:agri_guide_app/core/service/location_service.dart';
-import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
 import 'package:agri_guide_app/feature/home/presentation/manger/cubit/weather_cubit.dart';
 import 'package:agri_guide_app/feature/profile/domain/entitys/profile_entity.dart';
@@ -9,8 +8,6 @@ import 'package:agri_guide_app/feature/profile/presentation/widgets/profile_feil
 import 'package:agri_guide_app/feature/profile/presentation/widgets/profile_save_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_chat_ui/flutter_chat_ui.dart';
-import 'package:http/http.dart';
 
 class ProfileViewBody extends StatefulWidget {
 

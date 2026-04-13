@@ -4,6 +4,9 @@ import 'package:agri_guide_app/feature/chat_bot/data/chat_repo_impl.dart/chat_re
 
 import 'package:agri_guide_app/feature/chat_bot/presentation/manger/message/chat_cubit.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/manger/session/session_cubit.dart';
+import 'package:agri_guide_app/feature/diagonals_image/data/repo_impl/scan_impl.dart';
+import 'package:agri_guide_app/feature/diagonals_image/presentaion/manger/history_scan/history_scan_cubit.dart';
+import 'package:agri_guide_app/feature/diagonals_image/presentaion/manger/scan/scan_cubit.dart';
 import 'package:agri_guide_app/feature/home/data/repos/weather_repo_impl.dart';
 
 import 'package:agri_guide_app/feature/home/presentation/manger/cubit/weather_cubit.dart';
@@ -45,6 +48,13 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ChatCubit(ChatRepoImpl())),
         BlocProvider(create: (context) => SessionCubit(ChatRepoImpl())),
          BlocProvider(create: (context) => WeatherCubit(WeatherRepoImpl())),
+         BlocProvider(
+          create: (context) => ScanCubit(ScanImpl()),
+        ),
+        BlocProvider(
+          create: (context) => HistoryScanCubit(ScanImpl()),
+        ),
+          
       BlocProvider(
        create: (context) => ThemeCubit(),)
       ],

@@ -2,11 +2,14 @@ import 'package:agri_guide_app/core/constans/app_colors.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/view/chat_bot_view.dart';
 import 'package:agri_guide_app/feature/crop_recom/presentation/view/crop_reco_view.dart';
+import 'package:agri_guide_app/feature/diagonals_image/presentaion/manger/history_scan/history_scan_cubit.dart';
+import 'package:agri_guide_app/feature/diagonals_image/presentaion/view/history_screan.dart';
+import 'package:agri_guide_app/feature/diagonals_image/presentaion/widgets/history_item_card.dart';
 import 'package:agri_guide_app/feature/diagonals_image/presentaion/widgets/image_picker_service.dart';
 
 import 'package:agri_guide_app/feature/home/presentation/widgets/action_card.dart';
 import 'package:agri_guide_app/feature/home/presentation/widgets/home_header.dart';
-import 'package:agri_guide_app/feature/home/presentation/widgets/info_item.dart';
+
 import 'package:agri_guide_app/feature/home/presentation/widgets/weather_widget.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/settings/presentation/view/settings_view.dart';
@@ -23,6 +26,12 @@ class HomeViewBody extends StatefulWidget {
 
 class _HomeViewBodyState extends State<HomeViewBody> {
   int _currentIndex = 0;
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+     context.read<HistoryScanCubit>().getHistory();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -47,8 +56,7 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               const SizedBox(height: 28),
               const HomeRecentScans(),
               const SizedBox(height: 28),
-              const HomeQuickTips(),
-              const SizedBox(height: 24),
+           
             ],
           ),
         ),
@@ -90,7 +98,10 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               setState(() => _currentIndex = 3);
               await Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context) =>  CropRecoView()),
+                MaterialPageRoute(builder: (context) =>
+               // HistoryScreen() 
+                 CropRecoView()
+                ),
               );
               setState(() => _currentIndex = 0);
             }),
@@ -151,7 +162,8 @@ class HomeActionCards extends StatelessWidget {
             title: 'Scan Plant',
             subtitle: 'Analyze plant health',
             color: maincolor,
-            onTap: () {},
+            onTap:() =>ImagePickerService(context).showPickerSheet()
+            
           ),
         ),
         const SizedBox(width: 12),
@@ -182,64 +194,64 @@ class HomeRecentScans extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(
-          'Recent Scans',
-          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+        Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 10),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Text(
+                'Recent Scans',
+                style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+              ),
+              InkWell(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_)=>HistoryScreen())),
+                child: Text(
+                  'see all',
+                  style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
+                ),
+              ),
+            ],
+          ),
         ),
         const SizedBox(height: 12),
-        const InfoItem(
-          icon: Icons.warning_amber_outlined,
-          iconColor: Color(0xFFE6A817),
-          iconBg: Color(0xFFFFF3DC),
-          title: 'Tomato Plant',
-          subtitle: 'Early Blight',
-          time: '2 days ago',
+
+        BlocBuilder<HistoryScanCubit, HistoryScanState>(
+          builder: (context, state) {
+            if (state is HistoryScanLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (state is HistoryScanSuccess) {
+              final recent = state.data.take(3).toList();
+
+              if (recent.isEmpty) {
+                return const Center(child: Text('No scans yet'));
+              }
+
+              return ListView.separated(
+                shrinkWrap: true,                              
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: recent.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 10),
+                itemBuilder: (context, index) => HistoryItemCard(
+                  item: recent[index],
+                 
+                ),
+              );
+            }
+
+            if (state is HistoryScanFailure) {
+              return Center(child: Text(state.errmessage));
+            }
+
+            return const SizedBox.shrink();
+          },
         ),
-        const SizedBox(height: 10),
-        const InfoItem(
-          icon: Icons.eco_outlined,
-          iconColor: Color(0xFF2E9E47),
-          iconBg: Color(0xFFE1F5E6),
-          title: 'Rose Bush',
-          subtitle: 'Healthy',
-          time: '1 week ago',
-        ),
+    
+    
+ 
       ],
     );
   }
 }
 
-class HomeQuickTips extends StatelessWidget {
-  const HomeQuickTips({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
-          'Quick Tips',
-          style: theme.textTheme.titleMedium?.copyWith(fontWeight: FontWeight.bold),
-        ),
-        const SizedBox(height: 12),
-        const InfoItem(
-          icon: Icons.eco_outlined,
-          iconColor: Color(0xFF2E9E47),
-          iconBg: Color(0xFFE1F5E6),
-          title: 'Spring Planting',
-          subtitle: 'Best time to start your vegetable garden',
-        ),
-        const SizedBox(height: 10),
-        const InfoItem(
-          icon: Icons.trending_up,
-          iconColor: Color(0xFF2D5BE3),
-          iconBg: Color(0xFFE8EDFC),
-          title: 'Crop Rotation',
-          subtitle: 'Improve soil health naturally',
-        ),
-      ],
-    );
-  }
-}

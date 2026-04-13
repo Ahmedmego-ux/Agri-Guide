@@ -40,7 +40,7 @@ class ImagePickerService {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => AIResultScreen(imagePath: image.path),
+        builder: (_) => AIResultScreen(imagePath: image.path, isNetwork: false,),
       ),
     );
   }
@@ -59,7 +59,7 @@ class ImagePickerService {
     Navigator.push(
       context,
       MaterialPageRoute(
-        builder: (_) => AIResultScreen(imagePath: image.path),
+        builder: (_) => AIResultScreen(imagePath: image.path, isNetwork: false,),
       ),
     );
   }

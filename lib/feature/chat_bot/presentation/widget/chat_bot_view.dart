@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
+
 
 import 'package:agri_guide_app/core/erorr/error_handler.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/manger/message/chat_cubit.dart' as chat_cubit;
@@ -11,9 +10,7 @@ import 'package:flutter_chat_types/flutter_chat_types.dart' as types;
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:uuid/uuid.dart';
+
 
 class ChatBotViewBody extends StatefulWidget {
   const ChatBotViewBody({super.key});
