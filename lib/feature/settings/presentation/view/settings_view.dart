@@ -1,5 +1,11 @@
+import 'package:agri_guide_app/core/network/api_services.dart';
 import 'package:agri_guide_app/core/utils/theme/mange_theme/cubit/theme_cubit.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
+import 'package:agri_guide_app/feature/market/data/data_source/local_data_source.dart';
+import 'package:agri_guide_app/feature/market/data/data_source/remot_data_source.dart';
+import 'package:agri_guide_app/feature/market/data/repos_impl/product_impl.dart';
+import 'package:agri_guide_app/feature/market/presentation/manger/cubit/product_cubit.dart';
+import 'package:agri_guide_app/feature/market/presentation/view/market_view.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/profile/presentation/view/profile_view.dart';
 import 'package:agri_guide_app/feature/settings/presentation/widgets/help_faq_view.dart';
@@ -9,30 +15,34 @@ import 'package:agri_guide_app/feature/settings/presentation/widgets/settings_to
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_chat_ui/flutter_chat_ui.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class SettingsView extends StatelessWidget {
+   SettingsView({super.key});
+  
 
-  const SettingsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
-    bool isDark(){
-   final mode=context.watch<ThemeCubit>().state;
-   if(mode ==ThemeMode.system)
-  { return MediaQuery.of(context).platformBrightness == Brightness.dark;
-   }else 
-   return mode==ThemeMode.dark;
-
+    bool isDark() {
+      final mode = context.watch<ThemeCubit>().state;
+      if (mode == ThemeMode.system) {
+        return MediaQuery.of(context).platformBrightness == Brightness.dark;
+      } else
+        return mode == ThemeMode.dark;
     }
 
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: theme.appBarTheme.foregroundColor),
+          icon: Icon(
+            Icons.arrow_back,
+            color: theme.appBarTheme.foregroundColor,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
         title: const Text('Settings'),
@@ -81,7 +91,23 @@ class SettingsView extends StatelessWidget {
                 title: 'Dark Mode',
                 subtitle: 'Switch to dark theme',
                 value: isDark(),
-                onChanged: (val) => context.read<ThemeCubit>().themeToggle(val)
+                onChanged: (val) => context.read<ThemeCubit>().themeToggle(val),
+              ),
+
+              SettingItem(
+                icon: Icons.store,
+                iconBg: const Color(0xFFE3F2FD),
+                iconColor: const Color(0xFF1565C0),
+                title: "Agriculture Market",
+                subtitle: "Browse and order products easily",
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const MarketView(),
+                    ),
+                  );
+                },
               ),
             ]),
             const SizedBox(height: 30),

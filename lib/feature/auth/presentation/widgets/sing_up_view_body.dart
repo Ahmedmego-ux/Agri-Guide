@@ -107,7 +107,11 @@ class _SignupViewBodyState extends State<SignupViewBody> {
           _showSnack('Account created successfully', theme.colorScheme.primary);
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => LoginView()),
+            MaterialPageRoute(builder: (_) => LoginView(
+              email: _emailController.text,
+              password: _passwordController.text,
+            )),
+            
           );
         }
       },

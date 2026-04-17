@@ -15,7 +15,9 @@ import 'package:agri_guide_app/feature/home/presentation/view/home_view.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 
 class LoginViewBody extends StatefulWidget {
-  const LoginViewBody({super.key});
+  const LoginViewBody({super.key, required this.email, required this.password});
+  final String? email;
+  final String ?password;
 
   @override
   State<LoginViewBody> createState() => _LoginViewBodyState();
@@ -44,7 +46,13 @@ class _LoginViewBodyState extends State<LoginViewBody> {
 
     context.read<LoginCubit>().login(userData: entity, context: context);
   }
-
+@override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _emailController.text=widget.email??'';
+    _passwordController.text=widget.password??'';
+  }
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);

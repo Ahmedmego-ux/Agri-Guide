@@ -6,9 +6,12 @@ class DioClient {
 
   final Dio _dio=Dio(
     BaseOptions(
-      baseUrl: 'https://sonic-zdi0.onrender.com/api',
+      baseUrl: "https://gogarden.co.in",
       headers: {
-        "Content-Type":'application/json'
+        "Content-Type":'application/json',
+        'post_type': 'product'
+        
+
       }
     )
   );

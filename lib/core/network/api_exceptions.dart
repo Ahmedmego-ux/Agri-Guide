@@ -1,49 +1,55 @@
-import 'package:agri_guide_app/core/network/api_errors.dart';
-import 'package:dio/dio.dart';
+// core/network/api_exceptions.dart
 
+import 'package:dio/dio.dart';
+import 'api_errors.dart';
 
 class ApiExceptions {
-  
   static ApiErrors handleError(DioException error) {
+    final response = error.response;
+    final statusCode = response?.statusCode;
+    final data = response?.data;
 
-    final code=error.response!.statusCode;
-    final data=error.response?.data;
-    if(data is Map<String,dynamic>&&data['message']!=null){
-      return ApiErrors(message: data['message'],statusCode: code);
+    // 🔥 No response (internet / server down)
+    if (response == null) {
+      return ApiErrors(
+        message: _mapDioType(error.type),
+        statusCode: null,
+      );
+    }
+
+    // 🔥 backend message
+    if (data is Map<String, dynamic> && data['message'] != null) {
+      return ApiErrors(
+        message: data['message'],
+        statusCode: statusCode,
+      );
     }
 
     switch (error.type) {
-
-
       case DioExceptionType.connectionTimeout:
-        return ApiErrors(message: "Connection timeout. Please try again.");
-
       case DioExceptionType.sendTimeout:
-        return ApiErrors(message: "Send timeout. Please try again.");
-
       case DioExceptionType.receiveTimeout:
-        return ApiErrors(message: "Receive timeout. Check your internet connection.");
-
-      case DioExceptionType.badCertificate:
-        return ApiErrors(message: "Bad SSL certificate.");
-
-      case DioExceptionType.badResponse:
-        return _handleBadResponse(error);
-
-      case DioExceptionType.cancel:
-        return ApiErrors(message: "Request was cancelled.");
+        return ApiErrors(message: "Request timeout.");
 
       case DioExceptionType.connectionError:
         return ApiErrors(message: "No internet connection.");
 
+      case DioExceptionType.badCertificate:
+        return ApiErrors(message: "SSL certificate error.");
+
+      case DioExceptionType.cancel:
+        return ApiErrors(message: "Request cancelled.");
+
+      case DioExceptionType.badResponse:
+        return _handleStatusCode(statusCode);
+
       case DioExceptionType.unknown:
+      default:
         return ApiErrors(message: "Unexpected error occurred.");
     }
   }
 
-  static ApiErrors _handleBadResponse(DioException error) {
-    final status = error.response?.statusCode;
-
+  static ApiErrors _handleStatusCode(int? status) {
     switch (status) {
       case 400:
         return ApiErrors(message: "Bad request.");
@@ -54,13 +60,26 @@ class ApiExceptions {
       case 404:
         return ApiErrors(message: "Not found.");
       case 500:
-        return ApiErrors(message: "Internal server error.");
+        return ApiErrors(message: "Server error.");
       case 503:
         return ApiErrors(message: "Service unavailable.");
-
       default:
-        return ApiErrors(message: error.response?.statusMessage ?? "Unknown server error.");
+        return ApiErrors(message: "Unknown server error.");
+    }
+  }
+
+  static String _mapDioType(DioExceptionType type) {
+    switch (type) {
+      case DioExceptionType.connectionTimeout:
+        return "Connection timeout.";
+      case DioExceptionType.sendTimeout:
+        return "Send timeout.";
+      case DioExceptionType.receiveTimeout:
+        return "Receive timeout.";
+      case DioExceptionType.connectionError:
+        return "No internet connection.";
+      default:
+        return "Network error.";
     }
   }
 }
-

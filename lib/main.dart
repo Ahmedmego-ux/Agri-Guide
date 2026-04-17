@@ -1,3 +1,4 @@
+import 'package:agri_guide_app/core/network/api_services.dart';
 import 'package:agri_guide_app/core/utils/theme/mange_theme/cubit/theme_cubit.dart';
 import 'package:agri_guide_app/core/utils/theme/theme.dart';
 import 'package:agri_guide_app/feature/chat_bot/data/chat_repo_impl.dart/chat_repo_impl.dart';
@@ -10,37 +11,49 @@ import 'package:agri_guide_app/feature/diagonals_image/presentaion/manger/scan/s
 import 'package:agri_guide_app/feature/home/data/repos/weather_repo_impl.dart';
 
 import 'package:agri_guide_app/feature/home/presentation/manger/cubit/weather_cubit.dart';
+import 'package:agri_guide_app/feature/market/data/data_source/local_data_source.dart';
+import 'package:agri_guide_app/feature/market/data/data_source/remot_data_source.dart';
+import 'package:agri_guide_app/feature/market/data/repos_impl/product_impl.dart';
+import 'package:agri_guide_app/feature/market/presentation/manger/cubit/product_cubit.dart';
 import 'package:agri_guide_app/splash_view.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Supabase.initialize(
-    anonKey:
-        'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6bHZjd3Juc2pvY3RmdndjbXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxOTY3NzIsImV4cCI6MjA4Nzc3Mjc3Mn0.IIkdRViqGRFf07sF2uYACmJLOYcneSg-MPEktHZCViQ',
+   anonKey:  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl6bHZjd3Juc2pvY3RmdndjbXRyIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzIxOTY3NzIsImV4cCI6MjA4Nzc3Mjc3Mn0.IIkdRViqGRFf07sF2uYACmJLOYcneSg-MPEktHZCViQ',
     url: 'https://yzlvcwrnsjoctfvwcmtr.supabase.co',
   );
+
   await EasyLocalization.ensureInitialized();
+
+  final prefs = await SharedPreferences.getInstance();
+  final apiServices = ApiServices();
+
+  final productRepo = ProductImpl(
+    networkDataSource: RemotDataSourceImpl(apiServices),
+    localDataSource: ProductLocalDataSourceImpl(prefs),
+  )..getProducts();
+
   runApp(
     EasyLocalization(
-      supportedLocales: const [
-        Locale('en'),
-        Locale('ar'),
-      ],
+      supportedLocales: const [Locale('en'), Locale('ar')],
       path: 'assets/lang',
       fallbackLocale: const Locale('en'),
       startLocale: const Locale('en'),
-      child: const MyApp(),
+      child: MyApp(productRepo: productRepo),
     ),
   );
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
-
+  const MyApp({super.key, required this.productRepo});
+final ProductImpl productRepo;
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -48,11 +61,11 @@ class MyApp extends StatelessWidget {
         BlocProvider(create: (context) => ChatCubit(ChatRepoImpl())),
         BlocProvider(create: (context) => SessionCubit(ChatRepoImpl())),
          BlocProvider(create: (context) => WeatherCubit(WeatherRepoImpl())),
-         BlocProvider(
-          create: (context) => ScanCubit(ScanImpl()),
-        ),
+         BlocProvider( create: (context) => ScanCubit(ScanImpl()),),
+        BlocProvider(create: (context) => HistoryScanCubit(ScanImpl()),),
         BlocProvider(
-          create: (context) => HistoryScanCubit(ScanImpl()),
+          create: (context) => ProductCubit(productRepo),
+         
         ),
           
       BlocProvider(
