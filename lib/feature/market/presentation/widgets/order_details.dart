@@ -4,7 +4,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
-
 class OrderDetails extends StatelessWidget {
   final ProductEntity product;
 
@@ -15,9 +14,11 @@ class OrderDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(),
-      backgroundColor: Colors.white,
+      backgroundColor: cs.surface,
       body: SafeArea(
         child: SingleChildScrollView(
           child: Column(
@@ -49,7 +50,7 @@ class OrderDetails extends StatelessWidget {
               else
                 Container(
                   height: 300,
-                  color: Colors.grey[200],
+                  color: cs.surfaceContainerLowest,
                   child: const Center(
                     child: Icon(Icons.image),
                   ),
@@ -62,9 +63,10 @@ class OrderDetails extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   product.title ?? "No title",
-                  style: const TextStyle(
+                  style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
+                    color: cs.onSurface,
                   ),
                 ),
               ),
@@ -75,10 +77,10 @@ class OrderDetails extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  "${product.price ?? 0}EG",
-                  style: const TextStyle(
+                  "${product.price ?? 0} EG",
+                  style: TextStyle(
                     fontSize: 20,
-                    color: Colors.green,
+                    color: cs.primary,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
@@ -99,14 +101,15 @@ class OrderDetails extends StatelessWidget {
               /// 🟢 ORDER BUTTON
               Container(
                 padding: const EdgeInsets.all(12),
-                color: Colors.white,
+                color: cs.surface,
                 child: Row(
                   children: [
                     Expanded(
                       child: ElevatedButton(
                         style: ElevatedButton.styleFrom(
                           padding: const EdgeInsets.all(14),
-                          backgroundColor: Colors.green,
+                          backgroundColor: cs.primary,
+                          foregroundColor: cs.onPrimary,
                         ),
                         onPressed: () async {
                           await openWhatsApp();

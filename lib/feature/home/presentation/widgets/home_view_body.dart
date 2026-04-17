@@ -11,6 +11,7 @@ import 'package:agri_guide_app/feature/home/presentation/widgets/action_card.dar
 import 'package:agri_guide_app/feature/home/presentation/widgets/home_header.dart';
 
 import 'package:agri_guide_app/feature/home/presentation/widgets/weather_widget.dart';
+import 'package:agri_guide_app/feature/market/presentation/view/market_view.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:agri_guide_app/feature/settings/presentation/view/settings_view.dart';
 import 'package:flutter/material.dart';
@@ -172,13 +173,26 @@ class HomeActionCards extends StatelessWidget {
             icon: Icons.chat_bubble_outline,
             title: 'AI Chat',
             subtitle: 'Ask expert advice',
-            color: const Color.fromARGB(255, 3, 33, 121),
+            color:  Color(0xff1A237E),
             onTap: () => Navigator.push(
               context,
               MaterialPageRoute(builder: (context) => ChatBotView()),
             ),
           ),
         ),
+        //  const SizedBox(width: 10),
+        // Expanded(
+        //   child: ActionCard(
+        //     icon: Icons.chat_bubble_outline,
+        //     title: 'Market',
+        //     subtitle: 'Buy & Sell Product',
+        //     color:  Color(0xffFFD54F),
+        //     onTap: () => Navigator.push(
+        //       context,
+        //       MaterialPageRoute(builder: (context) => MarketView()),
+        //     ),
+        //   ),
+        // ),
       ],
     );
   }

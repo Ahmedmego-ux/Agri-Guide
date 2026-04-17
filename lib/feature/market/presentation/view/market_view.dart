@@ -4,14 +4,13 @@ import 'package:agri_guide_app/feature/market/presentation/manger/cubit/product_
 import 'package:agri_guide_app/feature/market/presentation/widgets/product_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-class MarketView extends  StatefulWidget {
+
+class MarketView extends StatefulWidget {
   const MarketView({super.key});
 
   @override
   State<MarketView> createState() => _MarketViewState();
 }
-
-
 
 class _MarketViewState extends State<MarketView> {
   final TextEditingController _controller = TextEditingController();
@@ -40,6 +39,8 @@ class _MarketViewState extends State<MarketView> {
 
   @override
   Widget build(BuildContext context) {
+    final cs = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
         title: const Text("Agriculture Market 🌱"),
@@ -54,7 +55,12 @@ class _MarketViewState extends State<MarketView> {
             }
 
             if (state is ProductFailure) {
-              return Center(child: Text(state.errmessage));
+              return Center(
+                child: Text(
+                  state.errmessage,
+                  style: TextStyle(color: cs.error),
+                ),
+              );
             }
 
             if (state is ProductSuccess) {
@@ -62,7 +68,6 @@ class _MarketViewState extends State<MarketView> {
 
               return Column(
                 children: [
-                 
                   TextField(
                     controller: _controller,
                     onChanged: _onSearchChanged,
@@ -84,15 +89,22 @@ class _MarketViewState extends State<MarketView> {
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(12),
                       ),
+                      filled: true,
+                      fillColor: cs.surfaceContainerHighest,
+                      hintStyle: TextStyle(color: cs.onSurfaceVariant),
                     ),
                   ),
 
                   const SizedBox(height: 20),
 
-                  
                   Expanded(
                     child: products.isEmpty
-                        ? const Center(child: Text("No products found"))
+                        ? Center(
+                            child: Text(
+                              "No products found",
+                              style: TextStyle(color: cs.onSurface),
+                            ),
+                          )
                         : GridView.builder(
                             itemCount: products.length,
                             gridDelegate:

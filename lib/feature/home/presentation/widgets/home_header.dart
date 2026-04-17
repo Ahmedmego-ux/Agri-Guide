@@ -1,7 +1,9 @@
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
+import 'package:agri_guide_app/feature/market/presentation/view/market_view.dart';
 import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 class HomeHeader extends StatelessWidget {
   const HomeHeader({super.key, required this.loginEntity});
@@ -26,9 +28,9 @@ class HomeHeader extends StatelessWidget {
         final String fullName = '$firstName $lastName'.trim();
 
         return
-        // Row(
-        //  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-       //   children: [
+        Row(
+         mainAxisAlignment: MainAxisAlignment.spaceBetween,
+         children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -64,7 +66,11 @@ class HomeHeader extends StatelessWidget {
                     ],
                   ),
               ],
-            );
+            ),
+            GestureDetector(
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>MarketView())),
+              child: SvgPicture.asset('assets/market_icon.svg',width: 40,height: 60,))
+            ]);
             
       },
     );
