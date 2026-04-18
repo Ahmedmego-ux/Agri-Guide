@@ -12,10 +12,9 @@ Bloc/Cubit state management, and REST API integration using Dio.
 ## 📱 Screenshots
 
 <!-- Add 3 screenshots here after recording -->
-| Home Screen |Market| Product Details | Product Details 2 |
-|---|---|---|
-| ![home](assets/screenshots/home.png) | ![market](assets/screenshots/details.png)|![details](assets/screenshots/details.png) | ![details2](assets/screenshots/search.png) | 
-
+| Home Screen | Market | Product Details | Product Details 2 |
+|---|---|---|---|
+| ![home](assets/screenshots/home.png) | ![market](assets/screenshots/market.png) | ![details](assets/screenshots/details.png) | ![details2](assets/screenshots/details2.png) |
 ---
 
 ## ✅ Key Features
