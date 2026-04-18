@@ -1,20 +1,17 @@
 # 🌱 Agri Guide — Flutter Agricultural Marketplace App
 
-A production-ready Flutter application that connects farmers and agricultural 
-enthusiasts with essential farming products. Built with Clean Architecture, 
-Bloc/Cubit state management, and REST API integration using Dio.
+A production-ready Flutter application that connects farmers and agricultural enthusiasts with essential farming products. Built with Clean Architecture, Bloc/Cubit state management, and REST API integration using Dio.
 
-> ⚡ Built to demonstrate real-world Flutter development practices: 
-> scalable structure, clean separation of concerns, and robust API handling.
+> ⚡ Built to demonstrate real-world Flutter development practices: scalable structure, clean separation of concerns, and robust API handling.
 
 ---
 
 ## 📱 Screenshots
 
-<!-- Add 3 screenshots here after recording -->
 | Home Screen | Market | Product Details | Product Details 2 |
 |---|---|---|---|
-| ![home](assets/screenshots/home.png) | ![market](assets/screenshots/market.png) | ![details](assets/screenshots/details.png) | ![details2](assets/screenshots/details2.png) |
+| ![home](https://raw.githubusercontent.com/Ahmedmego-ux/Agri-Guide/main/assets/screenshots/home.png) | ![market](https://raw.githubusercontent.com/Ahmedmego-ux/Agri-Guide/main/assets/screenshots/market.png) | ![details](https://raw.githubusercontent.com/Ahmedmego-ux/Agri-Guide/main/assets/screenshots/details.png) | ![details2](https://raw.githubusercontent.com/Ahmedmego-ux/Agri-Guide/main/assets/screenshots/details2.png) |
+
 ---
 
 ## ✅ Key Features
@@ -40,3 +37,58 @@ Bloc/Cubit state management, and REST API integration using Dio.
 ---
 
 ## 🏗️ Project Structure
+
+```
+lib/
+├── core/
+│   ├── network/        # Dio client, API service, error handling
+│   └── utils/          # Shared helpers & utilities
+│
+└── feature/
+    └── market/
+        ├── data/           # Models & repositories
+        └── presentation/
+            ├── manager/    # Cubit + States
+            ├── views/      # Screens
+            └── widgets/    # Reusable UI components
+```
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/Ahmedmego-ux/Agri-Guide.git
+cd Agri-Guide
+flutter pub get
+flutter run
+```
+
+**Requirements:** Flutter SDK 3.x+, Android Studio or VS Code
+
+---
+
+## 🔌 API
+
+Currently consuming: `https://gogarden.co.in/products.json`
+
+---
+
+## 📌 Roadmap
+
+- [ ] Full pagination support
+- [ ] Favorites / Wishlist
+- [ ] Cart & Checkout flow
+- [ ] Firebase Authentication
+- [ ] Supabase backend integration
+- [ ] Arabic / English localization
+
+---
+
+## 👨‍💻 Author
+
+**Ahmed Magdy** — Flutter Developer
+
+---
+
+⭐ If you found this useful, please give it a star on GitHub!
