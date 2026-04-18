@@ -69,7 +69,9 @@ class HomeHeader extends StatelessWidget {
             ),
             GestureDetector(
               onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>MarketView())),
-              child: SvgPicture.asset('assets/market_icon.svg',width: 40,height: 60,))
+              child: CircleAvatar(
+                radius: 25,
+                child: SvgPicture.asset('assets/market_icon_v2.svg',width: 40,height: 60,)))
             ]);
             
       },
