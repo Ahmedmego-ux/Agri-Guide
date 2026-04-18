@@ -117,7 +117,7 @@ flutter run
 
 - [ ] Crop recommendation AI integration
 - [ ] Full pagination support
-- [ ] Favorites / Wishlist
+- [ ] Dark & light mode
 - [ ] Cart & Checkout flow
 - [ ] Arabic / English localization
 - [ ] Offline support
