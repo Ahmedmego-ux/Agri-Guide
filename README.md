@@ -1,6 +1,7 @@
 # 🌱 Agri Guide — Flutter Agricultural App
 
-A production-ready Flutter application that connects farmers and agricultural enthusiasts with essential farming products. Built with Clean Architecture, Bloc/Cubit state management, REST API integration using Dio, and an AI-powered chatbot.
+A production-ready Flutter application built for farmers and agricultural enthusiasts. Features include AI-powered plant disease detection via image scanning (FastAPI backend), an AI chatbot powered by Groq, crop recommendations, scan history, and an agricultural product marketplace with WhatsApp ordering. Supports dark mode and Arabic/English localization. Built with Clean Architecture, Bloc/Cubit state management, Dio for REST API integration, and Supabase for authentication, chat storage (Edge Functions), and scan history.
+
 
 > ⚡ Built to demonstrate real-world Flutter development practices: scalable structure, clean separation of concerns, and robust API handling.
 
