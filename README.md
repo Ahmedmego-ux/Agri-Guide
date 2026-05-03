@@ -1,4 +1,4 @@
-# 🌱 Agri Guide — Flutter Agricultural Marketplace App
+# 🌱 Agri Guide — Flutter Agricultural App
 
 A production-ready Flutter application that connects farmers and agricultural enthusiasts with essential farming products. Built with Clean Architecture, Bloc/Cubit state management, REST API integration using Dio, and an AI-powered chatbot.
 
