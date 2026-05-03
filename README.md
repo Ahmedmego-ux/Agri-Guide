@@ -1,6 +1,6 @@
 # 🌱 Agri Guide — Flutter Agricultural App
 
-A production-ready Flutter application built for farmers and agricultural enthusiasts. Features include AI-powered plant disease detection via image scanning (FastAPI backend), an AI chatbot powered by Groq, crop recommendations, scan history, weather forecasting based on user location, and an agricultural product marketplace with WhatsApp ordering. Supports dark mode and Arabic/English localization. Built with Clean Architecture, Bloc/Cubit state management, Dio for REST API integration, and Supabase for authentication, chat storage (Edge Functions), and scan history.
+A production-ready Flutter application built for farmers and agricultural enthusiasts. Focused on AI-powered plant disease detection, smart crop recommendations, an agricultural chatbot, and location-based weather forecasting. Also includes a supplementary pesticide and tools marketplace for added convenience. Supports dark mode and Arabic/English localization. Built with Clean Architecture, Bloc/Cubit state management, Dio for REST API integration, and Supabase for authentication, chat storage (Edge Functions), and scan history.
 
 > ⚡ Built to demonstrate real-world Flutter development practices: scalable structure, clean separation of concerns, and robust API handling.
 
@@ -29,7 +29,7 @@ A production-ready Flutter application built for farmers and agricultural enthus
 - 📋 **Scan History** — View all previous plant scans stored in Supabase
 - 🌾 **Crop Recommendation** — AI-based crop recommendations tailored to the user
 - 🤖 **AI Chatbot** — Smart agricultural chatbot powered by Groq API, with chat history stored in Supabase via Edge Functions
-- 🛒 **Product Marketplace** — Browse fertilizers, tools, and seeds; orders are placed directly via WhatsApp
+- 🛒 **Supplementary Marketplace** — Browse pesticides and agricultural tools as an added convenience; orders placed via WhatsApp
 - 🔍 **Smart Search & Filter** — Search products by name or category in real time
 - 🌤️ **Weather** — Live local weather displayed inside the app based on user location (GoGarden API)
 - 👤 **Profile** — View and edit profile info including location update
