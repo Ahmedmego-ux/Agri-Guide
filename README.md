@@ -1,7 +1,6 @@
 # 🌱 Agri Guide — Flutter Agricultural App
 
-A production-ready Flutter application built for farmers and agricultural enthusiasts. Features include AI-powered plant disease detection via image scanning (FastAPI backend), an AI chatbot powered by Groq, crop recommendations, scan history, and an agricultural product marketplace with WhatsApp ordering. Supports dark mode and Arabic/English localization. Built with Clean Architecture, Bloc/Cubit state management, Dio for REST API integration, and Supabase for authentication, chat storage (Edge Functions), and scan history.
-
+A production-ready Flutter application built for farmers and agricultural enthusiasts. Features include AI-powered plant disease detection via image scanning (FastAPI backend), an AI chatbot powered by Groq, crop recommendations, scan history, weather forecasting based on user location, and an agricultural product marketplace with WhatsApp ordering. Supports dark mode and Arabic/English localization. Built with Clean Architecture, Bloc/Cubit state management, Dio for REST API integration, and Supabase for authentication, chat storage (Edge Functions), and scan history.
 
 > ⚡ Built to demonstrate real-world Flutter development practices: scalable structure, clean separation of concerns, and robust API handling.
 
@@ -25,14 +24,17 @@ A production-ready Flutter application built for farmers and agricultural enthus
 
 ## ✅ Key Features
 
-- 🤖 **AI Chatbot** — Integrated smart chatbot powered by Groq API
-- 🛒 **Product Marketplace** — Browse fertilizers, tools, and seeds with full detail views
-- 🔍 **Smart Search & Filter** — Search by name or category in real time
-- 🌐 **REST API Integration** — Live product data via Dio with full error handling
-- 🔐 **Authentication** — Login, Signup, Reset Password via Supabase
-- 🌱 **Crop Recommendation** — AI-based crop recommendation feature (coming soon)
-- 🏗️ **Clean Architecture** — Feature-first structure, fully scalable
-- ⚙️ **Bloc / Cubit** — Predictable, testable state management throughout
+- 🔐 **Authentication** — Login, Signup (with location capture), Reset Password via Supabase
+- 🌿 **Plant Disease Detection** — Scan a plant image and get an AI-powered diagnosis via FastAPI backend
+- 📋 **Scan History** — View all previous plant scans stored in Supabase
+- 🌾 **Crop Recommendation** — AI-based crop recommendations tailored to the user
+- 🤖 **AI Chatbot** — Smart agricultural chatbot powered by Groq API, with chat history stored in Supabase via Edge Functions
+- 🛒 **Product Marketplace** — Browse fertilizers, tools, and seeds; orders are placed directly via WhatsApp
+- 🔍 **Smart Search & Filter** — Search products by name or category in real time
+- 🌤️ **Weather** — Live local weather displayed inside the app based on user location (GoGarden API)
+- 👤 **Profile** — View and edit profile info including location update
+- 🌙 **Dark Mode** — Full dark/light theme support
+- 🌐 **Arabic / English** — Full localization support (AR & EN)
 
 ---
 
@@ -44,7 +46,11 @@ A production-ready Flutter application built for farmers and agricultural enthus
 | State Management | Bloc / Cubit |
 | Networking | Dio |
 | Authentication | Supabase |
+| Database & Storage | Supabase (scan history, chat history) |
+| Edge Functions | Supabase Edge Functions (chatbot) |
+| AI Disease Detection | FastAPI (custom backend) |
 | AI Chatbot | Groq API |
+| Weather | GoGarden API |
 | Architecture | Clean Architecture (Feature-first) |
 | Error Handling | Custom API error handling layer |
 
@@ -70,6 +76,14 @@ lib/
     │   ├── data/
     │   ├── domain/
     │   └── presentation/
+    ├── scan/
+    │   ├── data/
+    │   ├── domain/
+    │   └── presentation/
+    ├── scan_history/
+    │   ├── data/
+    │   ├── domain/
+    │   └── presentation/
     ├── market/
     │   ├── data/
     │   ├── domain/
@@ -79,6 +93,10 @@ lib/
     │   ├── domain/
     │   └── presentation/
     ├── chat_bot/
+    │   ├── data/
+    │   ├── domain/
+    │   └── presentation/
+    ├── weather/
     │   ├── data/
     │   ├── domain/
     │   └── presentation/
@@ -108,20 +126,12 @@ flutter run
 
 ## 🔌 APIs Used
 
-- Market Data: `https://gogarden.co.in/products.json`
-- AI Chatbot: Groq API
-- Backend & Auth: Supabase
-
----
-
-## 📌 Roadmap
-
-- [ ] Crop recommendation AI integration
-- [ ] Full pagination support
-- [ ] Dark & light mode
-- [ ] Cart & Checkout flow
-- [ ] Arabic / English localization
-- [ ] Offline support
+| API | Usage |
+|---|---|
+| Supabase | Authentication, scan history, chat storage via Edge Functions |
+| FastAPI (custom) | AI-powered plant disease detection |
+| Groq API | AI chatbot |
+| GoGarden API (`https://gogarden.co.in`) | Weather & product data |
 
 ---
 
