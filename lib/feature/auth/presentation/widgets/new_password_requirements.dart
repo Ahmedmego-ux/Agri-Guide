@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -23,7 +24,6 @@ class NewPasswordRequirements extends StatelessWidget {
     final successColor = theme.colorScheme.primary;
     final borderColor = theme.colorScheme.primary.withOpacity(0.2);
     final bgColor = theme.colorScheme.primary.withOpacity(0.05);
-    final textColor = theme.textTheme.bodyMedium?.color ?? Colors.black;
 
     return Container(
       width: double.infinity,
@@ -41,7 +41,7 @@ class NewPasswordRequirements extends StatelessWidget {
               Icon(Icons.rule, color: successColor, size: 20),
               const Gap(8),
               Text(
-                'Password Requirements',
+                'passwordRequirements'.tr(),
                 style: TextStyle(
                   fontSize: 15,
                   fontWeight: FontWeight.w600,
@@ -50,16 +50,46 @@ class NewPasswordRequirements extends StatelessWidget {
               ),
             ],
           ),
+
           const Gap(16),
-          _buildItem('At least 8 characters', hasMinLength, theme),
+
+          _buildItem(
+            'atLeast8Chars'.tr(),
+            hasMinLength,
+            theme,
+          ),
+
           const Gap(12),
-          _buildItem('At least one uppercase letter (A-Z)', hasUppercase, theme),
+
+          _buildItem(
+            'atLeastOneUppercase'.tr(),
+            hasUppercase,
+            theme,
+          ),
+
           const Gap(12),
-          _buildItem('At least one lowercase letter (a-z)', hasLowercase, theme),
+
+          _buildItem(
+            'atLeastOneLowercase'.tr(),
+            hasLowercase,
+            theme,
+          ),
+
           const Gap(12),
-          _buildItem('At least one number (0-9)', hasNumber, theme),
+
+          _buildItem(
+            'atLeastOneNumber'.tr(),
+            hasNumber,
+            theme,
+          ),
+
           const Gap(12),
-          _buildItem('At least one special character (!@#\$%^&*)', hasSpecial, theme),
+
+          _buildItem(
+            'atLeastOneSpecial'.tr(),
+            hasSpecial,
+            theme,
+          ),
         ],
       ),
     );
@@ -67,7 +97,10 @@ class NewPasswordRequirements extends StatelessWidget {
 
   Widget _buildItem(String text, bool isMet, ThemeData theme) {
     final successColor = theme.colorScheme.primary;
-    final defaultColor = theme.textTheme.bodyMedium?.color?.withOpacity(0.6) ?? Colors.grey;
+
+    final defaultColor =
+        theme.textTheme.bodyMedium?.color?.withOpacity(0.6) ??
+            Colors.grey;
 
     return Row(
       children: [
@@ -76,14 +109,17 @@ class NewPasswordRequirements extends StatelessWidget {
           size: 18,
           color: isMet ? successColor : defaultColor,
         ),
+
         const Gap(12),
+
         Expanded(
           child: Text(
             text,
             style: TextStyle(
               fontSize: 13,
               color: isMet ? successColor : defaultColor,
-              fontWeight: isMet ? FontWeight.w500 : FontWeight.normal,
+              fontWeight:
+                  isMet ? FontWeight.w500 : FontWeight.normal,
             ),
           ),
         ),

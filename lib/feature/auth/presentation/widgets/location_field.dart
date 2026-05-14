@@ -17,8 +17,8 @@ class LocationField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomeTextFormField(
-      hintText: 'Your location'.tr(),
-      labelText: 'Location'.tr(),
+      hintText: 'yourlocation'.tr(),
+      labelText: 'location'.tr(),
       prefixIcon: const Icon(Icons.location_on),
       suffixIcon: IconButton(
         onPressed: isLoading ? null : onTap,

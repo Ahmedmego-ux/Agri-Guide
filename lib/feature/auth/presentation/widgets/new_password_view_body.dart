@@ -7,6 +7,8 @@ import 'package:agri_guide_app/feature/auth/presentation/widgets/custome_auth_bu
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:easy_localization/easy_localization.dart';
+
 import 'auth_header.dart';
 import 'new_password_header.dart';
 import 'new_password_requirements.dart';
@@ -59,11 +61,11 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
   }
 
   String get _strengthText {
-    if (_passwordStrength <= 0.2) return 'Weak';
-    if (_passwordStrength <= 0.4) return 'Fair';
-    if (_passwordStrength <= 0.6) return 'Medium';
-    if (_passwordStrength <= 0.8) return 'Strong';
-    return 'Very Strong';
+    if (_passwordStrength <= 0.2) return 'weak'.tr();
+    if (_passwordStrength <= 0.4) return 'fair'.tr();
+    if (_passwordStrength <= 0.6) return 'medium'.tr();
+    if (_passwordStrength <= 0.8) return 'strong'.tr();
+    return 'veryStrong'.tr();
   }
 
   Color _strengthColor(ThemeData theme) {
@@ -84,11 +86,11 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
   void _onSubmit() {
     if (_passwordController.text.isEmpty ||
         _confirmPasswordController.text.isEmpty) {
-      _showSnack('Please fill all fields', Colors.red);
+      _showSnack('pleaseFillAllFields'.tr(), Colors.red);
       return;
     }
     if (_passwordController.text != _confirmPasswordController.text) {
-      _showSnack('Passwords do not match', Colors.red);
+      _showSnack('passwordsDoNotMatch'.tr(), Colors.red);
       return;
     }
     context.read<ResetPasswordCubit>().updatePassword(
@@ -98,13 +100,18 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
 
   void _listener(BuildContext context, ResetPasswordState state) {
     if (state is UpdatePasswordSuccess) {
-      _showSnack('Password updated successfully!',
-          Theme.of(context).colorScheme.primary);
-       Navigator.pushAndRemoveUntil(
-           context, MaterialPageRoute(builder: (context) => LoginView()),
-           (route)=>false
-       );
+      _showSnack(
+        'passwordUpdatedSuccessfully'.tr(),
+        Theme.of(context).colorScheme.primary,
+      );
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (context) => LoginView()),
+        (route) => false,
+      );
     }
+
     if (state is UpdatePasswordFailure) {
       _showSnack(state.errmessage, Theme.of(context).colorScheme.error);
     }
@@ -121,10 +128,11 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.arrow_back_ios, color: theme.colorScheme.primary),
-          onPressed: () =>   Navigator.pushAndRemoveUntil(
-           context, MaterialPageRoute(builder: (context) => ResetPasswordView()),
-           (route)=>false
-       )
+          onPressed: () => Navigator.pushAndRemoveUntil(
+            context,
+            MaterialPageRoute(builder: (context) => ResetPasswordView()),
+            (route) => false,
+          ),
         ),
       ),
       body: SafeArea(
@@ -142,22 +150,32 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
                     const Gap(40),
                     const NewPasswordHeader(),
                     const Gap(40),
+
                     _buildPasswordField(theme),
+
                     const Gap(16),
+
                     NewPasswordStrength(
                       passwordStrength: _passwordStrength,
                       strengthText: _strengthText,
                       strengthColor: _strengthColor(theme),
                     ),
+
                     const Gap(24),
+
                     _buildConfirmField(theme),
+
                     const Gap(32),
+
                     CustomAuthButton(
-                      text: 'Reset Password',
+                      text: 'resetPassword'.tr(),
                       isLoading: state is ResetPasswordLoading,
-                      onPressed: state is ResetPasswordLoading ? null : _onSubmit,
+                      onPressed:
+                          state is ResetPasswordLoading ? null : _onSubmit,
                     ),
+
                     const Gap(24),
+
                     NewPasswordRequirements(
                       hasMinLength: _hasMinLength,
                       hasUppercase: _hasUppercase,
@@ -165,6 +183,7 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
                       hasNumber: _hasNumber,
                       hasSpecial: _hasSpecial,
                     ),
+
                     const Gap(30),
                   ],
                 );
@@ -178,8 +197,8 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
 
   Widget _buildPasswordField(ThemeData theme) {
     return CustomeTextFormField(
-      hintText: 'Enter new password',
-      labelText: 'New Password',
+      hintText: 'enterNewPassword'.tr(),
+      labelText: 'newPassword'.tr(),
       prefixIcon: Icon(Icons.lock_outline, color: theme.colorScheme.primary),
       suffixIcon: IconButton(
         onPressed: () => setState(() => _obscurePassword = !_obscurePassword),
@@ -195,8 +214,8 @@ class _NewPasswordViewBodyState extends State<NewPasswordViewBody> {
 
   Widget _buildConfirmField(ThemeData theme) {
     return CustomeTextFormField(
-      hintText: 'Confirm new password',
-      labelText: 'Confirm Password',
+      hintText: 'confirmNewPassword'.tr(),
+      labelText: 'confirmPassword'.tr(),
       prefixIcon: Icon(Icons.lock_outline, color: theme.colorScheme.primary),
       suffixIcon: IconButton(
         onPressed: () => setState(() => _obscureConfirm = !_obscureConfirm),

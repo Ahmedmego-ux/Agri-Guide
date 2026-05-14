@@ -1,25 +1,36 @@
 import 'package:agri_guide_app/feature/home/presentation/enums/weather_enum.dart';
 import 'package:agri_guide_app/feature/home/presentation/manger/cubit/weather_cubit.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class WeatherWidget extends StatefulWidget {
-  const WeatherWidget({super.key, required this.latitude, required this.longitude,});
-final double latitude;
-final double longitude;
+  const WeatherWidget({
+    super.key,
+    required this.latitude,
+    required this.longitude,
+  });
+
+  final double latitude;
+  final double longitude;
 
   @override
-  State<WeatherWidget> createState() => _WeatherWidgetState();
+  State<WeatherWidget> createState() =>
+      _WeatherWidgetState();
 }
 
-class _WeatherWidgetState extends State<WeatherWidget> {
-  
+class _WeatherWidgetState
+    extends State<WeatherWidget> {
   @override
-void initState() {
-  super.initState();
+  void initState() {
+    super.initState();
 
-  context.read<WeatherCubit>().getWeather(widget.latitude, widget.longitude);
-}
+    context.read<WeatherCubit>().getWeather(
+          widget.latitude,
+          widget.longitude,
+        );
+  }
+
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
@@ -28,12 +39,37 @@ void initState() {
     return BlocBuilder<WeatherCubit, WeatherState>(
       builder: (context, state) {
         if (state is WeatherLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return Container(
+            height: 160,
+            decoration: BoxDecoration(
+              color: cs.primaryContainer,
+              borderRadius:
+                  BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: CircularProgressIndicator(
+                color: cs.primary,
+              ),
+            ),
+          );
         }
 
         if (state is WeatherFaliure) {
-          return const Center(
-            child: Text("Weather data is not available"),
+          return Container(
+            height: 80,
+            decoration: BoxDecoration(
+              color: cs.errorContainer,
+              borderRadius:
+                  BorderRadius.circular(20),
+            ),
+            child: Center(
+              child: Text(
+                "weatherNotAvailable".tr(),
+                style: TextStyle(
+                  color: cs.onErrorContainer,
+                ),
+              ),
+            ),
           );
         }
 
@@ -42,107 +78,206 @@ void initState() {
           final weatherEnum = weather.condition;
 
           return Container(
-            padding: const EdgeInsets.all(16),
+            padding: const EdgeInsets.all(18),
             decoration: BoxDecoration(
-             // color: weatherEnum.backgroundColor,
-              gradient: weatherEnum.backgroundGradient,
-              borderRadius: BorderRadius.circular(16),
+              gradient:
+                  weatherEnum.backgroundGradient,
+              borderRadius:
+                  BorderRadius.circular(24),
+              boxShadow: [
+                BoxShadow(
+                  color:
+                      Colors.black.withOpacity(0.15),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
+                ),
+              ],
             ),
-            child: Column(
+            child: Stack(
               children: [
-                
-                Row(
+                // Background decoration circles
+                Positioned(
+                  top: -30,
+                  right: Directionality.of(context) ==
+                          TextDirection.RTL
+                      ? null
+                      : -20,
+                  left: Directionality.of(context) ==
+                          TextDirection.RTL
+                      ? -20
+                      : null,
+                  child: Container(
+                    width: 110,
+                    height: 110,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white
+                          .withOpacity(0.07),
+                    ),
+                  ),
+                ),
+
+                Positioned(
+                  bottom: -20,
+                  left: Directionality.of(context) ==
+                          TextDirection.RTL
+                      ? null
+                      : -20,
+                  right: Directionality.of(context) ==
+                          TextDirection.RTL
+                      ? -20
+                      : null,
+                  child: Container(
+                    width: 80,
+                    height: 80,
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color: Colors.white
+                          .withOpacity(0.05),
+                    ),
+                  ),
+                ),
+
+                Column(
                   children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    // Top row: temp + icon
+                    Row(
+                      crossAxisAlignment:
+                          CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "${weather.temperature.toInt()}°",
-                          style: TextStyle(
-                            fontSize: 40,
-                            fontWeight: FontWeight.w600,
-                            color: cs.onPrimary,
-                          ),
+                        Column(
+                          crossAxisAlignment:
+                              CrossAxisAlignment
+                                  .start,
+                          children: [
+                            Text(
+                              "${weather.temperature.toInt()}°",
+                              style: TextStyle(
+                                fontSize: 52,
+                                fontWeight:
+                                    FontWeight.w800,
+                                color:
+                                    cs.onPrimary,
+                                height: 1.0,
+                              ),
+                            ),
+                            const SizedBox(
+                                height: 4),
+                            Text(
+                              weatherEnum.name
+                                  .tr(),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight:
+                                    FontWeight.w500,
+                                color: cs
+                                    .onPrimary
+                                    .withOpacity(
+                                        0.85),
+                                letterSpacing:
+                                    0.3,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          weatherEnum.name,
-                          style: TextStyle(
-                            fontSize: 14,
-                            color: cs.onPrimary.withOpacity(0.8),
-                          ),
+
+                        const Spacer(),
+
+                        Icon(
+                          weatherEnum.icon,
+                          color:
+                              weatherEnum.iconColor,
+                          size: 60,
                         ),
                       ],
                     ),
 
-                    const Spacer(),
+                    const SizedBox(height: 16),
 
-                   
-                    Icon(
-                      weatherEnum.icon,
-                      color: weatherEnum.iconColor,
-                      size: 48,
+                    // Divider
+                    Divider(
+                      color: Colors.white
+                          .withOpacity(0.2),
+                      thickness: 1,
+                      height: 1,
                     ),
-                  ],
-                ),
 
-                const SizedBox(height: 12),
+                    const SizedBox(height: 14),
 
-                
-                Row(
-                  children: [
-                    _buildStat(
-                      cs,
-                      Icons.water_drop_outlined,
-                      "${weather.soilMoisture.toStringAsFixed(1)}",
-                      "Soil",
-                    ),
-                    _buildStat(
-                      cs,
-                      Icons.air,
-                      "${weather.windSpeed.toInt()} km/h",
-                      "Wind",
-                    ),
-                    _buildStat(
-                      cs,
-                      Icons.umbrella_outlined,
-                      "${weather.rainChance.toInt()}%",
-                      "Rain",
-                    ),
-                    _buildStat(
-                      cs,
-                      Icons.wb_sunny_outlined,
-                      weather.uvIndex.toString(),
-                      "UV",
-                    ),
-                  ],
-                ),
+                    // Stats row
+                    Row(
+                      children: [
+                        _buildStat(
+                          cs,
+                          Icons
+                              .water_drop_outlined,
+                          weather.soilMoisture
+                              .toStringAsFixed(1),
+                          "soil".tr(),
+                        ),
 
-                const SizedBox(height: 10),
+                        _buildStat(
+                          cs,
+                          Icons.air,
+                          "${weather.windSpeed.toInt()} km/h",
+                          "wind".tr(),
+                        ),
 
-             
-                Container(
-                  width: double.infinity,
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 12,
-                    vertical: 8,
-                  ),
-                  decoration: BoxDecoration(
-                    color: weatherEnum.iconColor.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(8),
-                    border: Border(
-                      left: BorderSide(
-                        color: weatherEnum.iconColor,
-                        width: 3,
+                        _buildStat(
+                          cs,
+                          Icons
+                              .umbrella_outlined,
+                          "${weather.rainChance.toInt()}%",
+                          "rain".tr(),
+                        ),
+
+                        _buildStat(
+                          cs,
+                          Icons
+                              .wb_sunny_outlined,
+                          weather.uvIndex
+                              .toString(),
+                          "uv".tr(),
+                        ),
+                      ],
+                    ),
+
+                    const SizedBox(height: 14),
+
+                    // Tip banner
+                    Container(
+                      width: double.infinity,
+                      padding:
+                          const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 10,
+                      ),
+                      decoration: BoxDecoration(
+                        color: Colors.white
+                            .withOpacity(0.15),
+                        border: Border(
+                          left: BorderSide(
+                            color: weatherEnum
+                                .iconColor,
+                            width: 3,
+                          ),
+                        ),
+                        borderRadius:
+                            BorderRadius.circular(
+                                12),
+                      ),
+                      child: Text(
+                        weatherEnum.tip,
+                        style: TextStyle(
+                          fontSize: 12,
+                          fontWeight:
+                              FontWeight.w500,
+                          color: cs.onPrimary,
+                          height: 1.4,
+                        ),
                       ),
                     ),
-                  ),
-                  child: Text(
-                    weatherEnum.tip,
-                    style: TextStyle(
-                      fontSize: 12,
-                      color: cs.onPrimary,
-                    ),
-                  ),
+                  ],
                 ),
               ],
             ),
@@ -162,29 +297,40 @@ void initState() {
   ) {
     return Expanded(
       child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        margin: const EdgeInsets.symmetric(horizontal: 3),
+        padding: const EdgeInsets.symmetric(
+          vertical: 10,
+          horizontal: 4,
+        ),
+        margin:
+            const EdgeInsets.symmetric(horizontal: 3),
         decoration: BoxDecoration(
-          color: Colors.white.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(8),
+          color: Colors.white.withOpacity(0.12),
+          borderRadius:
+              BorderRadius.circular(12),
         ),
         child: Column(
           children: [
-            Icon(icon, color: cs.onPrimary, size: 16),
-            const SizedBox(height: 4),
+            Icon(
+              icon,
+              color: cs.onPrimary,
+              size: 18,
+            ),
+            const SizedBox(height: 5),
             Text(
               value,
               style: TextStyle(
                 fontSize: 12,
-                fontWeight: FontWeight.w500,
+                fontWeight: FontWeight.w700,
                 color: cs.onPrimary,
               ),
             ),
+            const SizedBox(height: 2),
             Text(
               label,
               style: TextStyle(
                 fontSize: 10,
-                color: cs.onPrimary.withOpacity(0.6),
+                color: cs.onPrimary
+                    .withOpacity(0.65),
               ),
             ),
           ],

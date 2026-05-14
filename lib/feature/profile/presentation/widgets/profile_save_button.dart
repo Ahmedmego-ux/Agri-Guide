@@ -14,7 +14,8 @@ class ProfileButton extends StatelessWidget {
     required this.value,
     this.icon,
     this.iconColor,
-    this.backgroundColor, this.textColor,
+    this.backgroundColor,
+    this.textColor,
   });
 
   @override
@@ -28,24 +29,33 @@ class ProfileButton extends StatelessWidget {
       width: double.infinity,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor ?? colorScheme.primary, 
-          foregroundColor: iconColor ?? colorScheme.onPrimary, 
-         
-          textStyle: textTheme.titleMedium?.copyWith(fontWeight: FontWeight.w600),
+          backgroundColor: backgroundColor ?? colorScheme.primary,
+          foregroundColor: iconColor ?? colorScheme.onPrimary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(14),
+          ),
+          textStyle: textTheme.titleMedium?.copyWith(
+            fontWeight: FontWeight.w600,
+          ),
         ),
         onPressed: onPressed,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
+          mainAxisSize: MainAxisSize.min,
           children: [
             if (icon != null) ...[
-              Icon(icon, color: iconColor ?? colorScheme.onPrimary),
-              const SizedBox(width: 8),
+              Icon(icon, color: iconColor ?? colorScheme.onPrimary, size: 18),
+              const SizedBox(width: 6),
             ],
-            Text(
-              value,
-              style: textTheme.titleMedium?.copyWith(
-                color:textColor?? colorScheme.onPrimary,
-                fontWeight: FontWeight.w600,
+            Flexible(
+              child: Text(
+                value,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: textTheme.titleSmall?.copyWith(
+                  color: textColor ?? colorScheme.onPrimary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ],

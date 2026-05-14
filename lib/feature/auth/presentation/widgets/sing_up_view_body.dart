@@ -2,6 +2,7 @@ import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'custome_auth_buttom.dart';
 import 'custom_textformfiled.dart';
 import 'auth_header.dart';
@@ -13,28 +14,23 @@ import 'package:agri_guide_app/core/service/location_handler.dart';
 
 class SignupViewBody extends StatefulWidget {
   const SignupViewBody({super.key});
-
   @override
   State<SignupViewBody> createState() => _SignupViewBodyState();
 }
 
 class _SignupViewBodyState extends State<SignupViewBody> {
   final _formKey = GlobalKey<FormState>();
-
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   final _confirmPasswordController = TextEditingController();
   final _locationController = TextEditingController();
-
   late double _latitude;
   late double _longitude;
-  
   bool _obscurePassword = true;
   bool _obscureConfirmPassword = true;
   late LocationHandler _locationHandler;
-
   @override
   void initState() {
     super.initState();
@@ -68,7 +64,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
       email: _emailController.text.trim(),
       password: _passwordController.text.trim(),
       cityName: _locationController.text.trim(),
-      longitude:_longitude, 
+      longitude: _longitude,
       latitude: _latitude,
     );
   }
@@ -77,10 +73,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
     final theme = Theme.of(context);
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: Text(
-          text,
-          style: theme.snackBarTheme.contentTextStyle,
-        ),
+        content: Text(text, style: theme.snackBarTheme.contentTextStyle),
         backgroundColor: color ?? theme.snackBarTheme.backgroundColor,
         behavior: theme.snackBarTheme.behavior,
         shape: theme.snackBarTheme.shape,
@@ -90,28 +83,30 @@ class _SignupViewBodyState extends State<SignupViewBody> {
 
   Future<void> _signup() async {
     if (!_formKey.currentState!.validate()) return;
-
     await context.read<SingUpCubit>().signup(_buildEntity(), context);
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
-
     return BlocConsumer<SingUpCubit, SingUpState>(
       listener: (context, state) {
         if (state is SingUpFailure) {
           _showSnack(state.errmessage, theme.colorScheme.error);
         }
         if (state is SingUpSuccess) {
-          _showSnack('Account created successfully', theme.colorScheme.primary);
+          _showSnack(
+            'accountCreatedSuccessfully'.tr(),
+            theme.colorScheme.primary,
+          );
           Navigator.pushReplacement(
             context,
-            MaterialPageRoute(builder: (_) => LoginView(
-              email: _emailController.text,
-              password: _passwordController.text,
-            )),
-            
+            MaterialPageRoute(
+              builder: (_) => LoginView(
+                email: _emailController.text,
+                password: _passwordController.text,
+              ),
+            ),
           );
         }
       },
@@ -136,39 +131,57 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                               children: [
                                 const Gap(20),
                                 CustomeTextFormField(
-                                  hintText: 'Enter your first name',
-                                  labelText: 'First Name',
+                                  hintText: 'enterFirstName'.tr(),
+                                  labelText: 'firstName'.tr(),
                                   controller: _firstNameController,
-                                  prefixIcon: Icon(Icons.person_outline, color: theme.iconTheme.color),
+                                  prefixIcon: Icon(
+                                    Icons.person_outline,
+                                    color: theme.iconTheme.color,
+                                  ),
                                   validator: (v) =>
-                                      AuthValidators.validateNotEmpty(v, "First Name"),
+                                      AuthValidators.validateNotEmpty(
+                                        v,
+                                        'firstName'.tr(),
+                                      ),
                                   isPassword: false,
                                 ),
                                 const Gap(15),
                                 CustomeTextFormField(
-                                  hintText: 'Enter your last name',
-                                  labelText: 'Last Name',
+                                  hintText: 'enterLastName'.tr(),
+                                  labelText: 'lastName'.tr(),
                                   controller: _lastNameController,
-                                  prefixIcon: Icon(Icons.person_outline, color: theme.iconTheme.color),
+                                  prefixIcon: Icon(
+                                    Icons.person_outline,
+                                    color: theme.iconTheme.color,
+                                  ),
                                   validator: (v) =>
-                                      AuthValidators.validateNotEmpty(v, "Last Name"),
+                                      AuthValidators.validateNotEmpty(
+                                        v,
+                                        'lastName'.tr(),
+                                      ),
                                   isPassword: false,
                                 ),
                                 const Gap(15),
                                 CustomeTextFormField(
-                                  hintText: 'Enter your email',
-                                  labelText: 'Email',
+                                  hintText: 'enterYourEmail'.tr(),
+                                  labelText: 'email'.tr(),
                                   controller: _emailController,
-                                  prefixIcon: Icon(Icons.email, color: theme.iconTheme.color),
+                                  prefixIcon: Icon(
+                                    Icons.email,
+                                    color: theme.iconTheme.color,
+                                  ),
                                   validator: AuthValidators.validateEmail,
                                   isPassword: false,
                                 ),
                                 const Gap(15),
                                 CustomeTextFormField(
-                                  hintText: 'Create password',
-                                  labelText: 'Password',
+                                  hintText: 'createPassword'.tr(),
+                                  labelText: 'password'.tr(),
                                   controller: _passwordController,
-                                  prefixIcon: Icon(Icons.lock, color: theme.iconTheme.color),
+                                  prefixIcon: Icon(
+                                    Icons.lock,
+                                    color: theme.iconTheme.color,
+                                  ),
                                   validator: AuthValidators.validatePassword,
                                   isPassword: _obscurePassword,
                                   suffixIcon: IconButton(
@@ -187,21 +200,25 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                                 ),
                                 const Gap(15),
                                 CustomeTextFormField(
-                                  hintText: 'Confirm password',
-                                  labelText: 'Confirm Password',
+                                  hintText: 'confirmPassword'.tr(),
+                                  labelText: 'confirmPassword'.tr(),
                                   controller: _confirmPasswordController,
-                                  prefixIcon: Icon(Icons.lock, color: theme.iconTheme.color),
+                                  prefixIcon: Icon(
+                                    Icons.lock,
+                                    color: theme.iconTheme.color,
+                                  ),
                                   isPassword: _obscureConfirmPassword,
                                   validator: (v) {
                                     if (v != _passwordController.text) {
-                                      return 'Passwords do not match';
+                                      return 'passwordsDoNotMatch'.tr();
                                     }
                                     return null;
                                   },
                                   suffixIcon: IconButton(
                                     onPressed: () {
                                       setState(() {
-                                        _obscureConfirmPassword = !_obscureConfirmPassword;
+                                        _obscureConfirmPassword =
+                                            !_obscureConfirmPassword;
                                       });
                                     },
                                     icon: Icon(
@@ -222,26 +239,32 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                                 CustomAuthButton(
                                   isLoading: state is SingUpLoading,
                                   onPressed: _signup,
-                                  text: 'Sign Up',
+                                  text: 'signUp'.tr(),
                                 ),
                                 const Gap(20),
                                 Row(
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    Text('Already have an account?', style: theme.textTheme.bodyMedium),
+                                    Text(
+                                      'alreadyHaveAccount'.tr(),
+                                      style: theme.textTheme.bodyMedium,
+                                    ),
                                     GestureDetector(
                                       onTap: () {
                                         Navigator.push(
                                           context,
-                                          MaterialPageRoute(builder: (_) => const LoginView()),
+                                          MaterialPageRoute(
+                                            builder: (_) => const LoginView(),
+                                          ),
                                         );
                                       },
                                       child: Text(
-                                        ' Log in',
-                                        style: theme.textTheme.bodyMedium?.copyWith(
-                                          color: theme.colorScheme.primary,
-                                          fontWeight: FontWeight.bold,
-                                        ),
+                                        ' ${'logIn'.tr()}',
+                                        style: theme.textTheme.bodyMedium
+                                            ?.copyWith(
+                                              color: theme.colorScheme.primary,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ),
                                   ],
@@ -261,9 +284,7 @@ class _SignupViewBodyState extends State<SignupViewBody> {
                   color: theme.colorScheme.onSurface.withOpacity(0.3),
                   width: double.infinity,
                   height: double.infinity,
-                  child: const Center(
-                    child: CircularProgressIndicator(),
-                  ),
+                  child: const Center(child: CircularProgressIndicator()),
                 ),
             ],
           ),

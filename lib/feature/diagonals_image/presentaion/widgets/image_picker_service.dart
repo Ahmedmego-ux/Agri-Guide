@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:agri_guide_app/feature/diagonals_image/presentaion/view/ai_result.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -78,7 +79,7 @@ class ImagePickerService {
             children: [
               ListTile(
                 leading: const Icon(Icons.camera_alt),
-                title: const Text("Camera"),
+                title:  Text("camera".tr()),
                 onTap: () {
                   Navigator.pop(context);
                   pickFromCamera();
@@ -86,7 +87,7 @@ class ImagePickerService {
               ),
               ListTile(
                 leading: const Icon(Icons.photo_library),
-                title: const Text("Gallery"),
+                title:  Text("gallery".tr()),
                 onTap: () {
                   Navigator.pop(context);
                   pickFromGallery();

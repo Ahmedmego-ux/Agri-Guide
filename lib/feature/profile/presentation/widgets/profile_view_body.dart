@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:agri_guide_app/core/erorr/error_handler.dart';
 import 'package:agri_guide_app/core/service/location_service.dart';
 import 'package:agri_guide_app/feature/auth/presentation/view/login_view.dart';
@@ -10,7 +11,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class ProfileViewBody extends StatefulWidget {
-
   const ProfileViewBody({super.key});
 
   @override
@@ -65,35 +65,34 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
 
   void _saveChanges() async {
     final locationName = _locationController.text.trim();
-
     double? lat;
-    double ?lon;
-    
+    double? lon;
+
     final coords =
         await LocationService().getCoordinatesFromCity(locationName);
-        print(coords);
 
     if (coords != null) {
       lat = coords['lat'];
       lon = coords['lon'];
-     
-      print("jjjjjjjjjjjjjjj$lat jjjjjjjj$lon");
-    } else {
-     
-      print('Could not get coordinates for $locationName');
     }
+
     if (_formKey.currentState!.validate()) {
       final updatedProfile = ProfileEntity(
         id: context.read<ProfileCubit>().userId,
         firstName: _firstNameController.text.trim(),
         lastName: _lastNameController.text.trim(),
         email: _emailController.text.trim(),
-        location:locationName,
+        location: locationName,
         lat: lat,
-        lon: lon
+        lon: lon,
       );
-       context.read<WeatherCubit>().getWeather(lat,lon);
-      await context.read<ProfileCubit>().updateData(profile: updatedProfile);
+
+      context.read<WeatherCubit>().getWeather(lat, lon);
+
+      await context
+          .read<ProfileCubit>()
+          .updateData(profile: updatedProfile);
+
       setState(() => _isEditing = false);
     }
   }
@@ -103,50 +102,37 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
     final theme = Theme.of(context);
     final cs = theme.colorScheme;
 
+    final isRTL =
+        Directionality.of(context) == TextDirection.RTL;
+
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
-      appBar: AppBar(
-        leading: IconButton(
-          icon: Icon(
-            Icons.arrow_back,
-            color: theme.appBarTheme.foregroundColor,
-          ),
-          onPressed: () => Navigator.pop(context),
-        ),
-        title: const Text('My Profile'),
-        actions: [
-          TextButton(
-            onPressed: _toggleEdit,
-            child: Text(
-              _isEditing ? 'Cancel' : 'Edit',
-              style: TextStyle(
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                color: _isEditing ? cs.error : cs.surface,
-              ),
-            ),
-          ),
-        ],
-      ),
       body: BlocConsumer<ProfileCubit, ProfileState>(
         listener: (context, state) {
           if (state is ProfileFaliure) {
-            ErrorHandler.showErrorSnackBar(context, state.errmessage);
+            ErrorHandler.showErrorSnackBar(
+              context,
+              state.errmessage,
+            );
           }
-           if (state is DeleteSuccess) {
-             Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => LoginView(),
-                                  ),
-                                  (route) => false,
-                                );
-            ErrorHandler.showErrorSnackBar(context, 'Account Deleted');
+
+          if (state is DeleteSuccess) {
+            ErrorHandler.showErrorSnackBar(
+              context,
+              'accountDeleted'.tr(),
+            );
+
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(builder: (_) => LoginView()),
+              (route) => false,
+            );
           }
+
           if (state is ProfileSuccessUpdate) {
             ErrorHandler.showSuccessSnackBar(
               context,
-              'Profile updated successfully',
+              'profileUpdatedSuccess'.tr(),
             );
           }
         },
@@ -158,7 +144,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                 children: [
                   CircularProgressIndicator(color: cs.primary),
                   const SizedBox(height: 16),
-                  Text('Loading profile...', style: theme.textTheme.bodyMedium),
+                  Text('loadingProfile'.tr()),
                 ],
               ),
             );
@@ -169,27 +155,18 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Icon(Icons.error_outline, size: 48, color: cs.error),
+                  Icon(Icons.error_outline,
+                      size: 48, color: cs.error),
                   const SizedBox(height: 16),
-                  Text(
-                    'Failed to load profile',
-                    style: theme.textTheme.bodyLarge?.copyWith(
-                      color: cs.onSurfaceVariant,
-                    ),
-                  ),
+                  Text('failedToLoadProfile'.tr()),
                   const SizedBox(height: 8),
-                  Text(
-                    state.errmessage,
-                    style: theme.textTheme.bodySmall?.copyWith(
-                      color: cs.onSurfaceVariant,
-                    ),
-                    textAlign: TextAlign.center,
-                  ),
+                  Text(state.errmessage),
                   const SizedBox(height: 24),
                   ElevatedButton(
-                    onPressed: () =>
-                        context.read<ProfileCubit>().getProfileData(),
-                    child: const Text('Retry'),
+                    onPressed: () => context
+                        .read<ProfileCubit>()
+                        .getProfileData(),
+                    child: Text('retry'.tr()),
                   ),
                 ],
               ),
@@ -204,149 +181,264 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
             return Form(
               key: _formKey,
               child: SingleChildScrollView(
-                padding: const EdgeInsets.all(16),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Center(
-                      child: Column(
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.fromLTRB(
+                          16, 52, 16, 28),
+                      decoration: BoxDecoration(
+                        color: cs.primary,
+                        borderRadius: const BorderRadius.only(
+                          bottomLeft: Radius.circular(32),
+                          bottomRight: Radius.circular(32),
+                        ),
+                      ),
+                      child: Stack(
                         children: [
-                          CircleAvatar(
-                            radius: 42,
-                            backgroundColor: cs.primaryContainer,
-                            child: Text(
-                              _initials,
-                              style: theme.textTheme.headlineSmall?.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: cs.onPrimaryContainer,
+                          Positioned(
+                            top: -20,
+                            right: -20,
+                            child: Container(
+                              width: 100,
+                              height: 100,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color:
+                                    Colors.white.withOpacity(0.07),
                               ),
                             ),
                           ),
-                          const SizedBox(height: 12),
-                          Text(
-                            _fullName,
-                            style: theme.textTheme.titleLarge?.copyWith(
-                              fontWeight: FontWeight.bold,
-                              color: cs.onSurface,
+
+                          Row(
+                            mainAxisAlignment:
+                                MainAxisAlignment.spaceBetween,
+                            children: [
+                              GestureDetector(
+                                onTap: () =>
+                                    Navigator.pop(context),
+                                child: Container(
+                                  width: 36,
+                                  height: 36,
+                                  decoration: BoxDecoration(
+                                    color: Colors.white
+                                        .withOpacity(0.2),
+                                    borderRadius:
+                                        BorderRadius.circular(10),
+                                  ),
+                                  child: Icon(
+                                    isRTL
+                                        ? Icons
+                                            .arrow_forward_ios_rounded
+                                        : Icons
+                                            .arrow_back_ios_rounded,
+                                    color: cs.onPrimary,
+                                    size: 16,
+                                  ),
+                                ),
+                              ),
+                              Text(
+                                'myProfile'.tr(),
+                                style: theme.textTheme.titleMedium
+                                    ?.copyWith(
+                                  color: cs.onPrimary,
+                                  fontWeight: FontWeight.w800,
+                                ),
+                              ),
+                              GestureDetector(
+                                onTap: _toggleEdit,
+                                child: Container(
+                                  padding:
+                                      const EdgeInsets.symmetric(
+                                          horizontal: 14,
+                                          vertical: 7),
+                                  decoration: BoxDecoration(
+                                    color: _isEditing
+                                        ? cs.error
+                                            .withOpacity(0.15)
+                                        : Colors.white
+                                            .withOpacity(0.2),
+                                    borderRadius:
+                                        BorderRadius.circular(20),
+                                  ),
+                                  child: Text(
+                                    _isEditing
+                                        ? 'cancel'.tr()
+                                        : 'edit'.tr(),
+                                    style: TextStyle(
+                                      fontSize: 13,
+                                      fontWeight: FontWeight.w700,
+                                      color: _isEditing
+                                          ? cs.error
+                                          : cs.onPrimary,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+
+                          Padding(
+                            padding:
+                                const EdgeInsets.only(top: 52),
+                            child: Center(
+                              child: Column(
+                                children: [
+                                  Container(
+                                    width: 84,
+                                    height: 84,
+                                    decoration: BoxDecoration(
+                                      shape: BoxShape.circle,
+                                      color: Colors.white
+                                          .withOpacity(0.25),
+                                    ),
+                                    child: Center(
+                                      child: Text(
+                                        _initials,
+                                        style: theme.textTheme
+                                            .headlineSmall
+                                            ?.copyWith(
+                                          color: cs.onPrimary,
+                                        ),
+                                      ),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 12),
+                                  Text(
+                                    _fullName,
+                                    style: theme
+                                        .textTheme.titleLarge
+                                        ?.copyWith(
+                                      color: cs.onPrimary,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],
                       ),
                     ),
-                    _buildSectionHeader(context, 'PERSONAL INFO'),
-                    SizedBox(height: 10),
-                    _buildFormGroup(context, [
-                      ProfileFieldTile(
-                        controller: _firstNameController,
-                        label: 'First Name',
-                        icon: Icons.person_outline,
-                        iconBg: cs.primaryContainer,
-                        iconColor: cs.onPrimaryContainer,
-                        isEditing: _isEditing,
-                        validator: (v) =>
-                            v == null || v.isEmpty ? 'Required' : null,
-                      ),
-                      Divider(
-                        height: 15,
-                        indent: 68,
-                        color: theme.dividerTheme.color,
-                      ),
-                      ProfileFieldTile(
-                        controller: _lastNameController,
-                        label: 'Last Name',
-                        icon: Icons.person_outline,
-                        iconBg: cs.primaryContainer,
-                        iconColor: cs.onPrimaryContainer,
-                        isEditing: _isEditing,
-                        validator: (v) =>
-                            v == null || v.isEmpty ? 'Required' : null,
-                      ),
-                    ]),
-                    _buildSectionHeader(context, 'CONTACT'),
-                    _buildFormGroup(context, [
-                      ProfileFieldTile(
-                        controller: _emailController,
-                        label: 'Email',
-                        icon: Icons.email_outlined,
-                        iconBg: const Color(0xFFE8EAF6),
-                        iconColor: const Color(0xFF3949AB),
-                        isEditing: _isEditing,
-                        keyboardType: TextInputType.emailAddress,
-                        validator: (v) {
-                          if (v == null || v.isEmpty) return 'Required';
-                          if (!v.contains('@gmail')) return 'Your Email Isnot Type Of Gmail';
-                          return null;
-                        },
-                      ),
-                      Divider(
-                        height: 15,
-                        indent: 68,
-                        color: theme.dividerTheme.color,
-                      ),
-                      ProfileFieldTile(
-                        controller: _locationController,
-                        label: 'Location',
-                        icon: Icons.location_on_outlined,
-                        iconBg: const Color(0xFFFFF3E0),
-                        iconColor: const Color(0xFFE65100),
-                        isEditing: _isEditing,
-                        validator: (v) =>
-                            v == null || v.isEmpty ? 'Required' : null,
-                      ),
-                    ]),
-                    const SizedBox(height: 32),
-                    if (_isEditing)
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: ProfileButton(
-                          value: "Save Changes",
-                          onPressed: _saveChanges,
-                        ),
-                      ),
 
-                    if (!_isEditing)
-                      Row(
+                    Padding(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
                         children: [
-                          Expanded(
-                            child: ProfileButton(
-                              onPressed: () {
-                                Navigator.pushAndRemoveUntil(
-                                  context,
-                                  MaterialPageRoute(
-                                    builder: (_) => LoginView(),
-                                  ),
-                                  (route) => false,
-                                );
+                          _buildSectionHeader(
+                              context, 'personalInfo'.tr()),
+
+                          _buildFormGroup(context, [
+                            ProfileFieldTile(
+                              controller: _firstNameController,
+                              label: 'firstName'.tr(),
+                              icon: Icons.person_outline,
+                              iconBg: cs.primaryContainer,
+                              iconColor:
+                                  cs.onPrimaryContainer,
+                              isEditing: _isEditing,
+                              validator: (v) => v == null || v.isEmpty
+                                  ? 'required'.tr()
+                                  : null,
+                            ),
+                            ProfileFieldTile(
+                              controller: _lastNameController,
+                              label: 'lastName'.tr(),
+                              icon: Icons.person_outline,
+                              iconBg: cs.primaryContainer,
+                              iconColor:
+                                  cs.onPrimaryContainer,
+                              isEditing: _isEditing,
+                              validator: (v) => v == null || v.isEmpty
+                                  ? 'required'.tr()
+                                  : null,
+                            ),
+                          ]),
+
+                          _buildSectionHeader(
+                              context, 'contact'.tr()),
+
+                          _buildFormGroup(context, [
+                            ProfileFieldTile(
+                              controller: _emailController,
+                              label: 'email'.tr(),
+                              icon: Icons.email_outlined,
+                              iconBg: const Color(0xFFE8EAF6),
+                              iconColor: const Color(0xFF3949AB),
+                              isEditing: _isEditing,
+                              validator: (v) {
+                                if (v == null || v.isEmpty) {
+                                  return 'required'.tr();
+                                }
+                                return null;
                               },
-                              icon: Icons.delete,
-                              iconColor: const Color(0xffE7000B),
-                              textColor: const Color(0xffE7000B),
-                              backgroundColor: const Color(0xffFEF2F2),
-                              value: "Log Out",
                             ),
-                          ),
-                          SizedBox(width: 20),
-                          Expanded(
-                            child: ProfileButton(
-                              onPressed: () =>context.read<ProfileCubit>().deletData(userId: context.read<ProfileCubit>().userId),
-                              icon: Icons.logout,
-                              backgroundColor: Color(0xffF3F4F6),
-                              iconColor: Color(0xff4A5565),
-                              textColor: Color(0xff4A5565),
-                              value: "Delet Acount",
+                            ProfileFieldTile(
+                              controller: _locationController,
+                              label: 'location'.tr(),
+                              icon: Icons.location_on_outlined,
+                              iconBg: const Color(0xFFFFF3E0),
+                              iconColor:
+                                  const Color(0xFFE65100),
+                              isEditing: _isEditing,
+                              validator: (v) => v == null || v.isEmpty
+                                  ? 'required'.tr()
+                                  : null,
                             ),
-                          ),
+                          ]),
+
+                          if (_isEditing)
+                            ProfileButton(
+                              value: 'saveChanges'.tr(),
+                              onPressed: _saveChanges,
+                            )
+                          else
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: ProfileButton(
+                                    value: 'logout'.tr(),
+                                    onPressed: () {
+                                      Navigator
+                                          .pushAndRemoveUntil(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (_) =>
+                                                LoginView()),
+                                        (route) => false,
+                                      );
+                                    },
+                                  ),
+                                ),
+                                const SizedBox(width: 12),
+                                Expanded(
+                                  child: ProfileButton(
+                                    value:
+                                        'deleteAccount'.tr(),
+                                    onPressed: () => context
+                                        .read<ProfileCubit>()
+                                        .deletData(
+                                          userId: context
+                                              .read<
+                                                  ProfileCubit>()
+                                              .userId,
+                                        ),
+                                  ),
+                                ),
+                              ],
+                            ),
+
+                          const SizedBox(height: 30),
                         ],
                       ),
-
-                    const SizedBox(height: 32),
+                    ),
                   ],
                 ),
               ),
             );
           }
 
-          return const SizedBox.shrink();
+          return const SizedBox();
         },
       ),
     );
@@ -354,30 +446,26 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
 
   Widget _buildSectionHeader(BuildContext context, String title) {
     final cs = Theme.of(context).colorScheme;
-
     return Padding(
-      padding: const EdgeInsets.only(left: 8, bottom: 8, top: 8),
+      padding: const EdgeInsets.only(bottom: 8),
       child: Text(
         title,
         style: TextStyle(
           fontSize: 12,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           color: cs.onSurfaceVariant,
-          letterSpacing: 0.8,
         ),
       ),
     );
   }
 
   Widget _buildFormGroup(BuildContext context, List<Widget> items) {
-    final theme = Theme.of(context);
-
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
-      margin: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+      margin: const EdgeInsets.only(bottom: 16),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       decoration: BoxDecoration(
-        color: theme.cardTheme.color,
-        borderRadius: BorderRadius.circular(12),
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
       ),
       child: Column(children: items),
     );

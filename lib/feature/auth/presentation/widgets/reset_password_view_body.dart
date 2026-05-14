@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
 import 'auth_header.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class ResetPasswordViewBody extends StatefulWidget {
   const ResetPasswordViewBody({super.key});
@@ -77,37 +78,46 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                     const Gap(20),
                     const AuthHeader(),
                     const Gap(40),
+
                     Text(
-                      'Reset Password',
+                      'resetPassword'.tr(),
                       style: theme.textTheme.headlineSmall?.copyWith(
                         fontWeight: FontWeight.bold,
                       ),
                     ),
+
                     const Gap(12),
+
                     Text(
-                      'Enter your email address and we\'ll send you a verification code to reset your password.',
+                      'resetPasswordDescription'.tr(),
                       style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
                     ),
+
                     const Gap(40),
+
                     CustomeTextFormField(
                       hintText: 'farmer@example.com',
-                      labelText: 'Email Address',
-                      prefixIcon: Icon(Icons.email_outlined,
-                          color: theme.iconTheme.color),
+                      labelText: 'emailAddress'.tr(),
+                      prefixIcon: Icon(
+                        Icons.email_outlined,
+                        color: theme.iconTheme.color,
+                      ),
                       controller: _emailController,
                       isPassword: false,
                       keyboardType: TextInputType.emailAddress,
                     ),
+
                     const Gap(32),
+
                     CustomAuthButton(
-                      text: 'Send Verification Code',
+                      text: 'sendVerificationCode'.tr(),
                       isLoading: state is ResetPasswordLoading,
                       onPressed: state is ResetPasswordLoading
                           ? null
                           : () {
                               if (_emailController.text.trim().isEmpty) {
                                 _showSnack(
-                                  "Please enter your email",
+                                  'pleaseEnterYourEmail'.tr(),
                                   theme.colorScheme.error,
                                 );
                                 return;
@@ -118,12 +128,14 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                                   );
                             },
                     ),
+
                     const Gap(20),
+
                     Center(
                       child: TextButton(
                         onPressed: () => Navigator.pop(context),
                         child: Text(
-                          'Back to Login',
+                          'backToLogin'.tr(),
                           style: theme.textTheme.bodyMedium?.copyWith(
                             fontWeight: FontWeight.w600,
                             color: theme.colorScheme.primary,
@@ -131,8 +143,11 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
                         ),
                       ),
                     ),
+
                     const Gap(40),
+
                     _buildSecurityTips(theme),
+
                     const Gap(30),
                   ],
                 );
@@ -152,18 +167,23 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
         color: theme.colorScheme.primary.withOpacity(0.08),
         borderRadius: BorderRadius.circular(16),
         border: Border.all(
-            color: theme.colorScheme.primary.withOpacity(0.2), width: 1),
+          color: theme.colorScheme.primary.withOpacity(0.2),
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             children: [
-              Icon(Icons.security,
-                  color: theme.colorScheme.primary, size: 22),
+              Icon(
+                Icons.security,
+                color: theme.colorScheme.primary,
+                size: 22,
+              ),
               const Gap(8),
               Text(
-                'Security Tips',
+                'securityTips'.tr(),
                 style: theme.textTheme.bodyMedium?.copyWith(
                   fontWeight: FontWeight.w600,
                   color: theme.colorScheme.primary,
@@ -172,21 +192,26 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
             ],
           ),
           const Gap(16),
+
           _buildSecurityTip(
             icon: Icons.lock_outline,
-            text: 'Use a unique password you don\'t use elsewhere',
+            text: 'securityTip1'.tr(),
             theme: theme,
           ),
+
           const Gap(12),
+
           _buildSecurityTip(
             icon: Icons.password,
-            text: 'Include letters, numbers, and symbols',
+            text: 'securityTip2'.tr(),
             theme: theme,
           ),
+
           const Gap(12),
+
           _buildSecurityTip(
             icon: Icons.share,
-            text: 'Never share your password with anyone',
+            text: 'securityTip3'.tr(),
             theme: theme,
           ),
         ],
@@ -194,8 +219,11 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
     );
   }
 
-  Widget _buildSecurityTip(
-      {required IconData icon, required String text, required ThemeData theme}) {
+  Widget _buildSecurityTip({
+    required IconData icon,
+    required String text,
+    required ThemeData theme,
+  }) {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -204,9 +232,7 @@ class _ResetPasswordViewBodyState extends State<ResetPasswordViewBody> {
         Expanded(
           child: Text(
             text,
-            style: theme.textTheme.bodySmall?.copyWith(
-              height: 1.4,
-            ),
+            style: theme.textTheme.bodySmall?.copyWith(height: 1.4),
           ),
         ),
       ],

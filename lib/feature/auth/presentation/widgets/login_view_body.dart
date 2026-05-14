@@ -115,8 +115,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                               const Gap(50),
 
                               CustomeTextFormField(
-                                hintText: 'enterYourEmail',
-                                labelText: 'email',
+                                hintText: 'enterYourEmail'.tr(),
+                                labelText: 'email'.tr(),
                                 prefixIcon: Icon(Icons.email,
                                     color: theme.iconTheme.color),
                                 controller: _emailController,
@@ -127,8 +127,8 @@ class _LoginViewBodyState extends State<LoginViewBody> {
                               const Gap(30),
 
                               CustomeTextFormField(
-                                hintText: 'enterYourPassword',
-                                labelText: 'password',
+                                hintText: 'enterYourPassword'.tr(),
+                                labelText: 'password'.tr(),
                                 prefixIcon: Icon(Icons.lock,
                                     color: theme.iconTheme.color),
                                 suffixIcon: IconButton(

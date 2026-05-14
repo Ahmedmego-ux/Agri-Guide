@@ -10,7 +10,11 @@ sealed class ScanState extends Equatable {
 final class ScanInitial extends ScanState {}
 final class ScanLoading extends ScanState {}
 
-final class ScanSuccess extends ScanState {}
+final class ScanSuccess extends ScanState {
+  final ScanEntity entity;
+
+  ScanSuccess({required this.entity});
+}
 
 final class ScanFailure extends ScanState {
   final String message;

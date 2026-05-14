@@ -6,6 +6,7 @@ import 'package:agri_guide_app/feature/auth/presentation/view/new_password_view.
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:pinput/pinput.dart';
+import 'package:easy_localization/easy_localization.dart';
 
 class OtpViewBody extends StatefulWidget {
   const OtpViewBody({super.key, required this.email});
@@ -99,7 +100,10 @@ class _OtpViewBodyState extends State<OtpViewBody> {
                 }
                 if (state is ResetPasswordSuccess) {
                   _startTime();
-                  _showSnack("Code resent successfully", theme.colorScheme.primary);
+                  _showSnack(
+                    'codeResentSuccessfully'.tr(),
+                    theme.colorScheme.primary,
+                  );
                 }
               },
               builder: (context, state) {
@@ -108,7 +112,6 @@ class _OtpViewBodyState extends State<OtpViewBody> {
                   children: [
                     const SizedBox(height: 40),
 
-                    // Icon Circle
                     Container(
                       width: 80,
                       height: 80,
@@ -125,24 +128,28 @@ class _OtpViewBodyState extends State<OtpViewBody> {
 
                     const SizedBox(height: 24),
 
-                    // Title
                     Text(
-                      'Verification',
-                      style: theme.textTheme.headlineMedium?.copyWith(fontWeight: FontWeight.bold),
+                      'verification'.tr(),
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
 
                     const SizedBox(height: 12),
 
-                    // Description
                     RichText(
                       textAlign: TextAlign.center,
                       text: TextSpan(
                         style: theme.textTheme.bodyMedium?.copyWith(height: 1.5),
                         children: [
-                          const TextSpan(text: 'Enter the 6-digit code sent to\n'),
+                          TextSpan(
+                            text: 'enter6DigitCode'.tr() + '\n',
+                          ),
                           TextSpan(
                             text: widget.email,
-                            style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.w600),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.w600,
+                            ),
                           ),
                         ],
                       ),
@@ -150,18 +157,20 @@ class _OtpViewBodyState extends State<OtpViewBody> {
 
                     const SizedBox(height: 50),
 
-                    // OTP Input
                     Pinput(
                       controller: _otpController,
                       length: 6,
                       keyboardType: TextInputType.number,
-                      defaultPinTheme: defaultPinTheme(context),
+                      defaultPinTheme: defaultPinTheme( context),
                       focusedPinTheme: focusedPinTheme(context),
                       submittedPinTheme: submittedPinTheme(context),
                       errorPinTheme: errorPinTheme(context),
                       onCompleted: (pin) {
                         context.read<ResetPasswordCubit>().verifyOtp(
-                              entity: VerifyOtpEntity(email: widget.email, otpCode: pin),
+                              entity: VerifyOtpEntity(
+                                email: widget.email,
+                                otpCode: pin,
+                              ),
                             );
                       },
                       useNativeKeyboard: true,
@@ -172,15 +181,16 @@ class _OtpViewBodyState extends State<OtpViewBody> {
 
                     const SizedBox(height: 40),
 
-                    // Timer
                     RichText(
                       text: TextSpan(
                         style: theme.textTheme.bodySmall,
                         children: [
-                          const TextSpan(text: 'Code expires in '),
+                          TextSpan(text: 'codeExpiresIn'.tr() + ' '),
                           TextSpan(
                             text: _timerText,
-                            style: theme.textTheme.bodyMedium?.copyWith(fontWeight: FontWeight.bold),
+                            style: theme.textTheme.bodyMedium?.copyWith(
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                         ],
                       ),
@@ -188,22 +198,29 @@ class _OtpViewBodyState extends State<OtpViewBody> {
 
                     const SizedBox(height: 24),
 
-                    // Resend Code
                     Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        Text("Didn't receive code? ", style: theme.textTheme.bodyMedium),
+                        Text(
+                          "didntReceiveCode".tr() + " ",
+                          style: theme.textTheme.bodyMedium,
+                        ),
                         GestureDetector(
                           onTap: _canResend
                               ? () {
-                                  context.read<ResetPasswordCubit>().resetPassword(
-                                        entity: ResetPasswordEntity(email: widget.email),
+                                  context
+                                      .read<ResetPasswordCubit>()
+                                      .resetPassword(
+                                        entity: ResetPasswordEntity(
+                                          email: widget.email,
+                                        ),
                                       );
                                 }
                               : null,
                           child: Text(
-                            'Resend',
-                            style: theme.textTheme.bodyMedium?.copyWith(
+                            'resend'.tr(),
+                            style:
+                                theme.textTheme.bodyMedium?.copyWith(
                               color: theme.colorScheme.primary,
                               fontWeight: FontWeight.bold,
                             ),
@@ -214,11 +231,10 @@ class _OtpViewBodyState extends State<OtpViewBody> {
 
                     const SizedBox(height: 20),
 
-                    // Change Email
                     TextButton(
                       onPressed: () => Navigator.pop(context),
                       child: Text(
-                        'Change Email',
+                        'changeEmail'.tr(),
                         style: theme.textTheme.bodySmall,
                       ),
                     ),
@@ -233,11 +249,8 @@ class _OtpViewBodyState extends State<OtpViewBody> {
       ),
     );
   }
-}
 
-/// ──────────────── Pinput Themes ────────────────
-
-PinTheme defaultPinTheme(BuildContext context) {
+  PinTheme defaultPinTheme(BuildContext context) {
   final cs = Theme.of(context).colorScheme;
   return PinTheme(
     width: 56,
@@ -291,3 +304,5 @@ PinTheme errorPinTheme(BuildContext context) {
     ],
   );
 }
+}
+

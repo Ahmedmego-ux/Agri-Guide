@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:agri_guide_app/core/erorr/error_handler.dart';
+import 'package:agri_guide_app/feature/diagonals_image/domain/entity/scan_entity.dart';
 import 'package:agri_guide_app/feature/diagonals_image/domain/repos/scan_repo.dart';
 import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
@@ -13,17 +14,18 @@ class ScanCubit extends Cubit<ScanState> {
 
   Future<void> saveScan({
     required File file,
-    required String result,
+    
   }) async {
     emit(ScanLoading());
 
     try {
+   final  entity= await repo.detectDisease(file);
       await repo.saveScane(
         file: file,
-        result: result,
       );
+      
 
-      emit(ScanSuccess());
+      emit(ScanSuccess(entity: entity));
     } catch (e) {
       emit(
         ScanFailure(

@@ -1,5 +1,6 @@
 // lib/feature/weather/domain/entity/weather_condition.dart
 
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 enum WeatherEnum {
@@ -36,95 +37,93 @@ extension WeatherEnumEx on WeatherEnum {
   }
 
   LinearGradient get backgroundGradient {
-  switch (this) {
-    case WeatherEnum.sunny:
-      return const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFFFFA726), // برتقالي فاتح
-          Color(0xFFFF7043), // برتقالي غامق
-        ],
-      );
+    switch (this) {
+      case WeatherEnum.sunny:
+        return const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFFFA726),
+            Color(0xFFFF7043),
+          ],
+        );
 
-    case WeatherEnum.rainy:
-      return const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFF1E88E5),
-          Color(0xFF1565C0),
-        ],
-      );
+      case WeatherEnum.rainy:
+        return const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF1E88E5),
+            Color(0xFF1565C0),
+          ],
+        );
 
-    case WeatherEnum.cloudy:
-      return const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFF90A4AE),
-          Color(0xFF546E7A),
-        ],
-      );
+      case WeatherEnum.cloudy:
+        return const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF90A4AE),
+            Color(0xFF546E7A),
+          ],
+        );
 
-    case WeatherEnum.partlyCloudy:
-      return const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFF64B5F6),
-          Color(0xFFFFCA28), // لمسة شمس خفيفة
-        ],
-      );
+      case WeatherEnum.partlyCloudy:
+        return const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF64B5F6),
+            Color(0xFFFFCA28),
+          ],
+        );
 
-    case WeatherEnum.windy:
-      return const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFF4DD0E1),
-          Color(0xFF0097A7),
-        ],
-      );
+      case WeatherEnum.windy:
+        return const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF4DD0E1),
+            Color(0xFF0097A7),
+          ],
+        );
 
-    case WeatherEnum.highHumidity:
-      return const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFF4FC3F7),
-          Color(0xFF0288D1),
-        ],
-      );
+      case WeatherEnum.highHumidity:
+        return const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF4FC3F7),
+            Color(0xFF0288D1),
+          ],
+        );
 
-    case WeatherEnum.highUV:
-      return const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFFFF7043),
-          Color(0xFFD84315),
-        ],
-      );
+      case WeatherEnum.highUV:
+        return const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFFFF7043),
+            Color(0xFFD84315),
+          ],
+        );
 
-    case WeatherEnum.cold:
-      return const LinearGradient(
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
-        colors: [
-          Color(0xFF64B5F6),
-          Color(0xFF1A237E),
-        ],
-      );
+      case WeatherEnum.cold:
+        return const LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Color(0xFF64B5F6),
+            Color(0xFF1A237E),
+          ],
+        );
+    }
   }
-}
-
-
 
   Color get iconColor {
     switch (this) {
       case WeatherEnum.sunny:
-         return Colors.orangeAccent;
+        return Colors.orangeAccent;
       case WeatherEnum.partlyCloudy:
         return Colors.blueGrey;
       case WeatherEnum.cloudy:
@@ -142,25 +141,31 @@ extension WeatherEnumEx on WeatherEnum {
     }
   }
 
-
   String get tip {
     switch (this) {
       case WeatherEnum.sunny:
-        return 'Water your plants early morning';
+        return 'weatherSunnyTip'.tr();
+
       case WeatherEnum.partlyCloudy:
-        return 'Great day for outdoor farming';
+        return 'weatherPartlyCloudyTip'.tr();
+
       case WeatherEnum.cloudy:
-        return 'Good day for transplanting seedlings';
+        return 'weatherCloudyTip'.tr();
+
       case WeatherEnum.rainy:
-        return 'No need to irrigate today';
+        return 'weatherRainyTip'.tr();
+
       case WeatherEnum.windy:
-        return 'Avoid spraying pesticides today';
+        return 'weatherWindyTip'.tr();
+
       case WeatherEnum.highHumidity:
-        return 'Watch out for fungal diseases';
+        return 'weatherHighHumidityTip'.tr();
+
       case WeatherEnum.highUV:
-        return 'Protect sensitive crops from direct sun';
+        return 'weatherHighUVTip'.tr();
+
       case WeatherEnum.cold:
-        return 'Cover sensitive plants tonight';
+        return 'weatherColdTip'.tr();
     }
   }
 
@@ -171,20 +176,22 @@ extension WeatherEnumEx on WeatherEnum {
     required double rainChance,
     required double uvIndex,
   }) {
-     if (rainChance > 50) return WeatherEnum.rainy;
+    if (rainChance > 50) return WeatherEnum.rainy;
 
-  if (windSpeed > 30) return WeatherEnum.windy;
+    if (windSpeed > 30) return WeatherEnum.windy;
 
-  if (uvIndex > 7) return WeatherEnum.highUV;
+    if (uvIndex > 7) return WeatherEnum.highUV;
 
-  if (temp < 10) return WeatherEnum.cold;
+    if (temp < 10) return WeatherEnum.cold;
 
-  if (soilMoisture > 0.6) return WeatherEnum.highHumidity;
+    if (soilMoisture > 0.6) return WeatherEnum.highHumidity;
 
-  if (temp > 25) return WeatherEnum.sunny;
+    if (temp > 25) return WeatherEnum.sunny;
 
-  if (temp >= 15 && temp <= 25) return WeatherEnum.partlyCloudy;
+    if (temp >= 15 && temp <= 25) {
+      return WeatherEnum.partlyCloudy;
+    }
 
-  return WeatherEnum.cloudy;
+    return WeatherEnum.cloudy;
   }
 }

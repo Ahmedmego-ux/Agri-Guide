@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class HelpFaqView extends StatefulWidget {
@@ -10,28 +11,28 @@ class HelpFaqView extends StatefulWidget {
 class _HelpFaqViewState extends State<HelpFaqView> {
   final List<FaqItem> _faqs = [
     FaqItem(
-      question: 'How do I scan a plant?',
-      answer: 'Open the app and tap "Scan Plant" on the home screen. Point your camera at the plant and take a photo. The AI will analyze the image and provide a diagnosis.',
+      question: 'faqQuestion1'.tr(),
+      answer: 'faqAnswer1'.tr(),
     ),
     FaqItem(
-      question: 'How accurate is the plant diagnosis?',
-      answer: 'Our AI model has been trained on thousands of plant images and achieves over 90% accuracy. However, for critical decisions, we recommend consulting a professional agronomist.',
+      question: 'faqQuestion2'.tr(),
+      answer: 'faqAnswer2'.tr(),
     ),
     FaqItem(
-      question: 'How do I chat with the AI assistant?',
-      answer: 'Tap the chat icon in the bottom navigation bar or the "AI Chat" button on the home screen. Type your question and the assistant will respond with farming advice.',
+      question: 'faqQuestion3'.tr(),
+      answer: 'faqAnswer3'.tr(),
     ),
     FaqItem(
-      question: 'How do I update my profile?',
-      answer: 'Go to Settings → Account → My Profile. Tap the "Edit" button in the top right corner to update your name, email, or location.',
+      question: 'faqQuestion4'.tr(),
+      answer: 'faqAnswer4'.tr(),
     ),
     FaqItem(
-      question: 'Is my data secure?',
-      answer: 'Yes. We use industry-standard encryption to protect your data. We never sell your personal information to third parties.',
+      question: 'faqQuestion5'.tr(),
+      answer: 'faqAnswer5'.tr(),
     ),
     FaqItem(
-      question: 'How do I delete my account?',
-      answer: 'Go to Settings → Account → scroll to the bottom and tap "Delete Account". Note that this action is irreversible and all your data will be permanently deleted.',
+      question: 'faqQuestion6'.tr(),
+      answer: 'faqAnswer6'.tr(),
     ),
   ];
 
@@ -44,10 +45,14 @@ class _HelpFaqViewState extends State<HelpFaqView> {
       backgroundColor: theme.scaffoldBackgroundColor,
       appBar: AppBar(
         leading: IconButton(
-          icon: Icon(Icons.arrow_back, color: theme.appBarTheme.foregroundColor),
+          icon: Icon(
+            Directionality.of(context) == TextDirection.RTL
+                ? Icons.arrow_forward_ios_rounded
+                : Icons.arrow_back_ios_rounded,
+          ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text('Help & FAQ'),
+        title: Text('helpFaq'.tr()),
       ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(16),
@@ -55,6 +60,7 @@ class _HelpFaqViewState extends State<HelpFaqView> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             const SizedBox(height: 8),
+
             Container(
               width: double.infinity,
               padding: const EdgeInsets.all(20),
@@ -65,10 +71,11 @@ class _HelpFaqViewState extends State<HelpFaqView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Icon(Icons.help_outline, color: cs.onPrimary, size: 32),
+                  Icon(Icons.help_outline,
+                      color: cs.onPrimary, size: 32),
                   const SizedBox(height: 10),
                   Text(
-                    'How can we help?',
+                    'howCanWeHelp'.tr(),
                     style: theme.textTheme.titleLarge?.copyWith(
                       color: cs.onPrimary,
                       fontWeight: FontWeight.w600,
@@ -76,7 +83,7 @@ class _HelpFaqViewState extends State<HelpFaqView> {
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    'Find answers to common questions below.',
+                    'faqSubtitle'.tr(),
                     style: theme.textTheme.bodySmall?.copyWith(
                       color: cs.onPrimary.withOpacity(0.75),
                     ),
@@ -84,11 +91,13 @@ class _HelpFaqViewState extends State<HelpFaqView> {
                 ],
               ),
             ),
+
             const SizedBox(height: 24),
+
             Padding(
               padding: const EdgeInsets.only(left: 2, bottom: 8),
               child: Text(
-                'FREQUENTLY ASKED QUESTIONS',
+                'faqTitle'.tr(),
                 style: theme.textTheme.labelSmall?.copyWith(
                   color: cs.onSurfaceVariant,
                   letterSpacing: 0.8,
@@ -96,6 +105,7 @@ class _HelpFaqViewState extends State<HelpFaqView> {
                 ),
               ),
             ),
+
             Container(
               decoration: BoxDecoration(
                 color: theme.cardTheme.color,
@@ -111,9 +121,11 @@ class _HelpFaqViewState extends State<HelpFaqView> {
                   endIndent: 16,
                   color: theme.dividerTheme.color,
                 ),
-                itemBuilder: (context, index) => FaqTile(item: _faqs[index]),
+                itemBuilder: (context, index) =>
+                    FaqTile(item: _faqs[index]),
               ),
             ),
+
             const SizedBox(height: 32),
           ],
         ),
@@ -127,7 +139,11 @@ class FaqItem {
   final String answer;
   bool isExpanded;
 
-  FaqItem({required this.question, required this.answer, this.isExpanded = false});
+  FaqItem({
+    required this.question,
+    required this.answer,
+    this.isExpanded = false,
+  });
 }
 
 class FaqTile extends StatefulWidget {
@@ -145,10 +161,15 @@ class _FaqTileState extends State<FaqTile> {
     final cs = theme.colorScheme;
 
     return InkWell(
-      onTap: () => setState(() => widget.item.isExpanded = !widget.item.isExpanded),
+      onTap: () => setState(
+        () => widget.item.isExpanded = !widget.item.isExpanded,
+      ),
       borderRadius: BorderRadius.circular(12),
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        padding: const EdgeInsets.symmetric(
+          horizontal: 16,
+          vertical: 14,
+        ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -164,7 +185,9 @@ class _FaqTileState extends State<FaqTile> {
                   ),
                 ),
                 Icon(
-                  widget.item.isExpanded ? Icons.keyboard_arrow_up : Icons.keyboard_arrow_down,
+                  widget.item.isExpanded
+                      ? Icons.keyboard_arrow_up
+                      : Icons.keyboard_arrow_down,
                   color: cs.onSurfaceVariant,
                   size: 20,
                 ),

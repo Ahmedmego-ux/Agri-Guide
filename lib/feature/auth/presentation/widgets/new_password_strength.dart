@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 
@@ -35,7 +36,7 @@ class NewPasswordStrength extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Text(
-              'Password Strength:',
+              "${'passwordStrength'.tr()}:",
               style: TextStyle(fontSize: 13, color: textColor),
             ),
             Container(

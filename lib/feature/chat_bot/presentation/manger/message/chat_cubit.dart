@@ -23,11 +23,7 @@ class ChatCubit extends Cubit<ChatState> {
 
   Future<void> sendMessage({String? text, String? imageBase64}) async {
     if (state is ChatLoading) return;
-    print('========== SEND MESSAGE ==========');
-  print('Text: $text');
-  print('ImageBase64 length: ${imageBase64?.length ?? 0}');
-  print('ImageBase64 exists: ${imageBase64 != null}');
-  print('===================================');
+   
 
     // ✅ إذا كانت أول رسالة ولا توجد جلسة، أنشئ جلسة جديدة
     if (_isFirstMessage && sessionId == null && text != null) {
@@ -65,7 +61,7 @@ class ChatCubit extends Cubit<ChatState> {
       ));
     }
 
-    // ✅ أضف loading
+    
     uiMessages.insert(0, types.TextMessage(
       author: _bot,
       createdAt: DateTime.now().millisecondsSinceEpoch,
@@ -106,7 +102,7 @@ class ChatCubit extends Cubit<ChatState> {
           await repo.saveMessage(sessionId!, botMessage);
         }
 
-        // ✅ شيل loading وحط الرد
+        
         uiMessages.removeWhere((m) => m.id == 'loading');
         uiMessages.insert(0, types.TextMessage(
           author: _bot,
@@ -115,7 +111,7 @@ class ChatCubit extends Cubit<ChatState> {
           text: reply,
         ));
 
-        // ✅ بعد أول رسالة، قم بتحديث عنوان الجلسة (تأكيد)
+       
         if (_isFirstMessage && text != null && sessionId != null) {
           _isFirstMessage = false;
           final finalTitle = text.length > 30 ? '${text.substring(0, 30)}...' : text;

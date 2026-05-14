@@ -36,7 +36,7 @@ class CustomeTextFormField extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(left: 4, bottom: 8),
           child: Text(
-            labelText.tr(), // ✅ ترجمة
+            labelText, 
             style: theme.textTheme.bodyMedium?.copyWith(
               fontWeight: FontWeight.w600,
               color: theme.colorScheme.onSurface,
@@ -68,7 +68,7 @@ class CustomeTextFormField extends StatelessWidget {
                   )
                 : null,
             suffixIcon: suffixIcon,
-            hintText: hintText.tr(), // ✅ ترجمة
+            hintText: hintText, // ✅ ترجمة
             hintStyle: theme.textTheme.bodySmall
                 ?.copyWith(color: theme.colorScheme.onSurfaceVariant),
             filled: true,

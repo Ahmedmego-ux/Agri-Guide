@@ -1,6 +1,7 @@
 import 'package:agri_guide_app/feature/market/domain/entity/product_entity.dart';
 import 'package:agri_guide_app/feature/market/presentation/widgets/open_whatsapp.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 
@@ -17,7 +18,16 @@ class OrderDetails extends StatelessWidget {
     final cs = Theme.of(context).colorScheme;
 
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        leading: IconButton(
+          onPressed: () => Navigator.pop(context),
+          icon: Icon(
+            Directionality.of(context) == TextDirection.RTL
+                ? Icons.arrow_forward_ios_rounded
+                : Icons.arrow_back_ios_new_rounded,
+          ),
+        ),
+      ),
       backgroundColor: cs.surface,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -60,9 +70,10 @@ class OrderDetails extends StatelessWidget {
 
               /// 🏷 TITLE
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
-                  product.title ?? "No title",
+                  product.title ?? "noTitle".tr(),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -75,7 +86,8 @@ class OrderDetails extends StatelessWidget {
 
               /// 💰 PRICE
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16),
                 child: Text(
                   "${product.price ?? 0} EG",
                   style: TextStyle(
@@ -90,9 +102,11 @@ class OrderDetails extends StatelessWidget {
 
               /// 📝 DESCRIPTION
               Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16),
                 child: Html(
-                  data: product.description ?? "<p>No description</p>",
+                  data: product.description ??
+                      "<p>${'noDescription'.tr()}</p>",
                 ),
               ),
 
@@ -114,7 +128,9 @@ class OrderDetails extends StatelessWidget {
                         onPressed: () async {
                           await openWhatsApp();
                         },
-                        child: const Text("Order Now"),
+                        child: Text(
+                          "orderNow".tr(),
+                        ),
                       ),
                     ),
                   ],

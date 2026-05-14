@@ -30,78 +30,94 @@ class ProfileFieldTile extends StatelessWidget {
     final inputTheme = theme.inputDecorationTheme;
 
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          
+          // Icon container
           Container(
-            width: 40,
-            height: 40,
+            width: 42,
+            height: 42,
             decoration: BoxDecoration(
               color: iconBg,
-              borderRadius: BorderRadius.circular(10),
+              borderRadius: BorderRadius.circular(12),
             ),
             child: Icon(icon, color: iconColor, size: 20),
           ),
-          const SizedBox(width: 12),
-         
-          Expanded(
-  child: isEditing
-      ? Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
+          const SizedBox(width: 14),
 
-          Text(
-              label,
-              style: textTheme.labelSmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
+          // Content
+          Expanded(
+            child: isEditing
+                ? Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                      const SizedBox(height: 4),
+                      TextFormField(
+                        controller: controller,
+                        keyboardType: keyboardType,
+                        validator: validator,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        decoration: InputDecoration(
+                          filled: true,
+                          fillColor: inputTheme.fillColor,
+                          contentPadding: const EdgeInsets.symmetric(
+                            vertical: 10,
+                            horizontal: 14,
+                          ),
+                          isDense: true,
+                          border: inputTheme.border,
+                          enabledBorder: inputTheme.enabledBorder,
+                          focusedBorder: inputTheme.focusedBorder,
+                          errorBorder: inputTheme.errorBorder,
+                          focusedErrorBorder: inputTheme.focusedErrorBorder,
+                          hintStyle: inputTheme.hintStyle,
+                          errorStyle: inputTheme.errorStyle,
+                        ),
+                      ),
+                    ],
+                  )
+                : Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        label,
+                        style: textTheme.labelSmall?.copyWith(
+                          color: colorScheme.onSurfaceVariant,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.3,
+                        ),
+                      ),
+                      const SizedBox(height: 3),
+                      Text(
+                        controller.text,
+                        style: textTheme.bodyMedium?.copyWith(
+                          color: colorScheme.onSurface,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    ],
+                  ),
+          ),
+
+          // Edit mode indicator
+          if (!isEditing)
+            Icon(
+              Icons.chevron_right_rounded,
+              size: 18,
+              color: colorScheme.onSurfaceVariant.withOpacity(0.4),
             ),
-            const SizedBox(height: 2),
-          TextFormField(
-              controller: controller,
-              keyboardType: keyboardType,
-              validator: validator,
-              style: textTheme.bodyMedium, 
-              decoration: InputDecoration(
-               // labelText: label,
-                labelStyle: textTheme.labelSmall?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                ),
-                filled: true,
-                fillColor: inputTheme.fillColor,
-                contentPadding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16), 
-                isDense: true,
-                border: inputTheme.border,
-                enabledBorder: inputTheme.enabledBorder,
-                focusedBorder: inputTheme.focusedBorder,
-                errorBorder: inputTheme.errorBorder,
-                focusedErrorBorder: inputTheme.focusedErrorBorder,
-                hintStyle: inputTheme.hintStyle,
-                errorStyle: inputTheme.errorStyle,
-              ),
-            ),
-        ],
-      )
-      : Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              label,
-              style: textTheme.labelSmall?.copyWith(
-                color: colorScheme.onSurfaceVariant,
-              ),
-            ),
-            const SizedBox(height: 2),
-            Text(
-              controller.text,
-              style: textTheme.bodyMedium?.copyWith(
-                color: colorScheme.onSurface,
-              ),
-            ),
-          ],
-        ),
-),
         ],
       ),
     );

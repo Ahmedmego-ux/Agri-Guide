@@ -3,32 +3,35 @@ import 'package:agri_guide_app/core/network/dio_client.dart';
 import 'package:dio/dio.dart';
 
 class ApiServices {
-  final DioClient _dioClient = DioClient();
+  final DioClient _dioClient;
 
- Future<dynamic> get(
-  String endpoint, {
-  Map<String, dynamic>? query,
-}) async {
-  try {
-    final response = await _dioClient.dio.get(
-      endpoint,
-      queryParameters: query,
-    );
+  ApiServices({required String baseUrl})
+      : _dioClient = DioClient(baseUrl);
 
-    return response.data;
-  } on DioException catch (e) {
-    throw ApiExceptions.handleError(e);
-  }
-}
-
-  Future<dynamic> post(String endpoint, Map<String, dynamic> data) async {
+  Future<dynamic> get(
+    String endpoint, {
+    Map<String, dynamic>? query,
+  }) async {
     try {
-      final response = await _dioClient.dio.post(endpoint, data: data);
+      final response = await _dioClient.dio.get(
+        endpoint,
+        queryParameters: query,
+      );
+
       return response.data;
     } on DioException catch (e) {
       throw ApiExceptions.handleError(e);
     }
   }
+
+ Future<dynamic> postForm(String endpoint, FormData formData) async {
+  try {
+    final response = await _dioClient.dio.post(endpoint, data: formData);
+    return response.data;
+  } on DioException catch (e) {
+    throw ApiExceptions.handleError(e);
+  }
+}
 
   Future<dynamic> update(String endpoint, Map<String, dynamic> data) async {
     try {
