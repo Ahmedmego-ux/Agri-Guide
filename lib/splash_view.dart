@@ -1,8 +1,11 @@
-
+import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/onboard/view/onboard_view.dart';
-
+import 'package:agri_guide_app/feature/home/presentation/view/home_view.dart';
+import 'package:agri_guide_app/feature/profile/presentation/manger/cubit/profile_cubit.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class SplashView extends StatefulWidget {
   const SplashView({super.key});
@@ -27,29 +30,74 @@ class _SplashViewState extends State<SplashView>
       vsync: this,
     );
 
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+    _fadeAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeIn),
+    );
 
-    _slideAnimation = Tween<Offset>(
-      begin: const Offset(0, 0.3),
-      end: Offset.zero,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeOut));
+    _slideAnimation =
+        Tween<Offset>(begin: const Offset(0, 0.3), end: Offset.zero).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.easeOut),
+    );
 
-    _scaleAnimation = Tween<double>(
-      begin: 0.8,
-      end: 1.0,
-    ).animate(CurvedAnimation(parent: _controller, curve: Curves.elasticOut));
+    _scaleAnimation = Tween<double>(begin: 0.8, end: 1.0).animate(
+      CurvedAnimation(parent: _controller, curve: Curves.elasticOut),
+    );
 
     _controller.forward();
 
-    Future.delayed(const Duration(seconds: 3), () {
+    Future.delayed(const Duration(seconds: 3), () async {
       if (mounted) {
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (_) => OnboardView()),
-        );
+        final session = Supabase.instance.client.auth.currentSession;
+        final user = Supabase.instance.client.auth.currentUser;
+
+        if (session != null && user != null) {
+          final profileData = await Supabase.instance.client
+              .from('profiles')
+              .select(
+                'id, email, first_name, last_name, city_name, latitude, longitude',
+              )
+              .eq('id', user.id)
+              .maybeSingle();
+
+          if (mounted) {
+            if (profileData != null) {
+              final loginEntity = LoginEntity(
+                id: profileData['id'],
+                email: profileData['email'],
+                password: '',
+                firstName: profileData['first_name'] ?? '',
+                lastName: profileData['last_name'] ?? '',
+                cityName: profileData['city_name'] ?? '',
+                latitude: (profileData['latitude'] ?? 0).toDouble(),
+                longitude: (profileData['longitude'] ?? 0).toDouble(),
+              );
+
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                  builder: (_) => BlocProvider(
+                    // ✅ نفس اللي بيحصل في Login
+                    create: (_) => ProfileCubit(userId: loginEntity.id)
+                      ..getProfileData(),
+                    child: HomeView(loginEntity: loginEntity),
+                  ),
+                ),
+              );
+            } else {
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (_) => OnboardView()),
+              );
+            }
+          }
+        } else {
+          if (mounted) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (_) => OnboardView()),
+            );
+          }
+        }
       }
     });
   }
@@ -76,7 +124,6 @@ class _SplashViewState extends State<SplashView>
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                
                 SlideTransition(
                   position: _slideAnimation,
                   child: SvgPicture.asset(
@@ -89,9 +136,7 @@ class _SplashViewState extends State<SplashView>
                     ),
                   ),
                 ),
-
                 const SizedBox(height: 25),
-
                 Column(
                   children: [
                     SlideTransition(
@@ -105,9 +150,7 @@ class _SplashViewState extends State<SplashView>
                         ),
                       ),
                     ),
-
                     const SizedBox(height: 12),
-
                     ScaleTransition(
                       scale: _scaleAnimation,
                       child: Text(
@@ -121,7 +164,6 @@ class _SplashViewState extends State<SplashView>
                     ),
                   ],
                 ),
-
                 const SizedBox(height: 50),
               ],
             ),

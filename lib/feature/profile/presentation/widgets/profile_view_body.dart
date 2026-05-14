@@ -9,6 +9,7 @@ import 'package:agri_guide_app/feature/profile/presentation/widgets/profile_feil
 import 'package:agri_guide_app/feature/profile/presentation/widgets/profile_save_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 class ProfileViewBody extends StatefulWidget {
   const ProfileViewBody({super.key});
@@ -398,7 +399,8 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
                                 Expanded(
                                   child: ProfileButton(
                                     value: 'logout'.tr(),
-                                    onPressed: () {
+                                    onPressed: () async{
+                                        await Supabase.instance.client.auth.signOut();
                                       Navigator
                                           .pushAndRemoveUntil(
                                         context,

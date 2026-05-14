@@ -40,7 +40,7 @@ void main() async {
     final deviceLang =
         WidgetsBinding.instance.platformDispatcher.locale.languageCode;
     savedLang = ['en', 'ar'].contains(deviceLang) ? deviceLang : 'en';
-    
+
     await prefs.setString('locale', savedLang);
   }
   final savedLocale = Locale(savedLang);
@@ -51,6 +51,7 @@ void main() async {
   final productRepo = ProductImpl(
     networkDataSource: RemotDataSourceImpl(apiServices),
     localDataSource: ProductLocalDataSourceImpl(prefs),
+    
   );
 
   runApp(
@@ -95,7 +96,7 @@ class MyApp extends StatelessWidget {
         BlocProvider(
           create: (_) => ProductCubit(productRepo)..getProducts(),
         ),
-        BlocProvider(create: (_) => ThemeCubit()),
+        BlocProvider(create: (_) => ThemeCubit()..loadTheme()),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, mode) {
