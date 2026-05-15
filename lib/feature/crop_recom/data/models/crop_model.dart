@@ -6,9 +6,9 @@ class CropModel extends CropEntity{
 
    factory CropModel.fromJson(Map<String,dynamic>json){
     return CropModel(
-      crop: json["recommended_crop"],
+      crop: json["crop"],
        description:json['description'],
-        cropAr: json['recommended_crop_ar'],
+        cropAr: json['crop_ar'],
          descriptionAr: json['description_ar'],
         );
   }

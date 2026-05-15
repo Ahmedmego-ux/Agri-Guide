@@ -3,7 +3,7 @@ import 'package:agri_guide_app/feature/diagonals_image/domain/entity/scan_entity
 class ScanModel extends ScanEntity {
   ScanModel({
     required super.imageUrl,
-    required super.predictedClass,
+    required super.diseaseName,
     required super.confidence,
     required super.cause,
     required super.causeAr,
@@ -15,14 +15,17 @@ class ScanModel extends ScanEntity {
     required super.preventionAr,
     required super.isHealthy,
     required super.date,
-    required super.userId,
+    required super.userId, 
+    required super.diseaseNameAr,
   });
 
   factory ScanModel.fromJson(Map<String, dynamic> json) {
     return ScanModel(
       imageUrl: json['image_url'] ?? '',
 
-      predictedClass: json['predicted_class'] ?? '',
+      diseaseName: json['display_name'] ?? '',
+
+      diseaseNameAr: json['display_name_ar'] ?? '',
 
       confidence: ((json['confidence'] ?? 0) as num).toDouble(),
 
@@ -52,7 +55,8 @@ class ScanModel extends ScanEntity {
     return {
       'image_url': imageUrl,
 
-      'predicted_class': predictedClass,
+      'predicted_class': diseaseName,
+      "display_name_ar":diseaseNameAr,
 
       'confidence': confidence,
 

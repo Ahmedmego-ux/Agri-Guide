@@ -12,8 +12,8 @@ class CropInitial extends CropState {}
 class CropLoading extends CropState {}
 
 class CropSuccess extends CropState {
-  final CropEntity cropEntity;
-  CropSuccess({required this.cropEntity});
+  final List <CropEntity> listCropEntity;
+  CropSuccess({required this.listCropEntity});
 }
 
 class CropFailure extends CropState {

@@ -126,7 +126,8 @@ class _AIResultScreenState extends State<AIResultScreen> {
                       if (entity != null) {
                         final isAr = context.locale.languageCode != 'en';
 
-                        final disease    = entity.predictedClass;
+                        final disease    = entity.diseaseName;
+                        final diseaseAr =entity.diseaseNameAr;
                         final confidence = entity.confidence;
                         final cause      = isAr ? entity.causeAr      : entity.cause;
                         final symptoms   = isAr ? entity.symptomsAr   : entity.symptoms;
@@ -152,7 +153,7 @@ class _AIResultScreenState extends State<AIResultScreen> {
                                   children: [
                                     Expanded(
                                       child: Text(
-                                        disease,
+                                      context.locale==Locale('en')?  disease:diseaseAr,
                                         style: TextStyle(
                                           fontSize: 18,
                                           fontWeight: FontWeight.bold,

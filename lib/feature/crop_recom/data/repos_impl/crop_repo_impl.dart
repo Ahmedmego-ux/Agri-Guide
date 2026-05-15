@@ -13,9 +13,9 @@ class CropRepoImpl implements CropRepo {
   final _cropApi = ApiServices(
     baseUrl: dotenv.env['DETECT_DISEASE_API']!,
   );
-
+final weatherApikey=dotenv.env['WEATHER_APIKEY'];
   @override
-  Future<CropEntity> recommendCrop({
+  Future<List<CropEntity>> recommendCrop({
     required double lat,
     required double lon,
   }) async {
@@ -24,7 +24,7 @@ class CropRepoImpl implements CropRepo {
       'weather/forecast',
       query: {
         'location': '$lat,$lon',
-        'apikey': 'wkxsP72io5LCsbDZbOHrQKtj3pWiNth5',
+        'apikey': weatherApikey,
       },
     );
 
@@ -59,14 +59,16 @@ class CropRepoImpl implements CropRepo {
             "ph": soilData["ph"],
             "latitude": lat,
             "longitude": lon,
-            "temperature": temp,
-            "humidity": humidity,
-            "rainfall": rainfall,
+            // "temperature": temp,
+            // "humidity": humidity,
+            // "rainfall": rainfall,
           },
         );
+        final recommendations = response['recommendations'] as List;
+        
 
-        print('✅ Response: $response');
-        return CropModel.fromJson(response);
+        print('✅ Response: $recommendations');
+        return recommendations.map((crop)=>CropModel.fromJson(crop)).toList();
       } catch (e) {
         print('❌ Attempt $attempt failed: $e');
         if (attempt == 3) rethrow;

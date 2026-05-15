@@ -53,7 +53,7 @@ class _CropRecoViewBodyState extends State<CropRecoViewBody> {
       ),
       body: BlocBuilder<CropCubit, CropState>(
         builder: (context, state) {
-
+    
           if (state is CropLoading) {
             return Center(
               child: Column(
@@ -66,7 +66,7 @@ class _CropRecoViewBodyState extends State<CropRecoViewBody> {
               ),
             );
           }
-
+    
           if (state is CropFailure) {
             return Center(
               child: Padding(
@@ -98,58 +98,63 @@ class _CropRecoViewBodyState extends State<CropRecoViewBody> {
               ),
             );
           }
-
+    
           if (state is CropSuccess) {
-            final crop = state.cropEntity;
-
-            return InkWell(
-              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_)=>CropDescription(
-                title: crop.crop,
-                 description: crop.description,
-                 titleAr: crop.cropAr,
-                 descriptionAr: crop.descriptionAr))),
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.all(20),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Container(
-                      width: double.infinity,
-                      padding: const EdgeInsets.all(24),
-                      decoration: BoxDecoration(
-                        gradient: LinearGradient(
-                          colors: [
-                            primary,
-                            primary.withOpacity(0.75),
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: Column(
-                        children: [
-                          const Text('🌱', style: TextStyle(fontSize: 56)),
-                          const SizedBox(height: 12),
-                          Text(
-                          context.locale==Locale('en')? crop.crop:crop.cropAr,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 28,
-                              fontWeight: FontWeight.bold,
-                            ),
+            final crops = state.listCropEntity;
+    
+            return ListView.separated(
+              itemCount: crops.length,
+              separatorBuilder: (context, index) => SizedBox(height:0,),
+              itemBuilder: (context, index) {
+              return InkWell(
+                onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_)=>CropDescription(
+                  title: crops[index].crop,
+                   description: crops[index].description,
+                   titleAr: crops[index].cropAr,
+                   descriptionAr: crops[index].descriptionAr))),
+                child: Padding(
+                  padding: const EdgeInsets.all( 20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.all(24),
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [
+                              primary,
+                              primary.withOpacity(0.75),
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
                           ),
-                         
-                        ],
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Column(
+                          children: [
+                            const Text('🌱', style: TextStyle(fontSize: 56)),
+                            const SizedBox(height: 12),
+                            Text(
+                            context.locale==Locale('en')? crops[index].crop:crops[index].cropAr,
+                              style: const TextStyle(
+                                color: Colors.white,
+                                fontSize: 28,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                           
+                          ],
+                        ),
                       ),
-                    ),
-              
-                  ],
+                                  
+                    ],
+                  ),
                 ),
-              ),
+              );},
             );
           }
-
+    
           return const SizedBox();
         },
       ),

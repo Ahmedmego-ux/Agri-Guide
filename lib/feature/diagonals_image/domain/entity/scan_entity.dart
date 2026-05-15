@@ -1,7 +1,8 @@
 class ScanEntity {
   final String imageUrl;
 
-  final String predictedClass;
+  final String diseaseName;
+  final String diseaseNameAr;
   final double confidence;
 
   final String cause;
@@ -21,9 +22,10 @@ class ScanEntity {
   final DateTime date;
   final String userId;
 
-  ScanEntity({
+  ScanEntity( {
+    required this.diseaseNameAr,
     required this.imageUrl,
-    required this.predictedClass,
+    required this.diseaseName,
     required this.confidence,
     required this.cause,
     required this.causeAr,

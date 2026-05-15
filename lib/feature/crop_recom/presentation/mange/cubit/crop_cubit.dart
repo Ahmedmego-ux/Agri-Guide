@@ -18,7 +18,7 @@ class CropCubit extends Cubit<CropState> {
     try {
       final result = await cropRepo.recommendCrop(lat: lat, lon: lon);
       if (isClosed) return;
-      emit(CropSuccess(cropEntity: result));
+      emit(CropSuccess(listCropEntity: result));
     } catch (e) {
       if (isClosed) return;
       emit(CropFailure(errmessage: e.toString()));

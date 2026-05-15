@@ -83,7 +83,7 @@ class HistoryItemCard extends StatelessWidget {
                     children: [
                       Expanded(
                         child: Text(
-                          item.predictedClass,
+                       context.locale==Locale('en') ?item.diseaseName:item.diseaseNameAr,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(

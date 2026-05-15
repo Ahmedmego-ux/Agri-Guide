@@ -56,7 +56,8 @@ class ScanImpl implements ScanRepo {
       final model = ScanModel(
         imageUrl: imageUrlValue,
 
-        predictedClass: disease.predictedClass,
+        diseaseName: disease.diseaseName,
+        diseaseNameAr: disease.diseaseNameAr,
         confidence: disease.confidence,
 
         cause: disease.cause,
@@ -126,7 +127,8 @@ class ScanImpl implements ScanRepo {
       return ScanEntity(
         imageUrl: '',
 
-        predictedClass: response['predicted_class'] ?? '',
+        diseaseName: response['display_name'] ?? '',
+        diseaseNameAr: response['display_name_ar'] ?? '',
         confidence: ((response['confidence'] ?? 0) as num).toDouble() / 100,
 
         cause: response['cause'] ?? '',
