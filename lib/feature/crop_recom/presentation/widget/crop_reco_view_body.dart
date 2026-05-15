@@ -1,59 +1,158 @@
-import 'package:agri_guide_app/feature/crop_recom/domain/entity/crop_entity.dart';
-import 'package:agri_guide_app/feature/crop_recom/presentation/widget/crop_item.dart';
+import 'package:agri_guide_app/feature/crop_recom/presentation/mange/cubit/crop_cubit.dart';
+import 'package:agri_guide_app/feature/crop_recom/presentation/widget/crop_descrption.dart';
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class CropRecoViewBody extends StatelessWidget {
-   CropRecoViewBody({super.key});
-  final List<CropEntity> crops = [
-  CropEntity(
-    title: "Wheat",
-    description:
-        "Wheat is one of the most important cereal crops in the world. It is mainly grown in temperate regions and requires moderate temperatures during its growing season. Wheat is used to produce flour for bread, pasta, and many other food products. Proper irrigation and soil management are essential for achieving high yields.",
-  ),
-  CropEntity(
-    title: "Rice",
-    description:
-        "Rice is a staple food for more than half of the world's population. It is typically grown in flooded fields called paddies, which help control weeds and pests. Rice requires a warm and humid climate and a large amount of water throughout its growing period. It is rich in carbohydrates and provides a major source of energy.",
-  ),
-  CropEntity(
-    title: "Maize",
-    description:
-        "Maize, also known as corn, is a versatile crop used for food, animal feed, and industrial products. It grows best in warm weather with adequate sunlight and well-drained soil. Maize is rich in vitamins and minerals and is widely used in many food products such as cornmeal, corn oil, and snacks.",
-  ),
-  CropEntity(
-    title: "Cotton",
-    description:
-        "Cotton is a soft, fluffy fiber that grows in a boll around the seeds of the cotton plant. It requires a long frost-free period, plenty of sunshine, and moderate rainfall. Cotton is widely used in the textile industry to produce clothing and other fabric-based products. Proper pest control is crucial for maintaining crop quality.",
-  ),
-];
+class CropRecoViewBody extends StatefulWidget {
+  final double lat;
+  final double lon;
+
+  const CropRecoViewBody({
+    super.key,
+    required this.lat,
+    required this.lon,
+  });
+
+  @override
+  State<CropRecoViewBody> createState() => _CropRecoViewBodyState();
+}
+
+class _CropRecoViewBodyState extends State<CropRecoViewBody> {
+  @override
+  void initState() {
+    super.initState();
+
+    final currentState = context.read<CropCubit>().state;
+
+    
+    if (currentState is CropSuccess) {
+      
+      return;
+    }
+
+    context.read<CropCubit>().recommendCrop(
+      lat: widget.lat,
+      lon: widget.lon,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final primary = theme.colorScheme.primary;
+
     return Scaffold(
       appBar: AppBar(
-       backgroundColor: Theme.of(context).colorScheme.primary,
-
-        title: Text('Crop Recomendtion',
-        style:TextStyle(
-          color: Theme.of(context).colorScheme.onPrimary
-        ) ,
+        backgroundColor: primary,
+        title: Text(
+          'cropRecommendation'.tr(),
+          style: TextStyle(color: theme.colorScheme.onPrimary),
         ),
+        iconTheme: IconThemeData(color: theme.colorScheme.onPrimary),
       ),
-body:SafeArea(
-  child: Padding(
-    padding: const EdgeInsets.all(12),
-    child: ListView.builder(
-      itemCount: crops.length,
-      itemBuilder: (context,index){
-      return Padding(
-        padding: const EdgeInsets.symmetric(vertical: 8),
-        child: CropItem(title: crops[index].title, subtitle: crops[index].description),
-      );
-    })
-    ),
-  ),
-) ;
+      body: BlocBuilder<CropCubit, CropState>(
+        builder: (context, state) {
 
-    
+          if (state is CropLoading) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CircularProgressIndicator(color: primary),
+                  const SizedBox(height: 16),
+                  Text('analyzingYourRegion'.tr()),
+                ],
+              ),
+            );
+          }
+
+          if (state is CropFailure) {
+            return Center(
+              child: Padding(
+                padding: const EdgeInsets.all(24),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(Icons.error_outline,
+                        size: 64,
+                        color: theme.colorScheme.error),
+                    const SizedBox(height: 16),
+                    Text(
+                      state.errmessage,
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 24),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        context.read<CropCubit>().recommendCrop(
+                              lat: widget.lat,
+                              lon: widget.lon,
+                            );
+                      },
+                      icon: const Icon(Icons.refresh),
+                      label: Text('tryAgain'.tr()),
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          if (state is CropSuccess) {
+            final crop = state.cropEntity;
+
+            return InkWell(
+              onTap: () => Navigator.push(context, MaterialPageRoute(builder: (_)=>CropDescription(
+                title: crop.crop,
+                 description: crop.description,
+                 titleAr: crop.cropAr,
+                 descriptionAr: crop.descriptionAr))),
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.all(20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: double.infinity,
+                      padding: const EdgeInsets.all(24),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [
+                            primary,
+                            primary.withOpacity(0.75),
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Column(
+                        children: [
+                          const Text('🌱', style: TextStyle(fontSize: 56)),
+                          const SizedBox(height: 12),
+                          Text(
+                          context.locale==Locale('en')? crop.crop:crop.cropAr,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 28,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                         
+                        ],
+                      ),
+                    ),
+              
+                  ],
+                ),
+              ),
+            );
+          }
+
+          return const SizedBox();
+        },
+      ),
+    );
   }
 }

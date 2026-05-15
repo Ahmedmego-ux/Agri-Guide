@@ -1,3 +1,4 @@
+import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 
 class CropDescription extends StatelessWidget {
@@ -5,10 +6,15 @@ class CropDescription extends StatelessWidget {
     super.key,
     required this.title,
     required this.description,
+     required this.titleAr,
+      required this.descriptionAr,
   });
 
   final String title;
   final String description;
+   final String titleAr;
+  final String descriptionAr;
+  
 
   @override
   Widget build(BuildContext context) {
@@ -41,9 +47,9 @@ class CropDescription extends StatelessWidget {
               ),
             ),
             flexibleSpace: FlexibleSpaceBar(
-              titlePadding: const EdgeInsets.only(left: 20, bottom: 16),
+              titlePadding: const EdgeInsetsDirectional.only(bottom: 20,start: 12),
               title: Text(
-                title,
+              context.locale==Locale("en")?  title:titleAr,
                 style: TextStyle(
                   color: cs.onPrimary,
                   fontWeight: FontWeight.w800,
@@ -145,7 +151,7 @@ class CropDescription extends StatelessWidget {
                             ),
                             const SizedBox(width: 10),
                             Text(
-                              'Description',
+                              'description'.tr(),
                               style: theme.textTheme.titleMedium?.copyWith(
                                 fontWeight: FontWeight.w800,
                                 color: cs.onSurface,
@@ -160,7 +166,7 @@ class CropDescription extends StatelessWidget {
                         ),
                         const SizedBox(height: 14),
                         Text(
-                          description,
+                         context.locale==Locale("en")? description:descriptionAr,
                           style: theme.textTheme.bodyMedium?.copyWith(
                             color: cs.onSurfaceVariant,
                             height: 1.8,

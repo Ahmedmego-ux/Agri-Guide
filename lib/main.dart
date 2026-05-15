@@ -4,6 +4,8 @@ import 'package:agri_guide_app/core/utils/theme/theme.dart';
 import 'package:agri_guide_app/feature/chat_bot/data/chat_repo_impl.dart/chat_repo_impl.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/manger/message/chat_cubit.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/manger/session/session_cubit.dart';
+import 'package:agri_guide_app/feature/crop_recom/data/repos_impl/crop_repo_impl.dart';
+import 'package:agri_guide_app/feature/crop_recom/presentation/mange/cubit/crop_cubit.dart';
 import 'package:agri_guide_app/feature/diagonals_image/data/repo_impl/scan_impl.dart';
 import 'package:agri_guide_app/feature/diagonals_image/presentaion/manger/history_scan/history_scan_cubit.dart';
 import 'package:agri_guide_app/feature/diagonals_image/presentaion/manger/scan/scan_cubit.dart';
@@ -53,6 +55,7 @@ void main() async {
     localDataSource: ProductLocalDataSourceImpl(prefs),
     
   );
+  final cropRepoImpl = CropRepoImpl();
 
   runApp(
     EasyLocalization(
@@ -65,6 +68,7 @@ void main() async {
         chatRepo: chatRepo,
         scanImpl: scanImpl,
         productRepo: productRepo,
+         cropRepoImpl: cropRepoImpl,
       ),
     ),
   );
@@ -77,12 +81,14 @@ class MyApp extends StatelessWidget {
     required this.chatRepo,
     required this.scanImpl,
     required this.productRepo,
+     required this.cropRepoImpl,
   });
 
   final SharedPreferences prefs;
   final ChatRepoImpl chatRepo;
   final ScanImpl scanImpl;
   final ProductImpl productRepo;
+  final CropRepoImpl cropRepoImpl;
 
   @override
   Widget build(BuildContext context) {
@@ -97,6 +103,7 @@ class MyApp extends StatelessWidget {
           create: (_) => ProductCubit(productRepo)..getProducts(),
         ),
         BlocProvider(create: (_) => ThemeCubit()..loadTheme()),
+         BlocProvider(create: (_) => CropCubit(cropRepoImpl)),
       ],
       child: BlocBuilder<ThemeCubit, ThemeMode>(
         builder: (context, mode) {

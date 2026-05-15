@@ -19,6 +19,7 @@ class WeatherCubit extends Cubit<WeatherState> {
     emit(WeatherLoading());
 try {
   final weather= await repo.getWeather(longitude: longitude, latitude:latitude);
+  print("mdkkkkkkkkkkkkkkkkkkkkkk$weather");
   emit(WeatherSuccess(weather: weather));
 } catch (e) {
   emit(WeatherFaliure(errmessage: ErrorHandler.handlePostgrestError(e.toString())));

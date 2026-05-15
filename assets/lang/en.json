@@ -245,5 +245,10 @@
 "faqSubtitle": "Find answers to common questions below.",
 "faqTitle": "Frequently Asked Questions",
 
-"chooseLanguage":"Choose Language"
+"chooseLanguage":"Choose Language",
+
+"cropRecommendation": "Crop Recommendation",
+  "analyzingYourRegion": "Analyzing your region...",
+  "tryAgain": "Try Again",
+  "description": "Description"
 }

@@ -1,3 +1,4 @@
+import 'package:agri_guide_app/feature/crop_recom/presentation/mange/cubit/crop_cubit.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:agri_guide_app/core/erorr/error_handler.dart';
 import 'package:agri_guide_app/core/service/location_service.dart';
@@ -89,6 +90,7 @@ class _ProfileViewBodyState extends State<ProfileViewBody> {
       );
 
       context.read<WeatherCubit>().getWeather(lat, lon);
+      context.read<CropCubit>().recommendCrop(lat: lat!, lon: lon!);
 
       await context
           .read<ProfileCubit>()

@@ -244,6 +244,11 @@
   "howCanWeHelp": "كيف يمكننا مساعدتك؟",
 "faqSubtitle": "ابحث عن إجابات لأكثر الأسئلة الشائعة بالأسفل.",
 "faqTitle": "الأسئلة الشائعة",
-"chooseLanguage":"اختر اللغة"
+"chooseLanguage":"اختر اللغة",
+
+"cropRecommendation": "توصية المحاصيل",
+  "analyzingYourRegion": "جاري تحليل منطقتك...",
+  "tryAgain": "حاول مرة أخرى",
+  "description": "الوصف"
 }
 

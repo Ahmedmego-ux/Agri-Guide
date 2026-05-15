@@ -1,6 +1,7 @@
 import 'package:agri_guide_app/core/constans/app_colors.dart';
 import 'package:agri_guide_app/feature/auth/domain/entitys/login_entity.dart';
 import 'package:agri_guide_app/feature/chat_bot/presentation/view/chat_bot_view.dart';
+import 'package:agri_guide_app/feature/crop_recom/presentation/mange/cubit/crop_cubit.dart';
 import 'package:agri_guide_app/feature/crop_recom/presentation/view/crop_reco_view.dart';
 import 'package:agri_guide_app/feature/diagonals_image/presentaion/manger/history_scan/history_scan_cubit.dart';
 import 'package:agri_guide_app/feature/diagonals_image/presentaion/view/history_screan.dart';
@@ -249,14 +250,18 @@ class _HomeViewBodyState extends State<HomeViewBody> {
               3,
               () async {
                 setState(() => _currentIndex = 3);
-
-                await Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) =>
-                        CropRecoView(),
-                  ),
-                );
+               final profileCubit = context.read<ProfileCubit>();
+await Navigator.push(
+  context,
+  MaterialPageRoute(
+    builder: (_) => BlocProvider.value(
+      value: profileCubit,
+      child: CropRecoView(
+        loginEntity: widget.loginEntity,
+      ),
+    ),
+  ),
+);
 
                 setState(() => _currentIndex = 0);
               },

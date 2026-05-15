@@ -50,4 +50,13 @@ class ApiServices {
       throw ApiExceptions.handleError(e);
     }
   }
+
+  Future<dynamic> post(String endpoint, {Map<String, dynamic>? data}) async {
+  try {
+    final response = await _dioClient.dio.post(endpoint, data: data);
+    return response.data;
+  } on DioException catch (e) {
+    throw ApiExceptions.handleError(e);
+  }
+}
 }
